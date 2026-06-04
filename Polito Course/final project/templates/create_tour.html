@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Create Tour | LA Walks{% endblock %}
+{% block content %}
+<section class="guide-form-page">
+    <header class="dashboard-header">
+        <div>
+            <span class="section-label">Create tour</span>
+            <h1 class="dashboard-title">Create a new walking route</h1>
+            <p class="dashboard-subtitle">Guides can use this form to create a new LA walking tour.</p>
+        </div>
+        <a href="{{ url_for('guide_dashboard') }}" class="btn-light-back"><i class="bi bi-arrow-left"></i> Back to guide dashboard</a>
+    </header>
+
+    <form class="guide-form-card" method="POST" enctype="multipart/form-data">
+        <div class="form-section-title"><span class="section-label">Basic information</span><h2>Tour details</h2></div>
+        <div class="row g-3">
+            <div class="col-md-8"><label for="title" class="form-label">Tour title</label><input type="text" id="title" name="title" class="form-control" placeholder="Example: Echo Park Sunset Walk" required></div>
+            <div class="col-md-4"><label for="mainLanguage" class="form-label">Main language</label><select id="mainLanguage" name="main_language" class="form-select" required><option value="" selected>Select language</option><option>English</option><option>Spanish</option><option>Italian</option><option>German</option><option>French</option><option>Portuguese</option></select></div>
+            <div class="col-md-12"><label for="languages" class="form-label">All available languages</label><input type="text" id="languages" name="languages" class="form-control" placeholder="English / Spanish / Italian"><small class="form-help">Each tour should include English and at least two other languages.</small></div>
+            <div class="col-md-4"><label for="duration" class="form-label">Duration</label><input type="text" id="duration" name="duration" class="form-control" placeholder="100 min"></div>
+            <div class="col-md-4"><label for="distance" class="form-label">Distance</label><input type="text" id="distance" name="distance" class="form-control" placeholder="2.4 km"></div>
+            <div class="col-md-4"><label for="maxParticipants" class="form-label">Maximum participants</label><input type="number" id="maxParticipants" name="max_participants" class="form-control" min="1" max="30" placeholder="18"></div>
+            <div class="col-md-12"><label for="meetingPoint" class="form-label">Meeting point</label><input type="text" id="meetingPoint" name="meeting_point" class="form-control" placeholder="Echo Park Lake entrance"></div>
+            <div class="col-md-12"><label for="description" class="form-label">Tour description</label><textarea id="description" name="description" class="form-control" rows="5" placeholder="Explain what participants will see and learn."></textarea></div>
+        </div>
+
+        <hr class="form-divider">
+
+        <div class="form-section-title"><span class="section-label">Route stops</span><h2>Start, stops, and finish</h2></div>
+        <div class="row g-3">
+            <div class="col-md-6"><label class="form-label" for="startPoint">Start point</label><input id="startPoint" name="start_point" class="form-control" placeholder="Start: ..."></div>
+            <div class="col-md-6"><label class="form-label" for="stopOne">Stop 1</label><input id="stopOne" name="stop_one" class="form-control" placeholder="First important stop"></div>
+            <div class="col-md-6"><label class="form-label" for="stopTwo">Stop 2</label><input id="stopTwo" name="stop_two" class="form-control" placeholder="Second important stop"></div>
+            <div class="col-md-6"><label class="form-label" for="finishPoint">Finish point</label><input id="finishPoint" name="finish_point" class="form-control" placeholder="Finish: ..."></div>
+            <div class="col-md-12"><label class="form-label" for="restStops">Rest and photo stops</label><textarea id="restStops" name="rest_stops" class="form-control" rows="3" placeholder="Rest near viewpoint, photo break, final stop"></textarea></div>
+        </div>
+
+        <hr class="form-divider">
+
+        <div class="form-section-title"><span class="section-label">Rules and accessibility</span><h2>Participant information</h2></div>
+        <div class="row g-3">
+            <div class="col-md-4"><label for="fitnessLevel" class="form-label">Fitness level</label><select id="fitnessLevel" name="fitness_level" class="form-select"><option>Easy</option><option>Easy to moderate</option><option>Moderate</option><option>Challenging</option></select></div>
+            <div class="col-md-4"><label for="pathType" class="form-label">Path type</label><input id="pathType" name="path_type" class="form-control" placeholder="Flat urban sidewalks"></div>
+            <div class="col-md-4"><label for="mountainPath" class="form-label">Mountain path?</label><select id="mountainPath" name="mountain_path" class="form-select"><option>No</option><option>Partly</option><option>Yes</option></select></div>
+            <div class="col-md-4"><label for="childrenAllowed" class="form-label">Children allowed?</label><select id="childrenAllowed" name="children_allowed" class="form-select"><option>Yes</option><option>No</option><option>Only with adult</option></select></div>
+            <div class="col-md-4"><label for="petsAllowed" class="form-label">Pets allowed?</label><select id="petsAllowed" name="pets_allowed" class="form-select"><option>Yes, on leash</option><option>No</option><option>Outdoor areas only</option></select></div>
+            <div class="col-md-4"><label for="tourImage" class="form-label">Tour image</label><input type="file" id="tourImage" name="tour_image" class="form-control"></div>
+            <div class="col-md-12"><label for="whatToBring" class="form-label">What should participants bring?</label><textarea id="whatToBring" name="what_to_bring" class="form-control" rows="3" placeholder="Comfortable shoes, water, sun protection, camera"></textarea></div>
+        </div>
+
+        <button type="submit" class="btn-main guide-form-submit"><i class="bi bi-plus-circle"></i> Create tour</button>
+    </form>
+</section>
+{% endblock %}

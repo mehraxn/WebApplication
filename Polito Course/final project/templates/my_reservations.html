@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}My Reservations | LA Walks{% endblock %}
+
+{% block content %}
+<section class="reservations-page">
+    <header class="dashboard-header">
+        <div>
+            <span class="section-label">My reservations</span>
+
+            <h1 class="dashboard-title">Manage your walking tours</h1>
+
+            <p class="dashboard-subtitle">
+                This page shows your reservations from the database, including meeting point,
+                group size, extra participant names, and cancellation status.
+            </p>
+        </div>
+
+        <a href="{{ url_for('participant_dashboard') }}" class="btn-light-back">
+            <i class="bi bi-arrow-left"></i>
+            Back to dashboard
+        </a>
+    </header>
+
+    <div class="reservation-table-card">
+        <div class="reservation-table-header">
+            <span>Tour</span>
+            <span>Date and time</span>
+            <span>People</span>
+            <span>Status</span>
+            <span>Action</span>
+        </div>
+
+        {% for reservation in reservations %}
+            <article class="reservation-table-row">
+                <div class="reservation-tour-cell">
+                    <img
+                        src="{{ url_for('static', filename=reservation.tour.image) }}"
+                        alt="{{ reservation.tour.title }}"
+                    >
+
+                    <div>
+                        <h2>{{ reservation.tour.title }}</h2>
+                        <p>
+                            <i class="bi bi-geo-alt-fill"></i>
+                            {{ reservation.tour.meeting_point }}
+                        </p>
+                    </div>
+                </div>
+
+                <div>
+                    <strong>{{ reservation.date }}</strong>
+                    <span>{{ reservation.time }}</span>
+                </div>
+
+                <div>
+                    <strong>{{ reservation.extra_people + 1 }}</strong>
+                    <span>
+                        1 participant
+                        {% if reservation.extra_people > 0 %}
+                            + {{ reservation.extra_people }} extra
+                        {% endif %}
+                    </span>
+                    {% if reservation.extra_names %}
+                        <span>{{ reservation.extra_names|join(", ") }}</span>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <span class="reservation-status reservation-status-{{ reservation.status|lower }}">
+                        {{ reservation.status }}
+                    </span>
+                </div>
+
+                <div class="reservation-actions">
+                    <a href="{{ url_for('tour_detail', tour_id=reservation.tour.id) }}" class="btn-main btn-small">
+                        View tour
+                    </a>
+
+                    {% if reservation.can_cancel %}
+                        <form method="POST" action="{{ url_for('cancel_reservation', reservation_id=reservation.id) }}">
+                            <button type="submit" class="btn-cancel">
+                                Cancel
+                            </button>
+                        </form>
+                    {% else %}
+                        <span class="reservation-action-note">Not cancellable</span>
+                    {% endif %}
+                </div>
+            </article>
+        {% else %}
+            <article class="reservation-table-row">
+                <div>
+                    <strong>No reservations yet.</strong>
+                    <span>Browse tours and reserve one of the available dates.</span>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+
+    <section class="reservation-note-panel">
+        <i class="bi bi-info-circle"></i>
+
+        <div>
+            <h2>Reservation note</h2>
+
+            <p>
+                Reservations can be cancelled only at least 24 hours before the tour start time.
+            </p>
+        </div>
+    </section>
+</section>
+{% endblock %}

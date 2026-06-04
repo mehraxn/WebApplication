@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Guide Dashboard | LA Walks{% endblock %}
+{% block content %}
+<section class="guide-page">
+    <header class="dashboard-header">
+        <div>
+            <span class="section-label">Guide dashboard</span>
+            <h1 class="dashboard-title">
+                Welcome{% if session.get("full_name") %}, {{ session.get("full_name") }}{% endif %}
+            </h1>
+            <p class="dashboard-subtitle">
+                This is the guide control area. Guides can create walking tours,
+                edit existing routes, view reservations, and report completed tours.
+            </p>
+        </div>
+        <a href="{{ url_for('create_tour') }}" class="btn-main">
+            <i class="bi bi-plus-circle"></i> Create new tour
+        </a>
+    </header>
+
+    <section class="dashboard-stats-grid">
+        <article class="dashboard-stat-card"><i class="bi bi-map"></i><div><strong>{{ guide_tours|length }}</strong><span>My active tours</span></div></article>
+        <article class="dashboard-stat-card"><i class="bi bi-people"></i><div><strong>{{ upcoming_participants }}</strong><span>Upcoming participants</span></div></article>
+        <article class="dashboard-stat-card"><i class="bi bi-check-circle"></i><div><strong>{{ completed_tours|length }}</strong><span>Completed tours</span></div></article>
+        <article class="dashboard-stat-card"><i class="bi bi-star-fill"></i><div><strong>4.8</strong><span>Average rating</span></div></article>
+    </section>
+
+    <section class="guide-main-grid">
+        <div class="dashboard-panel">
+            <div class="dashboard-panel-header">
+                <div><span class="section-label">My tours</span><h2>Routes created by this guide</h2></div>
+            </div>
+
+            <div class="guide-tour-list">
+                {% for tour in guide_tours %}
+                    <article class="guide-tour-card">
+                        <img src="{{ url_for('static', filename=tour.image) }}" alt="{{ tour.title }}" class="guide-tour-image">
+                        <div class="guide-tour-content">
+                            <h3>{{ tour.title }}</h3>
+                            <div class="tour-summary">
+                                <span class="tour-rating">
+                                    <span class="rating-stars">
+                                        {% for i in range(tour.full_stars) %}<i class="bi bi-star-fill"></i>{% endfor %}
+                                        {% for i in range(5 - tour.full_stars) %}<i class="bi bi-star"></i>{% endfor %}
+                                    </span>
+                                    <span class="rating-score">{{ tour.rating }}</span>
+                                </span>
+                                <span><i class="bi bi-globe2"></i> {{ tour.languages }}</span>
+                                <span><i class="bi bi-clock"></i> {{ tour.duration }}</span>
+                                <span><i class="bi bi-signpost"></i> {{ tour.distance }}</span>
+                            </div>
+                            <p><i class="bi bi-geo-alt-fill"></i> {{ tour.meeting_point }}</p>
+                            {% if tour.reservation_summaries %}
+                                <div class="guide-reservation-summary">
+                                    {% for item in tour.reservation_summaries %}
+                                        <span>
+                                            <i class="bi bi-calendar-event"></i>
+                                            {{ item.selected_date }} {{ item.selected_time }}:
+                                            {{ item.expected_participants }} expected
+                                        </span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="guide-tour-actions">
+                                <a href="{{ url_for('tour_detail', tour_id=tour.id) }}" class="btn-main btn-small">View</a>
+                                <a href="{{ url_for('edit_tour', tour_id=tour.id) }}" class="btn-outline-small">Edit</a>
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+
+        <aside class="dashboard-panel guide-side-panel">
+            <span class="section-label">Guide actions</span>
+            <h2>Manage your work</h2>
+
+            <div class="guide-action-list">
+                <a href="{{ url_for('create_tour') }}"><i class="bi bi-plus-circle"></i> Create a new walking route</a>
+                <a href="{{ url_for('completed_tours') }}"><i class="bi bi-clipboard-check"></i> Report completed tours</a>
+                <a href="{{ url_for('home') }}#walking-routes"><i class="bi bi-search"></i> Preview public routes</a>
+            </div>
+
+            <div class="guide-note-box">
+                <h3><i class="bi bi-info-circle"></i> Guide note</h3>
+                <p>Only guide accounts can create tours. Essential tour information should not be changed after reservations exist.</p>
+            </div>
+        </aside>
+    </section>
+</section>
+{% endblock %}

@@ -1,0 +1,356 @@
+{% extends "base.html" %}
+
+{% block title %}Reserve {{ tour.title }} | LA Walks{% endblock %}
+
+{% block content %}
+<section class="reservation-page">
+    <header class="reservation-header">
+        <div>
+            <span class="section-label">Reservation</span>
+
+            <h1 class="reservation-title">Reserve your place</h1>
+
+            <p class="reservation-subtitle">
+                You are reserving a place for <strong>{{ tour.title }}</strong>.
+                This is a free walking tour, so payment is not required in advance.
+                You can voluntarily tip the guide after the walk.
+            </p>
+        </div>
+
+        <a href="{{ url_for('tour_detail', tour_id=tour.id) }}" class="btn-light-back">
+            <i class="bi bi-arrow-left"></i>
+            Back to tour
+        </a>
+    </header>
+
+    <div class="reservation-layout">
+        <aside class="reservation-summary-card">
+            <img
+                src="{{ url_for('static', filename=tour.image) }}"
+                alt="{{ tour.title }}"
+                class="reservation-summary-image"
+            >
+
+            <div class="reservation-summary-body">
+                <h2>{{ tour.title }}</h2>
+
+                <div class="tour-summary">
+                    <span class="tour-rating">
+                        <span class="rating-stars">
+                            {% for i in range(tour.full_stars) %}
+                                <i class="bi bi-star-fill"></i>
+                            {% endfor %}
+
+                            {% for i in range(5 - tour.full_stars) %}
+                                <i class="bi bi-star"></i>
+                            {% endfor %}
+                        </span>
+
+                        <span class="rating-score">{{ tour.rating }}</span>
+                    </span>
+
+                    <span><i class="bi bi-heart"></i> {{ tour.price }}</span>
+                    <span><i class="bi bi-globe2"></i> {{ tour.languages }}</span>
+                    <span><i class="bi bi-clock"></i> {{ tour.duration }}</span>
+                    <span><i class="bi bi-signpost"></i> {{ tour.distance }}</span>
+                </div>
+
+                <p class="reservation-summary-text">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    Meeting point: {{ tour.meeting_point }}
+                </p>
+
+                <p class="reservation-summary-text">
+                    <i class="bi bi-people"></i>
+                    Maximum participants: {{ tour.max_participants }}
+                </p>
+            </div>
+        </aside>
+
+        <form class="reservation-form-card" id="reservationForm" method="POST">
+            <div class="form-section-title">
+                <span class="section-label">Participant information</span>
+                <h2>Fill in your reservation details</h2>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="participantName" class="form-label">Full name</label>
+                    <input
+                        type="text"
+                        id="participantName"
+                        name="participant_name"
+                        class="form-control"
+                        placeholder="Example: Alex Johnson"
+                        required
+                    >
+                </div>
+
+                <div class="col-md-6">
+                    <label for="participantEmail" class="form-label">Email address</label>
+                    <input
+                        type="email"
+                        id="participantEmail"
+                        name="participant_email"
+                        class="form-control"
+                        placeholder="example@email.com"
+                        required
+                    >
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Tour date</label>
+
+                    <input
+                        type="hidden"
+                        id="selectedDate"
+                        name="selected_date"
+                        required
+                    >
+
+                    <input
+                        type="hidden"
+                        id="selectedTime"
+                        name="selected_time"
+                        required
+                    >
+
+                    <div class="reservation-calendar-picker">
+                        <div class="reservation-calendar-toolbar">
+                            <span>Choose month</span>
+
+                            <div class="reservation-month-menu" id="reservationMonthMenu">
+                                <button
+                                    type="button"
+                                    class="reservation-month-trigger"
+                                    id="reservationMonthTrigger"
+                                    aria-expanded="false"
+                                >
+                                    <span id="reservationMonthTriggerText">
+                                        {% for option in reservation_month_options %}
+                                            {% if option.selected %}{{ option.label }}{% endif %}
+                                        {% endfor %}
+                                    </span>
+                                    <i class="bi bi-chevron-down"></i>
+                                </button>
+
+                                <div class="reservation-month-options" id="reservationMonthOptions">
+                                    {% for option in reservation_month_options %}
+                                        <button
+                                            type="button"
+                                            class="reservation-month-option {% if option.selected %}selected-reservation-month-option{% endif %}"
+                                            data-key="{{ option.key }}"
+                                            data-start="{{ option.start_key }}"
+                                            data-end="{{ option.end_key }}"
+                                            data-label="{{ option.label }}"
+                                        >
+                                            {{ option.label }}
+                                        </button>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="reservation-calendar-wrapper">
+                            {% for calendar in reservation_calendars %}
+                                <div
+                                    class="reservation-calendar-card"
+                                    data-calendar-key="{{ calendar.key }}"
+                                >
+                                    <h3 class="reservation-calendar-title">
+                                        {{ calendar.month_name }} {{ calendar.year }}
+                                    </h3>
+
+                                    <div class="reservation-calendar-weekdays">
+                                        <span>Mon</span>
+                                        <span>Tue</span>
+                                        <span>Wed</span>
+                                        <span>Thu</span>
+                                        <span>Fri</span>
+                                        <span>Sat</span>
+                                        <span>Sun</span>
+                                    </div>
+
+                                    <div class="reservation-calendar-days">
+                                        {% for week in calendar.weeks %}
+                                            {% for day in week %}
+                                                {% if day %}
+                                                    {% if day.available %}
+                                                        <button
+                                                            type="button"
+                                                            class="reservation-day available-reservation-day"
+                                                            data-date="{{ day.iso }}"
+                                                            data-time="{{ day.time }}"
+                                                            aria-label="Reserve {{ day.iso }} at {{ day.time }}"
+                                                        >
+                                                            <span>{{ day.day }}</span>
+                                                            <small>{{ day.time }}</small>
+                                                        </button>
+                                                    {% else %}
+                                                        <button
+                                                            type="button"
+                                                            class="reservation-day disabled-reservation-day {% if day.past %}past-reservation-day{% endif %}"
+                                                            disabled
+                                                            aria-label="{{ day.iso }} is not available"
+                                                        >
+                                                            <span>{{ day.day }}</span>
+                                                        </button>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <span class="reservation-day empty-reservation-day"></span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="selected-slot-preview" id="selectedSlotPreview">
+                        Select one bold available date. Unavailable dates are disabled.
+                    </div>
+
+                    <small class="form-help">
+                        Only dates with a planned tour are clickable. Past dates and dates without a tour cannot be reserved.
+                    </small>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="extraPeople" class="form-label">Extra people</label>
+                    <select id="extraPeople" name="extra_people" class="form-select">
+                        <option value="0" selected>Only me</option>
+                        <option value="1">1 extra person</option>
+                        <option value="2">2 extra people</option>
+                        <option value="3">3 extra people</option>
+                    </select>
+                    <small class="form-help">
+                        A participant can reserve for themselves and up to 3 extra people.
+                    </small>
+                </div>
+
+                <div class="col-12">
+                    <div class="extra-people-name-list" id="extraPeopleNameList"></div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="phoneNumber" class="form-label">Phone number</label>
+                    <input
+                        type="tel"
+                        id="phoneNumber"
+                        name="phone_number"
+                        class="form-control"
+                        placeholder="Optional"
+                    >
+                </div>
+
+                <div class="col-12">
+                    <label for="messageToGuide" class="form-label">Message to guide</label>
+                    <textarea
+                        id="messageToGuide"
+                        name="message_to_guide"
+                        class="form-control"
+                        rows="4"
+                        placeholder="Optional: allergies, children, accessibility question, or arrival note"
+                    ></textarea>
+                </div>
+
+                <div class="col-12">
+                    <div class="reservation-rules-box">
+                        <h3><i class="bi bi-info-circle"></i> Before reserving</h3>
+
+                        <ul>
+                            <li>Please arrive at the meeting point 10 minutes before the start time.</li>
+                            <li>The tour is free to join, and tips are voluntary after the walk.</li>
+                            <li>Wear comfortable shoes and bring water.</li>
+                            <li>If you cannot attend, cancel your reservation as early as possible.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    {% if is_logged_in and current_role == "Participant" %}
+                        <button type="submit" class="btn-main reservation-submit-button">
+                            <i class="bi bi-check-circle"></i>
+                            Confirm reservation
+                        </button>
+                    {% else %}
+                        <button type="button" class="btn-main reservation-submit-button" id="openLoginRequiredModal">
+                            <i class="bi bi-lock"></i>
+                            Confirm reservation
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<div class="login-required-modal" id="loginRequiredModal" aria-hidden="true">
+    <div class="login-required-modal-backdrop"></div>
+
+    <div class="login-required-modal-card">
+        <button type="button" class="login-required-close" id="closeLoginRequiredModal" aria-label="Close">
+            &times;
+        </button>
+
+        <div class="login-required-icon">
+            <i class="bi bi-lock-fill"></i>
+        </div>
+
+        <span class="section-label">Login required</span>
+
+        {% if current_role == "Guide" %}
+            <h2>Use a participant account to reserve</h2>
+            <p>
+                This account is registered as a guide. The same email can also be registered as a participant,
+                but reservations must be made from the participant account.
+            </p>
+
+            <div class="login-required-actions account-choice-actions">
+                <a href="{{ url_for('register', role='Participant', next=url_for('reserve_tour', tour_id=tour.id)) }}" class="btn-main">
+                    <i class="bi bi-person-plus"></i>
+                    Register as Participant
+                </a>
+
+                <a href="{{ url_for('login', next=url_for('reserve_tour', tour_id=tour.id)) }}" class="btn-light-back">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    Login as Participant
+                </a>
+            </div>
+        {% else %}
+            <h2>Choose how to continue</h2>
+            <p>
+                To reserve this tour, continue as a participant. If you want to create tours instead,
+                you can register as a guide.
+            </p>
+
+            <div class="login-required-actions account-choice-actions">
+                <a href="{{ url_for('login', next=url_for('reserve_tour', tour_id=tour.id)) }}" class="btn-main">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    Login
+                </a>
+
+                <a href="{{ url_for('register', role='Participant', next=url_for('reserve_tour', tour_id=tour.id)) }}" class="btn-light-back">
+                    <i class="bi bi-person-plus"></i>
+                    Register as Participant
+                </a>
+
+                <a href="{{ url_for('register', role='Guide') }}" class="btn-light-back">
+                    <i class="bi bi-person-badge"></i>
+                    Register as Guide
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/reservation.js') }}"></script>
+{% endblock %}
+

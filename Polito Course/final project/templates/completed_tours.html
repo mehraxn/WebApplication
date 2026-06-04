@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Completed Tours | LA Walks{% endblock %}
+{% block content %}
+<section class="guide-page">
+    <header class="dashboard-header">
+        <div>
+            <span class="section-label">Completed tours</span>
+            <h1 class="dashboard-title">Report completed walking tours</h1>
+            <p class="dashboard-subtitle">Guides can report tours that have already finished.</p>
+        </div>
+        <a href="{{ url_for('guide_dashboard') }}" class="btn-light-back"><i class="bi bi-arrow-left"></i> Back to guide dashboard</a>
+    </header>
+
+    <section class="guide-form-card">
+        <div class="form-section-title">
+            <span class="section-label">New report</span>
+            <h2>Declare actual participants</h2>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label" for="completedTourDate">Tour date</label>
+                <select id="completedTourDate" name="tour_date" class="form-select" required>
+                    <option value="" selected>Select completed date</option>
+                    {% for item in reportable_dates %}
+                        <option value="{{ item.tour_date }}" data-tour-id="{{ item.tour_id }}">
+                            {{ item.title }} - {{ item.tour_date }} {{ item.tour_time }}
+                            (expected {{ item.expected_participants }})
+                        </option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="completedTourId" name="tour_id">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="actualParticipants">Actual participants</label>
+                <input id="actualParticipants" name="actual_participants_count" type="number" min="0" class="form-control" required>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="evidencePhoto">Evidence photo</label>
+                <input id="evidencePhoto" name="evidence_photo" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-control">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="completedNotes">Notes</label>
+                <input id="completedNotes" name="notes" type="text" class="form-control" placeholder="Optional">
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn-main">
+                    <i class="bi bi-clipboard-check"></i>
+                    Save report
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <div class="completed-tour-list">
+        {% for item in completed_tours %}
+            <article class="completed-tour-card">
+                <img src="{{ url_for('static', filename=item.tour.image) }}" alt="{{ item.tour.title }}" class="completed-tour-image">
+                <div class="completed-tour-content">
+                    <h2>{{ item.tour.title }}</h2>
+                    <div class="tour-summary">
+                        <span><i class="bi bi-calendar-check"></i> {{ item.date }}</span>
+                        <span><i class="bi bi-people"></i> {{ item.participants }} participants</span>
+                        <span><i class="bi bi-heart"></i> Tips: {{ item.tips }}</span>
+                        <span><i class="bi bi-flag"></i> {{ item.status }}</span>
+                    </div>
+                    <p><i class="bi bi-geo-alt-fill"></i> {{ item.tour.meeting_point }}</p>
+                    <div class="completed-tour-actions">
+                        <button type="button" class="btn-main btn-small"><i class="bi bi-clipboard-check"></i> Report completed</button>
+                        <button type="button" class="btn-outline-small">View participants</button>
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/completed_tours.js') }}"></script>
+{% endblock %}

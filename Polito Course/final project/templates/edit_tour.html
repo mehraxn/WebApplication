@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Edit {{ tour.title }} | LA Walks{% endblock %}
+{% block content %}
+<section class="guide-form-page">
+    <header class="dashboard-header">
+        <div>
+            <span class="section-label">Edit tour</span>
+            <h1 class="dashboard-title">Edit {{ tour.title }}</h1>
+            <p class="dashboard-subtitle">This page is similar to the create page, but it is pre-filled with existing tour information.</p>
+        </div>
+        <a href="{{ url_for('guide_dashboard') }}" class="btn-light-back"><i class="bi bi-arrow-left"></i> Back to guide dashboard</a>
+    </header>
+
+    <form class="guide-form-card" method="POST" enctype="multipart/form-data">
+        <div class="form-section-title"><span class="section-label">Basic information</span><h2>Update tour details</h2></div>
+        <div class="row g-3">
+            <div class="col-md-8"><label for="title" class="form-label">Tour title</label><input type="text" id="title" name="title" class="form-control" value="{{ tour.title }}" required></div>
+            <div class="col-md-4"><label for="duration" class="form-label">Duration</label><input type="text" id="duration" name="duration" class="form-control" value="{{ tour.duration }}"></div>
+            <div class="col-md-6"><label for="languages" class="form-label">Languages</label><input type="text" id="languages" name="languages" class="form-control" value="{{ tour.languages }}"></div>
+            <div class="col-md-6"><label for="distance" class="form-label">Distance</label><input type="text" id="distance" name="distance" class="form-control" value="{{ tour.distance }}"></div>
+            <div class="col-md-12"><label for="meetingPoint" class="form-label">Meeting point</label><input type="text" id="meetingPoint" name="meeting_point" class="form-control" value="{{ tour.meeting_point }}"></div>
+            <div class="col-md-12"><label for="description" class="form-label">Description</label><textarea id="description" name="description" class="form-control" rows="5">{{ tour.description }}</textarea></div>
+        </div>
+
+        <hr class="form-divider">
+
+        <div class="form-section-title"><span class="section-label">Current route</span><h2>Route stops</h2></div>
+        <div class="edit-stop-list">
+            {% for stop in tour.stops %}
+                <div class="edit-stop-item">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    <input type="text" class="form-control" name="stop_{{ loop.index }}" value="{{ stop }}">
+                </div>
+            {% endfor %}
+        </div>
+
+        <hr class="form-divider">
+
+        <div class="row g-3">
+            <div class="col-md-6"><label for="tourImage" class="form-label">Replace tour image</label><input type="file" id="tourImage" name="tour_image" class="form-control"></div>
+            <div class="col-md-6"><label for="tourStatus" class="form-label">Tour status</label><select id="tourStatus" name="tour_status" class="form-select"><option>Active</option><option>Draft</option><option>Paused</option></select></div>
+        </div>
+
+        <button type="submit" class="btn-main guide-form-submit"><i class="bi bi-save"></i> Save changes</button>
+    </form>
+</section>
+{% endblock %}

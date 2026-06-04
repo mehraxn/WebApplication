@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Login | LA Walks{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+    <div class="auth-card">
+        <div class="auth-intro">
+            <span class="section-label">Login</span>
+
+            <h1 class="auth-title">Welcome back</h1>
+
+            <p class="auth-text">
+                Log in to reserve walking tours, check your reservations, or manage your guide account.
+            </p>
+
+            <div class="auth-feature-list">
+                <span><i class="bi bi-ticket-perforated"></i> Reserve tours</span>
+                <span><i class="bi bi-calendar-check"></i> View your bookings</span>
+                <span><i class="bi bi-person-walking"></i> Manage walking routes</span>
+            </div>
+        </div>
+
+        {% if role_choices %}
+            <div class="auth-role-choice-panel">
+                <div class="form-section-title">
+                    <span class="section-label">Choose account</span>
+                    <h2>This email has more than one role</h2>
+                </div>
+
+                <p class="auth-text">
+                    The same email can be used once as a participant and once as a guide.
+                    Choose which account you want to open.
+                </p>
+
+                <div class="login-role-choice-grid">
+                    {% for choice in role_choices %}
+                        <form method="POST" action="{{ url_for('select_login_role') }}">
+                            <input type="hidden" name="user_id" value="{{ choice.id }}">
+
+                            <button type="submit" class="login-role-choice-card">
+                                {% if choice.role == "Guide" %}
+                                    <i class="bi bi-person-badge"></i>
+                                {% else %}
+                                    <i class="bi bi-person"></i>
+                                {% endif %}
+
+                                <strong>Continue as {{ choice.role }}</strong>
+                                <span>{{ choice.full_name }}</span>
+                            </button>
+                        </form>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <form class="auth-form" method="POST">
+            <div class="form-section-title">
+                <span class="section-label">Account access</span>
+                <h2>Enter your login details</h2>
+            </div>
+
+            <div class="mb-3">
+                <label for="loginEmail" class="form-label">Email address</label>
+                <input
+                    type="email"
+                    id="loginEmail"
+                    name="email"
+                    class="form-control"
+                    placeholder="example@email.com"
+                    required
+                >
+            </div>
+
+            <div class="mb-3">
+                <label for="loginPassword" class="form-label">Password</label>
+                <input
+                    type="password"
+                    id="loginPassword"
+                    name="password"
+                    class="form-control"
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
+
+            <input type="hidden" name="next" value="{{ next_url }}">
+
+            <button type="submit" class="btn-main auth-submit-button">
+                <i class="bi bi-box-arrow-in-right"></i>
+                Login
+            </button>
+
+            <p class="auth-switch-text">
+                Do not have an account?
+                <a href="{{ url_for('register') }}">Create one here</a>
+            </p>
+        </form>
+    </div>
+</section>
+{% endblock %}

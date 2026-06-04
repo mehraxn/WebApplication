@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <form class="auth-form" method="POST">
+        <form class="auth-form" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="next" value="{{ next_url }}">
             <div class="form-section-title">
                 <span class="section-label">New account</span>
@@ -96,6 +96,18 @@
                         placeholder="Repeat password"
                         required
                     >
+                </div>
+
+                <div class="col-md-12">
+                    <label for="profilePicture" class="form-label">Profile picture (optional)</label>
+                    <input
+                        type="file"
+                        id="profilePicture"
+                        name="profile_picture"
+                        class="form-control"
+                        accept=".jpg,.jpeg,.png,.webp"
+                    >
+                    <small class="form-help">This is optional for both participants and guides.</small>
                 </div>
 
                 <div class="col-md-12">

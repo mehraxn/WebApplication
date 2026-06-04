@@ -47,8 +47,8 @@
 
             <dl class="tour-info-list">
                 <div>
-                    <dt><i class="bi bi-heart"></i> Price</dt>
-                    <dd>{{ tour.price }}</dd>
+                    <dt><i class="bi bi-map"></i> Type</dt>
+                    <dd>Scheduled walking route</dd>
                 </div>
 
                 <div>
@@ -73,7 +73,7 @@
 
                 <div>
                     <dt><i class="bi bi-person-badge"></i> Guide</dt>
-                    <dd>{{ tour.guide }}</dd>
+                    <dd><a href="{{ url_for('guide_profile', guide_id=tour.guide_user_id) }}">{{ tour.guide }}</a></dd>
                 </div>
             </dl>
 
@@ -81,6 +81,15 @@
                 <i class="bi bi-ticket-perforated"></i>
                 Reserve this tour
             </a>
+            {% if tour.existing_reservations %}
+                <div class="alert alert-info mt-3">
+                    You already reserved this tour for:
+                    {% for reservation in tour.existing_reservations %}
+                        <strong>{{ reservation.selected_date }} at {{ reservation.selected_time }}</strong>{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
         </aside>
     </section>
 

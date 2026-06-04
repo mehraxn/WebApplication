@@ -2009,7 +2009,7 @@ a {
 }
 
 .dashboard-panel-header h2,
-.dashboard-tips-panel h2 {
+.dashboard-info-panel h2 {
     font-size: 1.45rem;
     font-weight: 900;
     margin: 0;
@@ -2994,4 +2994,12 @@ a {
 
 .account-choice-actions {
     flex-wrap: wrap;
+}
+
+.guide-profile-picture {
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 1rem;
 }

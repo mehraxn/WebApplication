@@ -7,6 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from database import get_db_connection
 from models import User
 
+
 login_manager = LoginManager()
 login_manager.login_view = "login"
 
@@ -14,29 +15,73 @@ login_manager.login_view = "login"
 @login_manager.user_loader
 def load_user(user_id):
     connection = get_db_connection()
-    user = connection.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+    user = connection.execute(
+        "SELECT * FROM users WHERE id = ?",
+        (user_id,)
+    ).fetchone()
     connection.close()
-    return User(user) if user else None
+
+    if user is None:
+        return None
+
+    return User(user)
+
+
+def save_profile_picture(uploaded_file, user_id):
+    if not uploaded_file:
+        return ""
+
+    if not uploaded_file.filename:
+        return ""
+
+    filename_parts = uploaded_file.filename.rsplit(".", 1)
+    if len(filename_parts) != 2:
+        return ""
+
+    extension = filename_parts[-1].lower()
+    if extension not in ["jpg", "jpeg", "png", "webp"]:
+        return ""
+
+    filename = f"user_{user_id}.{extension}"
+    save_path = f"static/uploads/{filename}"
+    uploaded_file.save(save_path)
+
+    return f"uploads/{filename}"
 
 
 def is_safe_next_url(next_url):
-    """Accept only local redirects such as /tour/1/reserve."""
-    return bool(next_url) and next_url.startswith("/") and not next_url.startswith("//")
+    # We accept only local links such as /tour/1/reserve.
+    if not next_url:
+        return False
+
+    if not next_url.startswith("/"):
+        return False
+
+    if next_url.startswith("//"):
+        return False
+
+    return True
 
 
 def complete_login(user, next_url=None):
-    """Log in a selected user row and redirect according to role."""
-    login_user(User(user))
+    user_object = User(user)
+    login_user(user_object)
+
     session["user_id"] = user["id"]
     session["role"] = user["role"]
     session["full_name"] = user["full_name"]
-    session.pop("pending_login_user_ids", None)
-    session.pop("pending_login_next", None)
+
+    if "pending_login_user_ids" in session:
+        session.pop("pending_login_user_ids")
+
+    if "pending_login_next" in session:
+        session.pop("pending_login_next")
 
     flash(f"Welcome back, {user['full_name']}.")
 
-    if is_safe_next_url(next_url) and user["role"] == "Participant":
-        return redirect(next_url)
+    if is_safe_next_url(next_url):
+        if user["role"] == "Participant":
+            return redirect(next_url)
 
     if user["role"] == "Guide":
         return redirect(url_for("guide_dashboard"))
@@ -48,9 +93,11 @@ def require_role(role):
     if not current_user.is_authenticated:
         flash("Please log in first.")
         return redirect(url_for("login"))
+
     if current_user.role != role:
         flash(f"This page is only available for {role.lower()} accounts.")
         return redirect(url_for("home"))
+
     return None
 
 
@@ -75,9 +122,14 @@ def login():
 
         matching_users = []
         for user in users:
-            stored_hash = user["password_hash"] if "password_hash" in user.keys() else None
-            if stored_hash and check_password_hash(stored_hash, password):
-                matching_users.append(user)
+            stored_hash = None
+            if "password_hash" in user.keys():
+                stored_hash = user["password_hash"]
+
+            if stored_hash:
+                password_is_correct = check_password_hash(stored_hash, password)
+                if password_is_correct:
+                    matching_users.append(user)
 
         if not matching_users:
             flash("Invalid email or password.")
@@ -86,12 +138,22 @@ def login():
         if len(matching_users) == 1:
             return complete_login(matching_users[0], next_url=next_url)
 
-        session["pending_login_user_ids"] = [user["id"] for user in matching_users]
-        session["pending_login_next"] = next_url if is_safe_next_url(next_url) else ""
+        pending_user_ids = []
+        role_choices = []
+        for user in matching_users:
+            pending_user_ids.append(user["id"])
+            role_choices.append(dict(user))
+
+        session["pending_login_user_ids"] = pending_user_ids
+
+        if is_safe_next_url(next_url):
+            session["pending_login_next"] = next_url
+        else:
+            session["pending_login_next"] = ""
 
         return render_template(
             "login.html",
-            role_choices=[dict(user) for user in matching_users],
+            role_choices=role_choices,
             next_url=next_url
         )
 
@@ -154,7 +216,10 @@ def register():
         confirm_password = request.form.get("confirm_password", "").strip()
         role = request.form.get("role", "").strip()
         next_url = request.form.get("next", "").strip()
-        spoken_languages = ", ".join(request.form.getlist("spoken_languages"))
+        profile_picture_file = request.files.get("profile_picture")
+
+        language_list = request.form.getlist("spoken_languages")
+        spoken_languages = ", ".join(language_list)
 
         if role not in ["Participant", "Guide"]:
             role = selected_role
@@ -162,10 +227,16 @@ def register():
         if not is_safe_next_url(next_url):
             next_url = ""
 
-        if full_name and (not first_name or not last_name):
-            name_parts = full_name.split(" ", 1)
-            first_name = first_name or name_parts[0]
-            last_name = last_name or (name_parts[1] if len(name_parts) > 1 else "")
+        if full_name:
+            if not first_name or not last_name:
+                name_parts = full_name.split(" ", 1)
+                if not first_name:
+                    first_name = name_parts[0]
+                if not last_name:
+                    if len(name_parts) > 1:
+                        last_name = name_parts[1]
+                    else:
+                        last_name = ""
 
         full_name = f"{first_name} {last_name}".strip()
 
@@ -196,13 +267,19 @@ def register():
             flash(f"This email is already registered as a {role.lower()} account.")
             return render_template("register.html", selected_role=role, next_url=next_url)
 
+        if role == "Guide":
+            saved_languages = spoken_languages
+        else:
+            saved_languages = ""
+
         try:
-            connection.execute(
+            cursor = connection.execute(
                 """
                 INSERT INTO users (
-                    full_name, first_name, last_name, email, password, password_hash, role, spoken_languages
+                    full_name, first_name, last_name, email, password,
+                    password_hash, role, spoken_languages, profile_picture
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     full_name,
@@ -212,9 +289,20 @@ def register():
                     password,
                     generate_password_hash(password),
                     role,
-                    spoken_languages if role == "Guide" else ""
+                    saved_languages,
+                    ""
                 )
             )
+
+            new_user_id = cursor.lastrowid
+            profile_picture_path = save_profile_picture(profile_picture_file, new_user_id)
+
+            if profile_picture_path:
+                connection.execute(
+                    "UPDATE users SET profile_picture = ? WHERE id = ?",
+                    (profile_picture_path, new_user_id)
+                )
+
             connection.commit()
             connection.close()
         except sqlite3.IntegrityError:

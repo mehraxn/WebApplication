@@ -24,12 +24,30 @@
 
         <hr class="form-divider">
 
+        <div class="form-section-title"><span class="section-label">Weekly schedule</span><h2>Repeated tour meeting</h2></div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="scheduleWeekday" class="form-label">Weekly day</label>
+                <select id="scheduleWeekday" name="schedule_weekday" class="form-select" required>
+                    {% for weekday in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %}
+                        <option value="{{ weekday }}" {% if tour.schedule_weekday == weekday %}selected{% endif %}>{{ weekday }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="scheduleStartTime" class="form-label">Start time</label>
+                <input type="time" id="scheduleStartTime" name="schedule_start_time" class="form-control" value="{{ tour.schedule_start_time }}" required>
+            </div>
+        </div>
+
+        <hr class="form-divider">
+
         <div class="form-section-title"><span class="section-label">Current route</span><h2>Route stops</h2></div>
         <div class="edit-stop-list">
             {% for stop in tour.stops %}
                 <div class="edit-stop-item">
                     <i class="bi bi-geo-alt-fill"></i>
-                    <input type="text" class="form-control" name="stop_{{ loop.index }}" value="{{ stop }}">
+                    <input type="text" class="form-control" name="stop_{{ loop.index }}" value="{{ stop }}" required>
                 </div>
             {% endfor %}
         </div>

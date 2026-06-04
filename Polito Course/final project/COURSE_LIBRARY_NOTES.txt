@@ -1,0 +1,22 @@
+Strict backend library note
+
+The Python backend keeps the same split structure:
+app.py, auth.py, database.py, models.py, tours.py, reservations.py, guide.py.
+
+External/course libraries used in Python:
+- Flask
+- Flask-Login
+- Werkzeug security
+- sqlite3
+- datetime
+
+These are the backend technologies used in the course notes and exercises: Flask for routes/templates/forms, Flask-Login for authentication, Werkzeug security for password hashing, sqlite3 for SQLite, and datetime for date/time handling.
+
+Avoided in the backend:
+- no extra image processing library
+- no UUID library
+- no random library
+- no filesystem helper library for creating folders
+- no separate calendar module
+
+The folder static/uploads is already included in the ZIP, so the backend can save uploaded profile and report images there with simple string paths.

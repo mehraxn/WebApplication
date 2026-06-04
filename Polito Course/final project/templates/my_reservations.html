@@ -51,6 +51,7 @@
                 <div>
                     <strong>{{ reservation.date }}</strong>
                     <span>{{ reservation.time }}</span>
+                    {% if reservation.is_past %}<span>Past tour</span>{% else %}<span>Upcoming tour</span>{% endif %}
                 </div>
 
                 <div>

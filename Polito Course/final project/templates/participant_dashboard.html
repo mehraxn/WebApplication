@@ -42,10 +42,10 @@
         </article>
 
         <article class="dashboard-stat-card">
-            <i class="bi bi-heart"></i>
+            <i class="bi bi-calendar-event"></i>
             <div>
-                <strong>Tip-based</strong>
-                <span>No payment in advance</span>
+                <strong>Scheduled route</strong>
+                <span>Reservation based</span>
             </div>
         </article>
 
@@ -53,7 +53,7 @@
             <i class="bi bi-person-walking"></i>
             <div>
                 <strong>LA Walks</strong>
-                <span>Free walking tours</span>
+                <span>Walking routes</span>
             </div>
         </article>
     </section>
@@ -63,7 +63,7 @@
             <div class="dashboard-panel-header">
                 <div>
                     <span class="section-label">Upcoming</span>
-                    <h2>Your next reservations</h2>
+                    <h2>Your reservations</h2>
                 </div>
 
                 <a href="{{ url_for('my_reservations') }}" class="dashboard-small-link">
@@ -87,6 +87,7 @@
                             <div class="dashboard-reservation-meta">
                                 <span><i class="bi bi-calendar"></i> {{ reservation.date }}</span>
                                 <span><i class="bi bi-clock"></i> {{ reservation.time }}</span>
+                                {% if reservation.is_past %}<span><i class="bi bi-check-circle"></i> Past</span>{% else %}<span><i class="bi bi-calendar-event"></i> Upcoming</span>{% endif %}
                                 <span><i class="bi bi-people"></i> Extra people: {{ reservation.extra_people }}</span>
                             </div>
 
@@ -104,7 +105,7 @@
             </div>
         </div>
 
-        <aside class="dashboard-panel dashboard-tips-panel">
+        <aside class="dashboard-panel dashboard-info-panel">
             <span class="section-label">Before you go</span>
 
             <h2>Walking tour checklist</h2>
@@ -113,7 +114,7 @@
                 <li><i class="bi bi-check2-circle"></i> Arrive 10 minutes before the start time.</li>
                 <li><i class="bi bi-check2-circle"></i> Bring water and comfortable shoes.</li>
                 <li><i class="bi bi-check2-circle"></i> Check the meeting point before leaving.</li>
-                <li><i class="bi bi-check2-circle"></i> Tips are voluntary after the tour.</li>
+                <li><i class="bi bi-check2-circle"></i> Arrive on time and cancel early if you cannot attend.</li>
             </ul>
 
             <a href="{{ url_for('my_reservations') }}" class="btn-main dashboard-wide-button">

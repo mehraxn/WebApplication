@@ -21,7 +21,7 @@ class User(UserMixin):
         if "full_name" in row.keys():
             self.full_name = row["full_name"]
         else:
-            self.full_name = f"{self.first_name} {self.last_name}".strip()
+            self.full_name = (self.first_name + " " + self.last_name).strip()
 
         self.email = row["email"]
         self.role = row["role"]
@@ -31,16 +31,11 @@ class User(UserMixin):
         else:
             self.spoken_languages = ""
 
-        if "profile_picture" in row.keys():
-            self.profile_picture = row["profile_picture"]
-        else:
-            self.profile_picture = ""
-
 
 def get_current_user():
     user_id = session.get("user_id")
 
-    if not user_id:
+    if user_id is None or user_id == "" or user_id == 0:
         return None
 
     connection = get_db_connection()
@@ -51,29 +46,3 @@ def get_current_user():
     connection.close()
 
     return user
-
-
-def get_first_participant_id():
-    connection = get_db_connection()
-    user = connection.execute(
-        "SELECT id FROM users WHERE role = 'Participant' ORDER BY id LIMIT 1"
-    ).fetchone()
-    connection.close()
-
-    if user is None:
-        return None
-
-    return user["id"]
-
-
-def get_first_guide_id():
-    connection = get_db_connection()
-    user = connection.execute(
-        "SELECT id FROM users WHERE role = 'Guide' ORDER BY id LIMIT 1"
-    ).fetchone()
-    connection.close()
-
-    if user is None:
-        return None
-
-    return user["id"]

@@ -3,49 +3,50 @@
 {% block title %}{{ guide.full_name }} | LA Walks{% endblock %}
 
 {% block content %}
-<section class="guide-page">
-    <header class="dashboard-header">
+{% set default_tour_image = url_for('static', filename='images/places/default-tour-cover.jpg') %}
+<section class="guide-profile-page">
+    <header class="dashboard-header guide-profile-header">
         <div>
-            {% if guide.profile_picture %}
-                <img src="{{ url_for('static', filename=guide.profile_picture) }}" alt="{{ guide.full_name }} profile picture" class="guide-profile-picture">
-            {% endif %}
-            <span class="section-label">Guide profile</span>
-            <h1 class="dashboard-title">{{ guide.full_name }}</h1>
+            <span class="eyebrow"><i class="bi bi-person-badge" aria-hidden="true"></i> Local guide profile</span>
+            <h1>{{ guide.full_name }}</h1>
             <p class="dashboard-subtitle">
                 Spoken languages: {{ guide.spoken_languages if guide.spoken_languages else "Not specified" }}
             </p>
         </div>
-        <a href="{{ url_for('home') }}#walking-routes" class="btn-light-back"><i class="bi bi-arrow-left"></i> Back to routes</a>
     </header>
 
     <section class="guide-main-grid">
-        <div class="dashboard-panel">
-            <div class="dashboard-panel-heading">
+        <div class="dashboard-panel guide-profile-tours">
+            <div>
                 <div>
-                    <span class="section-label">Tours</span>
+                    <span class="eyebrow">Tours</span>
                     <h2>Routes created by this guide</h2>
                 </div>
             </div>
 
             <div class="guide-tour-list">
-                {% for tour in guide_tours %}
-                    <article class="guide-tour-card">
-                        <img src="{{ url_for('static', filename=tour.image) }}" alt="{{ tour.title }}" class="guide-tour-image">
+                {% for x in guide_tours %}
+                    <div class="guide-tour-card">
+                        <img
+                            src="{{ url_for('static', filename=x.image) }}"
+                            alt="{{ x.title }}"
+                            class="guide-tour-image"
+                            loading="lazy"
+                            onerror="this.onerror=null; this.src='{{ default_tour_image }}';">
                         <div class="guide-tour-content">
-                            <h3>{{ tour.title }}</h3>
-                            <p>{{ tour.description }}</p>
+                            <h3>{{ x.title }}</h3>
+                            <p>{{ x.description }}</p>
                             <div class="guide-tour-meta">
-                                <span><i class="bi bi-globe2"></i> {{ tour.languages }}</span>
-                                <span><i class="bi bi-clock"></i> {{ tour.duration }}</span>
-                                <span><i class="bi bi-star-fill"></i> {{ tour.rating }}</span>
+                                <span><i class="bi bi-globe2"></i> {{ x.languages }}</span>
+                                <span><i class="bi bi-clock"></i> {{ x.duration }}</span>
                             </div>
                             <div class="guide-tour-actions">
-                                <a href="{{ url_for('tour_detail', tour_id=tour.id) }}" class="btn-main btn-small">View tour</a>
+                                <a href="{{ url_for('tour_detail', tour_id=x.id) }}" class="btn-main btn-small">View tour</a>
                             </div>
                         </div>
-                    </article>
+                    </div>
                 {% else %}
-                    <p class="muted-text">This guide has not created any tours yet.</p>
+                    <div class="empty-state compact-empty-state"><i class="bi bi-map" aria-hidden="true"></i><p class="mb-0">This guide has not created any tours yet.</p></div>
                 {% endfor %}
             </div>
         </div>

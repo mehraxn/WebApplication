@@ -3,125 +3,92 @@
 {% block title %}Participant Dashboard | LA Walks{% endblock %}
 
 {% block content %}
-<section class="dashboard-page">
-    <header class="dashboard-header">
-        <div>
-            <span class="section-label">Participant dashboard</span>
+{% set default_tour_image = url_for('static', filename='images/places/default-tour-cover.jpg') %}
+<div class="row g-2 mb-4 page-heading dashboard-hero">
+    <div class="col-12 col-md-6">
+        <span class="eyebrow"><i class="bi bi-compass" aria-hidden="true"></i> My LA Walks</span>
+        <h1>Participant dashboard</h1>
+        <p>
+            Welcome{% if session.get("full_name") %}, {{ session.get("full_name") }}{% endif %}.
+            View your reservations or find another tour.
+        </p>
+    </div>
+    <div class="col-12 col-md-3 dashboard-action">
+        <a href="{{ url_for('home') }}#walking-routes" class="btn btn-primary w-100">Browse tours <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+    </div>
+    <div class="col-12 col-md-3 dashboard-action">
+        <a href="{{ url_for('my_reservations') }}" class="btn btn-outline-secondary w-100">My reservations</a>
+    </div>
+</div>
 
-            <h1 class="dashboard-title">
-                Welcome back{% if session.get("full_name") %}, {{ session.get("full_name") }}{% endif %}
-            </h1>
-
-            <p class="dashboard-subtitle">
-                From here, you can see upcoming walking tours, check reservation status,
-                and continue exploring LA routes.
-            </p>
-        </div>
-
-        <a href="{{ url_for('home') }}#walking-routes" class="btn-main">
-            <i class="bi bi-compass"></i>
-            Explore more routes
-        </a>
-    </header>
-
-    <section class="dashboard-stats-grid">
-        <article class="dashboard-stat-card">
-            <i class="bi bi-calendar-check"></i>
-            <div>
+<div class="row g-3 mb-4 dashboard-stats">
+    <div class="col-12 col-md-4">
+        <div class="card stat-card">
+            <div class="card-body">
+                <i class="bi bi-calendar-event stat-icon" aria-hidden="true"></i>
                 <strong>{{ upcoming_count }}</strong>
                 <span>Upcoming reservations</span>
             </div>
-        </article>
-
-        <article class="dashboard-stat-card">
-            <i class="bi bi-check-circle"></i>
-            <div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card stat-card">
+            <div class="card-body">
+                <i class="bi bi-patch-check stat-icon" aria-hidden="true"></i>
                 <strong>{{ confirmed_count }}</strong>
                 <span>Confirmed tours</span>
             </div>
-        </article>
-
-        <article class="dashboard-stat-card">
-            <i class="bi bi-calendar-event"></i>
-            <div>
-                <strong>Scheduled route</strong>
-                <span>Reservation based</span>
-            </div>
-        </article>
-
-        <article class="dashboard-stat-card">
-            <i class="bi bi-person-walking"></i>
-            <div>
-                <strong>LA Walks</strong>
-                <span>Walking routes</span>
-            </div>
-        </article>
-    </section>
-
-    <section class="dashboard-main-grid">
-        <div class="dashboard-panel">
-            <div class="dashboard-panel-header">
-                <div>
-                    <span class="section-label">Upcoming</span>
-                    <h2>Your reservations</h2>
-                </div>
-
-                <a href="{{ url_for('my_reservations') }}" class="dashboard-small-link">
-                    View all
-                    <i class="bi bi-arrow-right"></i>
-                </a>
-            </div>
-
-            <div class="dashboard-reservation-list">
-                {% for reservation in reservations %}
-                    <article class="dashboard-reservation-card">
-                        <img
-                            src="{{ url_for('static', filename=reservation.tour.image) }}"
-                            alt="{{ reservation.tour.title }}"
-                            class="dashboard-reservation-image"
-                        >
-
-                        <div class="dashboard-reservation-content">
-                            <h3>{{ reservation.tour.title }}</h3>
-
-                            <div class="dashboard-reservation-meta">
-                                <span><i class="bi bi-calendar"></i> {{ reservation.date }}</span>
-                                <span><i class="bi bi-clock"></i> {{ reservation.time }}</span>
-                                {% if reservation.is_past %}<span><i class="bi bi-check-circle"></i> Past</span>{% else %}<span><i class="bi bi-calendar-event"></i> Upcoming</span>{% endif %}
-                                <span><i class="bi bi-people"></i> Extra people: {{ reservation.extra_people }}</span>
-                            </div>
-
-                            <p>
-                                <i class="bi bi-geo-alt-fill"></i>
-                                {{ reservation.tour.meeting_point }}
-                            </p>
-
-                            <span class="reservation-status reservation-status-{{ reservation.status|lower }}">
-                                {{ reservation.status }}
-                            </span>
-                        </div>
-                    </article>
-                {% endfor %}
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card stat-card">
+            <div class="card-body">
+                <i class="bi bi-clock-history stat-icon" aria-hidden="true"></i>
+                <strong>{{ past_count }}</strong>
+                <span>Past reservations</span>
             </div>
         </div>
+    </div>
+</div>
 
-        <aside class="dashboard-panel dashboard-info-panel">
-            <span class="section-label">Before you go</span>
-
-            <h2>Walking tour checklist</h2>
-
-            <ul class="dashboard-checklist">
-                <li><i class="bi bi-check2-circle"></i> Arrive 10 minutes before the start time.</li>
-                <li><i class="bi bi-check2-circle"></i> Bring water and comfortable shoes.</li>
-                <li><i class="bi bi-check2-circle"></i> Check the meeting point before leaving.</li>
-                <li><i class="bi bi-check2-circle"></i> Arrive on time and cancel early if you cannot attend.</li>
-            </ul>
-
-            <a href="{{ url_for('my_reservations') }}" class="btn-main dashboard-wide-button">
-                <i class="bi bi-ticket-perforated"></i>
-                Manage reservations
-            </a>
-        </aside>
-    </section>
+<section class="dashboard-section">
+    <div class="dashboard-section-heading"><div><span class="eyebrow">Your itinerary</span><h2 class="h4 mb-0">Your reservations</h2></div><a href="{{ url_for('my_reservations') }}">View all <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
+    <div class="row g-3">
+        {% for x in reservations %}
+            <div class="col-12 col-lg-6">
+                <div class="card h-100 dashboard-reservation-card">
+                    <div class="row g-0 h-100">
+                        <div class="col-12 col-sm-4">
+                            <img
+                                src="{{ url_for('static', filename=x.tour.image) }}"
+                                class="dashboard-image"
+                                alt="{{ x.tour.title }}"
+                                loading="lazy"
+                                onerror="this.onerror=null; this.src='{{ default_tour_image }}';">
+                        </div>
+                        <div class="col-12 col-sm-8">
+                            <div class="card-body">
+                                <h3 class="card-title h5">{{ x.tour.title }}</h3>
+                                <p class="mb-1"><strong>Date:</strong> {{ x.date }}</p>
+                                <p class="mb-1"><strong>Time:</strong> {{ x.time }}</p>
+                                <p class="mb-1"><strong>Status:</strong> <span class="status-pill">{{ x.status }}</span></p>
+                                <p class="mb-1"><strong>Extra people:</strong> {{ x.extra_people_count }}</p>
+                                <p class="mb-0"><strong>Meeting point:</strong> {{ x.tour.meeting_point }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="bi bi-map" aria-hidden="true"></i>
+                    <h3 class="h5">No reservations yet</h3>
+                    <p>You have not reserved any tours yet.</p>
+                    <a href="{{ url_for('home') }}#walking-routes" class="btn btn-primary">Find a walking tour</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </section>
 {% endblock %}

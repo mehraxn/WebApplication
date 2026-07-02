@@ -3,178 +3,84 @@
 {% block title %}Register | LA Walks{% endblock %}
 
 {% block content %}
-<section class="auth-page">
-    <div class="auth-card auth-card-wide">
-        <div class="auth-intro">
-            <span class="section-label">Register</span>
+<div class="row justify-content-center auth-shell">
+    <div class="col-12 col-md-10 col-lg-8">
+        <section class="card auth-card">
+            <div class="card-body">
+            <span class="auth-icon" aria-hidden="true"><i class="bi bi-person-plus"></i></span>
+            <span class="eyebrow">Join the community</span>
+            <h1 class="h3">Create an account</h1>
+            <p>Register as a participant or guide.</p>
 
-            <h1 class="auth-title">Create your account</h1>
+            <form method="POST" action="{{ url_for('register') }}">
+                <input type="hidden" name="next" value="{{ next_url }}">
 
-            <p class="auth-text">
-                Register as a participant to reserve walking tours, or register as a guide
-                to create and manage your own LA walking routes.
-            </p>
-
-            <div class="auth-role-preview">
-                <div>
-                    <i class="bi bi-person"></i>
-                    <strong>Participant</strong>
-                    <span>Reserve tours and manage bookings.</span>
-                </div>
-
-                <div>
-                    <i class="bi bi-person-badge"></i>
-                    <strong>Guide</strong>
-                    <span>Create tours and report completed walks.</span>
-                </div>
-            </div>
-        </div>
-
-        <form class="auth-form" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="next" value="{{ next_url }}">
-            <div class="form-section-title">
-                <span class="section-label">New account</span>
-                <h2>Fill in your details</h2>
-            </div>
-
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label for="firstName" class="form-label">First name</label>
-                    <input
-                        type="text"
-                        id="firstName"
-                        name="first_name"
-                        class="form-control"
-                        placeholder="Example: Alex"
-                        required
-                    >
-                </div>
-
-                <div class="col-md-6">
-                    <label for="lastName" class="form-label">Last name</label>
-                    <input
-                        type="text"
-                        id="lastName"
-                        name="last_name"
-                        class="form-control"
-                        placeholder="Example: Johnson"
-                        required
-                    >
-                </div>
-
-                <div class="col-md-12">
-                    <label for="registerEmail" class="form-label">Email address</label>
-                    <input
-                        type="email"
-                        id="registerEmail"
-                        name="email"
-                        class="form-control"
-                        placeholder="example@email.com"
-                        required
-                    >
-                </div>
-
-                <div class="col-md-6">
-                    <label for="registerPassword" class="form-label">Password</label>
-                    <input
-                        type="password"
-                        id="registerPassword"
-                        name="password"
-                        class="form-control"
-                        placeholder="Create a password"
-                        required
-                    >
-                </div>
-
-                <div class="col-md-6">
-                    <label for="confirmPassword" class="form-label">Confirm password</label>
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        name="confirm_password"
-                        class="form-control"
-                        placeholder="Repeat password"
-                        required
-                    >
-                </div>
-
-                <div class="col-md-12">
-                    <label for="profilePicture" class="form-label">Profile picture (optional)</label>
-                    <input
-                        type="file"
-                        id="profilePicture"
-                        name="profile_picture"
-                        class="form-control"
-                        accept=".jpg,.jpeg,.png,.webp"
-                    >
-                    <small class="form-help">This is optional for both participants and guides.</small>
-                </div>
-
-                <div class="col-md-12">
-                    {% if selected_role %}
-                        <input type="hidden" id="role" name="role" value="{{ selected_role }}">
-
-                        <div class="selected-register-role-card">
-                            {% if selected_role == "Guide" %}
-                                <i class="bi bi-person-badge"></i>
-                            {% else %}
-                                <i class="bi bi-person"></i>
-                            {% endif %}
-
-                            <div>
-                                <label class="form-label">Selected account role</label>
-                                <strong>{{ selected_role }}</strong>
-                                <span>
-                                    {% if selected_role == "Guide" %}
-                                        This account can create and manage walking routes.
-                                    {% else %}
-                                        This account can reserve tours and manage bookings.
-                                    {% endif %}
-                                </span>
-                            </div>
-                        </div>
-                    {% else %}
-                        <label for="role" class="form-label">Account role</label>
-                        <select id="role" name="role" class="form-select" required>
-                            <option value="" selected>Select your role</option>
-                            <option value="Participant">Participant</option>
-                            <option value="Guide">Guide</option>
-                        </select>
-                        <small class="form-help">
-                            Participants reserve tours. Guides create and manage walking routes.
-                        </small>
-                    {% endif %}
-                </div>
-
-                <div class="col-md-12">
-                    <label class="form-label">Guide spoken languages</label>
-                    <div class="auth-language-options">
-                        {% for language in ["Italian", "English", "Spanish", "Portuguese", "German"] %}
-                            <label>
-                                <input type="checkbox" name="spoken_languages" value="{{ language }}">
-                                <span>{{ language }}</span>
-                            </label>
-                        {% endfor %}
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label for="firstName" class="form-label">First name</label>
+                        <input type="text" id="firstName" name="first_name" class="form-control" autocomplete="given-name" required>
                     </div>
-                    <small class="form-help">
-                        Required only for guide accounts.
-                    </small>
-                </div>
 
+                    <div class="col-12 col-md-6">
+                        <label for="lastName" class="form-label">Last name</label>
+                        <input type="text" id="lastName" name="last_name" class="form-control" autocomplete="family-name" required>
+                    </div>
 
-                <div class="col-12">
-                    <button type="submit" class="btn-main auth-submit-button">
-                        <i class="bi bi-person-plus"></i>
-                        Create account
-                    </button>
+                    <div class="col-12">
+                        <label for="registerEmail" class="form-label">Email address</label>
+                        <input type="email" id="registerEmail" name="email" class="form-control" autocomplete="email" required>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label for="registerPassword" class="form-label">Password</label>
+                        <input type="password" id="registerPassword" name="password" class="form-control" autocomplete="new-password" required>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label for="confirmPassword" class="form-label">Confirm password</label>
+                        <input type="password" id="confirmPassword" name="confirm_password" class="form-control" autocomplete="new-password" required>
+                    </div>
+
+                    <div class="col-12">
+                        {% if selected_role %}
+                            <input type="hidden" id="role" name="role" value="{{ selected_role }}">
+                            <div class="alert alert-secondary mb-0">
+                                Selected account role: <strong>{{ selected_role }}</strong>
+                            </div>
+                        {% else %}
+                            <label for="role" class="form-label">Account role</label>
+                            <select id="role" name="role" class="form-select" required>
+                                <option value="" selected>Select your role</option>
+                                <option value="Participant">Participant</option>
+                                <option value="Guide">Guide</option>
+                            </select>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Guide spoken languages</label>
+                        <div class="row">
+                            {% for x in ["Italian", "English", "Spanish", "Portuguese", "German"] %}
+                                <div class="col-12 col-sm-6 col-md-4">
+                                    <div class="form-check">
+                                        <input type="checkbox" name="spoken_languages" value="{{ x }}" class="form-check-input" id="spoken{{ x }}">
+                                        <label class="form-check-label" for="spoken{{ x }}">{{ x }}</label>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="form-text">Required only for guide accounts.</div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Create account <i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+                    </div>
                 </div>
+            </form>
+
+            <p class="mt-3 mb-0">Already have an account? <a href="{{ url_for('login') }}">Login here</a>.</p>
             </div>
-
-            <p class="auth-switch-text">
-                Already have an account?
-                <a href="{{ url_for('login') }}">Login here</a>
-            </p>
-        </form>
+        </section>
     </div>
-</section>
+</div>
 {% endblock %}

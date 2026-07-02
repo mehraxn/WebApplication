@@ -1,8 +1,10 @@
-from datetime import date, datetime
+from datetime import date
 
 from flask import flash, redirect, render_template, request, session, url_for
 
 from database import get_db_connection
+
+
 
 
 MONTH_NAMES = [
@@ -32,6 +34,27 @@ WEEKDAYS = [
 ]
 
 
+def get_time_minutes(time_text):
+    parts = time_text.split(":")
+
+    if len(parts) != 2:
+        return None
+
+    try:
+        hour = int(parts[0])
+        minute = int(parts[1])
+    except ValueError:
+        return None
+
+    if hour < 0 or hour > 23:
+        return None
+
+    if minute < 0 or minute > 59:
+        return None
+
+    return hour * 60 + minute
+
+
 def is_leap_year(year):
     if year % 4 != 0:
         return False
@@ -58,124 +81,115 @@ def get_days_in_month(year, month):
     return 28
 
 
-def add_days_to_date(start_date, days_to_add):
-    year = start_date.year
-    month = start_date.month
-    day = start_date.day + days_to_add
-
-    while True:
-        days_in_month = get_days_in_month(year, month)
-
-        if day <= days_in_month:
-            break
-
-        day = day - days_in_month
-        month = month + 1
-
-        if month > 12:
-            month = 1
-            year = year + 1
-
-    return date(year, month, day)
-
-
-def is_valid_time(time_text):
-    try:
-        datetime.strptime(time_text, "%H:%M")
-        return True
-    except ValueError:
-        return False
-
-
-def read_duration_minutes(duration_text, fallback_value=None):
-    if fallback_value:
-        return int(fallback_value)
-
-    digits = ""
-    for character in duration_text:
-        if character.isdigit():
-            digits = digits + character
-
-    if digits:
-        return int(digits)
+def read_duration_minutes(duration_minutes):
+    if duration_minutes:
+        return int(duration_minutes)
 
     return 90
 
 
-def calculate_rating(tour_id):
+def get_duration_options():
     connection = get_db_connection()
-    result = connection.execute(
-        "SELECT AVG(rating) AS average_rating FROM reviews WHERE tour_id = ?",
-        (tour_id,)
-    ).fetchone()
+    rows = connection.execute(
+        """
+        SELECT DISTINCT duration_minutes
+        FROM tours
+        WHERE duration_minutes IS NOT NULL
+        ORDER BY duration_minutes
+        """
+    ).fetchall()
     connection.close()
 
-    if result is not None:
-        if result["average_rating"] is not None:
-            average = float(result["average_rating"])
-            return round(average, 1)
+    duration_options = []
+    for x in rows:
+        duration_options.append(x["duration_minutes"])
 
-    return 4.8
-
-
-def full_star_count(rating):
-    stars = int(round(float(rating)))
-
-    if stars < 0:
-        return 0
-
-    if stars > 5:
-        return 5
-
-    return stars
+    return duration_options
 
 
-def get_all_tours(language=None, duration=None, selected_date=None):
+def get_all_tours(language, duration, selected_date):
     connection = get_db_connection()
 
-    query = "SELECT DISTINCT tours.* FROM tours"
-    parameters = []
-    conditions = []
+    if language is None:
+        language = ""
 
-    if selected_date:
-        query = query + " JOIN tour_dates ON tour_dates.tour_id = tours.id"
-        conditions.append("tour_dates.tour_date = ?")
-        parameters.append(selected_date)
+    if duration is None:
+        duration = ""
 
-    if language:
-        conditions.append("(tours.language = ? OR tours.languages LIKE ?)")
-        parameters.append(language)
-        parameters.append(f"%{language}%")
+    if selected_date is None:
+        selected_date = ""
 
-    if duration:
-        conditions.append("(tours.duration_minutes = ? OR tours.duration LIKE ?)")
-        parameters.append(duration)
-        parameters.append(f"%{duration}%")
+    tours = connection.execute(
+        "SELECT * FROM tours ORDER BY id"
+    ).fetchall()
 
-    if conditions:
-        query = query + " WHERE " + " AND ".join(conditions)
+    tour_ids_for_selected_date = []
+    if selected_date != "":
+        date_rows = connection.execute(
+            "SELECT tour_id FROM tour_dates WHERE tour_date = ?",
+            (selected_date,)
+        ).fetchall()
 
-    query = query + " ORDER BY tours.id"
+        for x in date_rows:
+            if x["tour_id"] not in tour_ids_for_selected_date:
+                tour_ids_for_selected_date.append(x["tour_id"])
 
-    tours = connection.execute(query, parameters).fetchall()
+    tour_ids_for_language = []
+    if language != "":
+        language_rows = connection.execute(
+            """
+            SELECT id
+            FROM tours
+            WHERE language = ? OR languages LIKE ?
+            """,
+            (language, "%" + language + "%")).fetchall()
+
+        for x in language_rows:
+            tour_ids_for_language.append(x["id"])
+
+    tour_ids_for_duration = []
+    if duration != "":
+        duration_rows = connection.execute(
+            "SELECT id FROM tours WHERE duration_minutes = ?",
+            (duration,)
+        ).fetchall()
+
+        for x in duration_rows:
+            tour_ids_for_duration.append(x["id"])
+
     connection.close()
 
     result = []
-    for tour in tours:
-        tour_dict = dict(tour)
-        rating = calculate_rating(tour_dict["id"])
-        tour_dict["rating"] = f"{rating:.1f}"
-        tour_dict["full_stars"] = full_star_count(rating)
+
+    for x in tours:
+        tour_dict = dict(x)
+
+        if selected_date != "":
+            if tour_dict["id"] not in tour_ids_for_selected_date:
+                continue
+
+        if language != "":
+            if tour_dict["id"] not in tour_ids_for_language:
+                continue
+
+        if duration != "":
+            if tour_dict["id"] not in tour_ids_for_duration:
+                continue
+
         result.append(tour_dict)
 
     return result
-
 
 def get_existing_reservations_for_participant(tour_id):
     participant_id = session.get("user_id")
     role = session.get("role")
 
-    if not participant_id or role != "Participant":
+    if (
+        participant_id is None
+        or participant_id == ""
+        or participant_id == 0
+        or role != "Participant"
+    ):
         return []
 
     connection = get_db_connection()
@@ -193,8 +207,8 @@ def get_existing_reservations_for_participant(tour_id):
     connection.close()
 
     result = []
-    for reservation in reservations:
-        result.append(dict(reservation))
+    for x in reservations:
+        result.append(dict(x))
 
     return result
 
@@ -203,15 +217,7 @@ def get_tour_by_id(tour_id):
     connection = get_db_connection()
 
     tour = connection.execute(
-        """
-        SELECT tours.*, users.full_name AS guide,
-               users.id AS guide_user_id,
-               users.profile_picture AS guide_profile_picture,
-               users.spoken_languages AS guide_spoken_languages
-        FROM tours
-        JOIN users ON users.id = tours.guide_id
-        WHERE tours.id = ?
-        """,
+        "SELECT * FROM tours WHERE id = ?",
         (tour_id,)
     ).fetchone()
 
@@ -220,6 +226,18 @@ def get_tour_by_id(tour_id):
         return None
 
     tour_dict = dict(tour)
+
+    guide = connection.execute(
+        "SELECT * FROM users WHERE id = ?",
+        (tour_dict["guide_id"],)
+    ).fetchone()
+
+    if guide is not None:
+        tour_dict["guide"] = guide["full_name"]
+        tour_dict["guide_user_id"] = guide["id"]
+    else:
+        tour_dict["guide"] = "Unknown guide"
+        tour_dict["guide_user_id"] = tour_dict["guide_id"]
 
     stops = connection.execute(
         """
@@ -251,17 +269,6 @@ def get_tour_by_id(tour_id):
         (tour_id,)
     ).fetchall()
 
-    reviews = connection.execute(
-        """
-        SELECT reviews.*, users.full_name
-        FROM reviews
-        JOIN users ON users.id = reviews.participant_id
-        WHERE reviews.tour_id = ?
-        ORDER BY reviews.id DESC
-        """,
-        (tour_id,)
-    ).fetchall()
-
     photos = connection.execute(
         """
         SELECT photo_path
@@ -274,44 +281,38 @@ def get_tour_by_id(tour_id):
 
     connection.close()
 
-    rating = calculate_rating(tour_id)
-    tour_dict["rating"] = f"{rating:.1f}"
-    tour_dict["full_stars"] = full_star_count(rating)
-
     stop_names = []
     normal_stops = []
     finish_stops = []
 
-    for stop in stops:
-        stop_names.append(stop["stop_name"])
+    for x in stops:
+        stop_names.append(x["stop_name"])
 
-        if stop["stop_type"] == "Stop":
-            normal_stops.append(stop["stop_name"])
+        if x["stop_type"] == "Stop":
+            normal_stops.append(x["stop_name"])
 
-        if stop["stop_type"] == "Finish":
-            finish_stops.append(stop["stop_name"])
+        if x["stop_type"] == "Finish":
+            finish_stops.append(x["stop_name"])
 
     tour_dict["stops"] = stop_names
 
-    if tour_dict.get("path_type"):
+    route_stops = []
+
+    for x in stop_names:
+        if x != tour_dict["meeting_point"]:
+            route_stops.append(x)
+
+    tour_dict["route_stops"] = route_stops
+
+    if tour_dict.get("path_type") is not None and tour_dict.get("path_type") != "":
         tour_dict["terrain"] = tour_dict.get("path_type")
     else:
         tour_dict["terrain"] = "Urban walking path"
 
-    if normal_stops:
+    if len(normal_stops) > 0:
         tour_dict["rest_stops"] = normal_stops
     else:
         tour_dict["rest_stops"] = ["Short rest during the route"]
-
-    if normal_stops or finish_stops:
-        photo_stops = []
-        for stop_name in normal_stops:
-            photo_stops.append(stop_name)
-        for stop_name in finish_stops:
-            photo_stops.append(stop_name)
-        tour_dict["photo_stops"] = photo_stops
-    else:
-        tour_dict["photo_stops"] = ["Main route viewpoint"]
 
     tour_dict["what_to_bring"] = ["Comfortable shoes", "Water", "Camera or phone", "Sun protection"]
     tour_dict["audience"] = "All people can participate. Check the fitness level before reserving."
@@ -321,61 +322,58 @@ def get_tour_by_id(tour_id):
     used_schedule_labels = []
     today = date.today()
 
-    if schedules:
-        first_schedule = schedules[0]
-        tour_dict["schedule_weekday"] = first_schedule["weekday"]
-        tour_dict["schedule_start_time"] = first_schedule["start_time"]
-    else:
-        tour_dict["schedule_weekday"] = "Monday"
-        tour_dict["schedule_start_time"] = "10:00"
+    tour_schedule_rows = []
+    for x in schedules:
+        tour_schedule_rows.append({
+            "weekday": x["weekday"],
+            "start_time": x["start_time"]
+        })
 
-    for schedule_row in schedules:
-        schedule_label = f"Every {schedule_row['weekday']} at {schedule_row['start_time']}"
+    tour_dict["schedules"] = tour_schedule_rows
+    today_string = today.strftime("%Y-%m-%d")
+
+    for x in schedules:
+        schedule_label = "Every " + str(x["weekday"]) + " at " + str(x["start_time"])
         if schedule_label not in used_schedule_labels:
             schedule.append(schedule_label)
             used_schedule_labels.append(schedule_label)
 
-    for item in dates:
-        date_text = item["tour_date"]
-        time_text = item["tour_time"]
+    for x in dates:
+        date_text = x["tour_date"]
+        time_text = x["tour_time"]
 
         try:
-            slot_date = datetime.strptime(date_text, "%Y-%m-%d").date()
+            slot_date = date.fromisoformat(date_text)
             weekday_name = WEEKDAYS[slot_date.weekday()]
         except ValueError:
             continue
 
-        if slot_date >= today:
+        if date_text > today_string:
             available_dates.append({
                 "date": date_text,
                 "time": time_text,
-                "label": f"{date_text} - {weekday_name} at {time_text}"
+                "label": date_text + " - " + weekday_name + " at " + time_text
             })
 
-    review_list = []
-    for review in reviews:
-        review_list.append(dict(review))
-
     photo_list = []
-    for photo in photos:
-        photo_list.append(photo["photo_path"])
+    for x in photos:
+        photo_list.append(x["photo_path"])
 
     tour_dict["schedule"] = schedule
     tour_dict["available_dates"] = available_dates
-    tour_dict["reviews"] = review_list
     tour_dict["photos"] = photo_list
     tour_dict["existing_reservations"] = get_existing_reservations_for_participant(tour_id)
 
     return tour_dict
 
-
+# Return the (year, month) reached by adding a month offset to a base date.
 def month_offset(base_date, offset):
     month = base_date.month + offset
     year = base_date.year + (month - 1) // 12
     month = (month - 1) % 12 + 1
     return year, month
 
-
+# Build the calendar grid for a single month, marking available days.
 def build_month_calendar(year, month, available_slots):
     first_day = date(year, month, 1)
     first_weekday = first_day.weekday()
@@ -385,7 +383,7 @@ def build_month_calendar(year, month, available_slots):
     weeks = []
     week = []
 
-    for number in range(first_weekday):
+    for i in range(first_weekday):
         week.append(None)
 
     for day_number in range(1, days_in_month + 1):
@@ -395,7 +393,7 @@ def build_month_calendar(year, month, available_slots):
 
         is_available = False
         if available_time is not None:
-            if current_date >= today:
+            if current_date > today:
                 is_available = True
 
         day_data = {
@@ -412,7 +410,7 @@ def build_month_calendar(year, month, available_slots):
             weeks.append(week)
             week = []
 
-    if week:
+    if len(week) > 0:
         while len(week) < 7:
             week.append(None)
         weeks.append(week)
@@ -427,7 +425,7 @@ def build_month_calendar(year, month, available_slots):
 
 def get_available_slot_dictionary(tour_id):
     connection = get_db_connection()
-    dates = connection.execute(
+    date_rows = connection.execute(
         """
         SELECT tour_date, tour_time
         FROM tour_dates
@@ -438,9 +436,24 @@ def get_available_slot_dictionary(tour_id):
     ).fetchall()
     connection.close()
 
+    today_string = str(date.today())
+
+    dates = []
+
+    for x in date_rows:
+        date_text = x["tour_date"]
+
+        try:
+            date.fromisoformat(date_text)
+        except ValueError:
+            continue
+
+        if date_text > today_string:
+            dates.append(x)
+
     available_slots = {}
-    for item in dates:
-        available_slots[item["tour_date"]] = item["tour_time"]
+    for x in dates:
+        available_slots[x["tour_date"]] = x["tour_time"]
 
     return available_slots, dates
 
@@ -458,29 +471,37 @@ def build_calendars(tour_id):
 
     return calendars
 
-
+# Build the calendar data and month options used by the reservation page.
 def build_reservation_calendar_options(tour_id):
     available_slots, dates = get_available_slot_dictionary(tour_id)
 
     today = date.today()
+    today_string = str(today)
+
     last_allowed_year = today.year + 1
     last_allowed_month = 12
-    last_allowed_key = f"{last_allowed_year}-{last_allowed_month:02d}"
+    
+    month_string = str(last_allowed_month)
+
+    if last_allowed_month < 10:
+        month_string = "0" + month_string
+
+    last_allowed_key = str(last_allowed_year) + "-" + month_string
 
     available_month_keys = []
     used_month_keys = []
 
-    for item in dates:
-        date_text = item["tour_date"]
+    for x in dates:
+        date_text = x["tour_date"]
 
         try:
-            slot_date = datetime.strptime(date_text, "%Y-%m-%d").date()
+            slot_date = date.fromisoformat(date_text)
         except ValueError:
             continue
 
-        month_key = f"{slot_date.year}-{slot_date.month:02d}"
+        month_key = str(slot_date)[:7]
 
-        if slot_date < today:
+        if date_text <= today_string:
             continue
 
         if month_key > last_allowed_key:
@@ -492,9 +513,16 @@ def build_reservation_calendar_options(tour_id):
         available_month_keys.append(month_key)
         used_month_keys.append(month_key)
 
-    if not available_month_keys:
+    
+    if len(available_month_keys) == 0:
         current_year, current_month = month_offset(today, 0)
-        available_month_keys.append(f"{current_year}-{current_month:02d}")
+
+        month_string = str(current_month)
+
+        if current_month < 10:
+            month_string = "0" + month_string
+
+        available_month_keys.append(str(current_year) + "-" + month_string)
 
     calendar_keys = []
     month_options = []
@@ -518,8 +546,22 @@ def build_reservation_calendar_options(tour_id):
             end_year = year
             end_month = month
 
-        start_key = f"{start_year}-{start_month:02d}"
-        end_key = f"{end_year}-{end_month:02d}"
+        
+
+        start_month_string = str(start_month)
+
+        if start_month < 10:
+            start_month_string = "0" + start_month_string
+
+        start_key = str(start_year) + "-" + start_month_string
+
+
+        end_month_string = str(end_month)
+
+        if end_month < 10:
+            end_month_string = "0" + end_month_string
+
+        end_key = str(end_year) + "-" + end_month_string
 
         if start_key not in calendar_keys:
             calendar_keys.append(start_key)
@@ -529,7 +571,7 @@ def build_reservation_calendar_options(tour_id):
 
         month_options.append({
             "key": month_key,
-            "label": f"{MONTH_NAMES[month]} {year}",
+            "label": str(MONTH_NAMES[month]) + " " + str(year),
             "start_key": start_key,
             "end_key": end_key,
             "selected": index == 0
@@ -538,49 +580,40 @@ def build_reservation_calendar_options(tour_id):
     calendars = []
     calendar_keys.sort()
 
-    for month_key in calendar_keys:
-        year_text, month_text = month_key.split("-")
+    for x in calendar_keys:
+        year_text, month_text = x.split("-")
         year = int(year_text)
         month = int(month_text)
         calendar = build_month_calendar(year, month, available_slots)
-        calendar["key"] = month_key
+        calendar["key"] = x
         calendars.append(calendar)
 
     return calendars, month_options
 
 
+# Load future available slots for this tour.
 def get_available_slots_for_tour(tour_id):
+    
+    today_string = str(date.today())
+
     connection = get_db_connection()
-    dates = connection.execute(
-        """
+    dates = connection.execute("""
         SELECT tour_date, tour_time
         FROM tour_dates
         WHERE tour_id = ?
+          AND tour_date > ?
         ORDER BY tour_date, tour_time
-        """,
-        (tour_id,)
-    ).fetchall()
+        """, (tour_id, today_string)).fetchall() 
+    
     connection.close()
 
-    today = date.today()
     available_slots = []
 
-    for item in dates:
-        date_text = item["tour_date"]
-        time_text = item["tour_time"]
-
-        try:
-            slot_date = datetime.strptime(date_text, "%Y-%m-%d").date()
-        except ValueError:
-            continue
-
-        if slot_date < today:
-            continue
-
+    for x in dates:
         available_slots.append({
-            "date": date_text,
-            "time": time_text,
-            "label": f"{WEEKDAYS[slot_date.weekday()]}, {MONTH_NAMES[slot_date.month]} {slot_date.day}, {slot_date.year} at {time_text}"
+            "date": x["tour_date"],
+            "time": x["tour_time"],
+            "label": x["tour_date"] + " at " + x["tour_time"]
         })
 
     return available_slots
@@ -596,14 +629,14 @@ def home():
         duration=duration,
         selected_date=selected_date
     )
+    duration_options = get_duration_options()
 
     return render_template(
         "home.html",
         tours=tours,
+        duration_options=duration_options,
         selected_language=language,
-        selected_duration=duration,
-        selected_date=selected_date
-    )
+        selected_duration=duration,selected_date=selected_date)
 
 
 def tour_detail(tour_id):
@@ -621,30 +654,22 @@ def tour_detail(tour_id):
 def guide_profile(guide_id):
     connection = get_db_connection()
 
-    guide = connection.execute(
-        "SELECT * FROM users WHERE id = ? AND role = 'Guide'",
-        (guide_id,)
-    ).fetchone()
+    guide = connection.execute("SELECT * FROM users WHERE id = ? AND role = 'Guide'",(guide_id,)).fetchone()
 
     if guide is None:
         connection.close()
         flash("Guide profile not found.")
         return redirect(url_for("home"))
 
-    tours = connection.execute(
-        "SELECT * FROM tours WHERE guide_id = ? ORDER BY title",
+    tours = connection.execute("SELECT * FROM tours WHERE guide_id = ? ORDER BY title",
         (guide_id,)
-    ).fetchall()
+).fetchall()
 
     connection.close()
 
     guide_tours = []
-    for tour in tours:
-        tour_dict = dict(tour)
-        rating = calculate_rating(tour_dict["id"])
-        tour_dict["rating"] = f"{rating:.1f}"
-        tour_dict["full_stars"] = full_star_count(rating)
-        guide_tours.append(tour_dict)
+    for x in tours:
+        guide_tours.append(dict(x))
 
     return render_template(
         "guide_profile.html",

@@ -2,803 +2,162 @@
 
 {% block title %}Home | LA Walks{% endblock %}
 
-{% block hero %}
-<section class="hero-section">
+{% block content %}
+{% set default_tour_image = url_for('static', filename='images/places/default-tour-cover.jpg') %}
+<section class="hero-carousel-section mb-5" aria-label="Featured Los Angeles experiences">
     <div
         id="heroCarousel"
-        class="carousel slide hero-background-carousel"
-        data-bs-touch="true"
-        data-bs-wrap="true"
-        data-bs-ride="false"
-        data-bs-interval="false"
+        class="carousel slide carousel-fade hero-carousel"
+        data-bs-ride="carousel"
+        data-bs-interval="9000"
+        data-bs-pause="hover"
     >
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1 of 4: Explore Los Angeles like a story"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2 of 4: Sunset streets and city lights"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3 of 4: Local guides, real stories"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="3" aria-label="Slide 4 of 4: Your next LA memory starts here"></button>
+        </div>
+
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <div class="hero-slide hero-slide-1 hero-slide-cover"></div>
+                <img
+                    src="{{ url_for('static', filename='images/hero/hollywood-sign.jpg') }}"
+                    class="hero-slide-img"
+                    alt="The Hollywood sign on Mount Lee in warm golden-hour light, with communication towers on the ridge behind it">
             </div>
 
             <div class="carousel-item">
-                <div class="hero-slide hero-slide-2 hero-slide-cover"></div>
+                <img
+                    src="{{ url_for('static', filename='images/places/tour_01_griffith_sunset_walk/cover.jpg') }}"
+                    class="hero-slide-img"
+                    loading="lazy"
+                    alt="Sunset view over the Los Angeles skyline from the Griffith Park hills">
             </div>
 
             <div class="carousel-item">
-                <div class="hero-slide hero-slide-3 hero-slide-cover"></div>
+                <img
+                    src="{{ url_for('static', filename='images/places/tour_07_historic_olvera_street_tour/cover.jpg') }}"
+                    class="hero-slide-img"
+                    loading="lazy"
+                    alt="Colorful market stalls along historic Olvera Street in downtown Los Angeles">
             </div>
 
             <div class="carousel-item">
-                <div class="hero-slide hero-slide-4 hero-slide-cover"></div>
-            </div>
-
-            <div class="carousel-item">
-                <div class="hero-slide hero-slide-5 hero-slide-cover"></div>
+                <img
+                    src="{{ url_for('static', filename='images/places/tour_04_santa_monica_coastal_walk/cover.jpg') }}"
+                    class="hero-slide-img"
+                    loading="lazy"
+                    alt="Santa Monica coastline and pier at dusk with soft pastel skies">
             </div>
         </div>
-    </div>
 
-    <div class="hero-overlay"></div>
-
-    <button
-        class="carousel-control-prev hero-carousel-control hero-carousel-prev"
-        type="button"
-        data-bs-target="#heroCarousel"
-        data-bs-slide="prev"
-        aria-label="Previous image"
-    >
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    </button>
-
-    <button
-        class="carousel-control-next hero-carousel-control hero-carousel-next"
-        type="button"
-        data-bs-target="#heroCarousel"
-        data-bs-slide="next"
-        aria-label="Next image"
-    >
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    </button>
-
-    <div class="carousel-indicators hero-carousel-indicators">
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
-    </div>
-
-    <div class="container hero-content-wrapper">
-        <div class="hero-content">
-            <span class="hero-label">
-                <i class="bi bi-signpost-split"></i>
-                Walking tours in Los Angeles
-            </span>
-
-            <h1 class="hero-title">Follow LA, One Step at a Time</h1>
-
-            <p class="hero-text">
-                Choose a route, meet a local guide, and walk through LA’s beaches,
-                movie streets, art corners, food markets, viewpoints, and hidden neighborhoods.
-            </p>
-
-            <div class="hero-actions">
-                <a href="#walking-routes" class="btn-main">
-                    <i class="bi bi-compass"></i>
-                    Explore Walking Routes
-                </a>
-                <a href="#walking-map" class="btn-light-outline">Preview the Map</a>
-            </div>
-        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous slide</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next slide</span>
+        </button>
     </div>
 </section>
-{% endblock %}
 
-{% block content %}
-<section id="walking-routes" class="popular-places-section">
-    <div class="section-heading">
-        <span class="section-label">Walking routes</span>
-
-        <h2 class="section-title">Popular Walking Routes in Los Angeles</h2>
-
-        <p class="section-subtitle">
-            Each route has a clear walking distance, visible finish point, and at least three
-            available languages including English.
-        </p>
+<section id="walking-routes">
+    <div class="section-heading mb-3">
+        <div>
+            <span class="eyebrow">Curated city walks</span>
+            <h2 class="mb-0">Choose your next route</h2>
+        </div>
+        <p class="mb-0">Filter by date, language, or duration.</p>
     </div>
 
-    <form class="tour-filter-form" method="GET" action="{{ url_for('home') }}">
-        <input type="date" name="date" class="form-control" value="{{ selected_date }}">
+    <form class="card card-body mb-4 tour-filters" method="GET" action="{{ url_for('home') }}">
+        <div class="filter-heading">
+            <span><i class="bi bi-sliders2" aria-hidden="true"></i> Find your walk</span>
+            <small><i class="bi bi-circle-fill" aria-hidden="true"></i> Live availability</small>
+        </div>
+        <div class="row g-3 align-items-end">
+            <div class="col-12 col-md-4">
+                <label for="tourDate" class="form-label">Date</label>
+                <input id="tourDate" type="date" name="date" class="form-control" value="{{ selected_date }}">
+            </div>
 
-        <select name="language" class="form-select">
-            <option value="">All languages</option>
-            {% for language in ["English", "Italian", "Spanish", "Portuguese", "German"] %}
-                <option value="{{ language }}" {% if selected_language == language %}selected{% endif %}>
-                    {{ language }}
-                </option>
-            {% endfor %}
-        </select>
+            <div class="col-12 col-md-3">
+                <label for="tourLanguage" class="form-label">Language</label>
+                <select id="tourLanguage" name="language" class="form-select">
+                    <option value="">All languages</option>
+                    {% for x in ["English", "Italian", "Spanish", "Portuguese", "German"] %}
+                        <option value="{{ x }}" {% if selected_language == x %}selected{% endif %}>
+                            {{ x }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-        <select name="duration" class="form-select">
-            <option value="">Any duration</option>
-            {% for minutes in [90, 100, 110, 120, 150] %}
-                <option value="{{ minutes }}" {% if selected_duration == minutes|string %}selected{% endif %}>
-                    {{ minutes }} min
-                </option>
-            {% endfor %}
-        </select>
+            <div class="col-12 col-md-3">
+                <label for="tourDuration" class="form-label">Duration</label>
+                <select id="tourDuration" name="duration" class="form-select">
+                    <option value="">Any duration</option>
+                    {% for x in duration_options %}
+                        <option value="{{ x }}" {% if selected_duration == x|string %}selected{% endif %}>
+                            {{ x }} min
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-        <button type="submit" class="btn-main">
-            <i class="bi bi-search"></i>
-            Filter
-        </button>
+            <div class="col-12 col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Show tours</button>
+            </div>
+        </div>
 
-        <a href="{{ url_for('home') }}#walking-routes" class="btn-light-back">Clear</a>
+
     </form>
 
-    <div class="route-list">
-        {% for tour in tours %}
-            <article class="route-card route-card-horizontal">
-                <div class="route-image-side">
-                    <img
-                        src="{{ url_for('static', filename=tour.image) }}"
-                        alt="{{ tour.title }}"
-                        class="route-card-image"
-                    >
-                </div>
-
-                <div class="route-card-body">
-                    <span class="route-number">{{ "%02d"|format(loop.index) }}</span>
-
-                    <h3 class="route-card-title">{{ tour.title }}</h3>
-
-                    <div class="tour-summary">
-                        <span class="tour-rating">
-                            <span class="rating-stars">
-                                {% for i in range(tour.full_stars) %}<i class="bi bi-star-fill"></i>{% endfor %}
-                                {% for i in range(5 - tour.full_stars) %}<i class="bi bi-star"></i>{% endfor %}
-                            </span>
-                            <span class="rating-score">{{ tour.rating }}</span>
-                        </span>
-                        <span><i class="bi bi-map"></i> Scheduled route</span>
-                        <span><i class="bi bi-globe2"></i> {{ tour.languages }}</span>
-                        <span><i class="bi bi-clock"></i> {{ tour.duration }}</span>
-                        <span><i class="bi bi-signpost"></i> {{ tour.distance }}</span>
-                    </div>
-
-                    <p class="route-card-text">{{ tour.description }}</p>
-
-                    <div class="meeting-point">
-                        <i class="bi bi-geo-alt-fill"></i>
-                        Meeting point: {{ tour.meeting_point }}
-                    </div>
-
-                    <a href="{{ url_for('tour_detail', tour_id=tour.id) }}" class="btn-main route-detail-button">
-                        <i class="bi bi-eye"></i>
-                        View full details
-                    </a>
-                </div>
-            </article>
-        {% else %}
-            <article class="info-card">
-                <h3>No tours match these filters.</h3>
-                <p>Try another language, date, or duration.</p>
-            </article>
-        {% endfor %}
-    </div>
-
-    {% if false %}
-    <div class="route-list">
-        <article class="route-card route-card-horizontal">
-            <div class="route-image-side">
-                <img
-                    src="{{ url_for('static', filename='images/places/griffith-observatory.jpg') }}"
-                    alt="Griffith Observatory in Los Angeles"
-                    class="route-card-image"
-                >
-            </div>
-
-            <div class="route-card-body">
-                <span class="route-number">01</span>
-
-                <h3 class="route-card-title">Griffith Sunset Walk</h3>
-
-                <div class="tour-summary">
-                    <span class="tour-rating" aria-label="Rated 5 out of 5 stars">
-                        <span class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                        </span>
-                        <span class="rating-score">4.9</span>
-                    </span>
-                    <span><i class="bi bi-map"></i> Scheduled walking route</span>
-                    <span><i class="bi bi-globe2"></i> English / Spanish / Italian</span>
-                    <span><i class="bi bi-clock"></i> 110 min</span>
-                    <span><i class="bi bi-signpost"></i> 2.8 km</span>
-                </div>
-
-                <p class="route-card-text">
-                    A viewpoint route around Griffith Observatory with skyline views, local stories, and photo stops near the Hollywood Hills.
-                </p>
-
-                <div class="meeting-point">
-                    <i class="bi bi-geo-alt-fill"></i>
-                    Meeting point: Griffith Observatory lawn
-                </div>
-
-                <div class="walking-route walking-route-horizontal">
-                    <span><strong>Start:</strong> Observatory lawn</span>
-                    <span>City viewpoint</span>
-                    <span>Hollywood Sign view</span>
-                    <span><strong>Finish:</strong> Sunset photo point</span>
-                </div>
-
-                <a href="{{ url_for('tour_detail', tour_id=1) }}" class="btn-main route-detail-button">
-                    <i class="bi bi-eye"></i>
-                    View full details
-                </a>
-            </div>
-        </article>
-
-        <article class="route-card route-card-horizontal">
-            <div class="route-image-side">
-                <img
-                    src="{{ url_for('static', filename='images/places/hollywood-walk-of-fame.jpg') }}"
-                    alt="Hollywood Walk of Fame"
-                    class="route-card-image"
-                >
-            </div>
-
-            <div class="route-card-body">
-                <span class="route-number">02</span>
-
-                <h3 class="route-card-title">Hollywood Cinema Walk</h3>
-
-                <div class="tour-summary">
-                    <span class="tour-rating" aria-label="Rated 4 out of 5 stars">
-                        <span class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star"></i>
-                        </span>
-                        <span class="rating-score">4.6</span>
-                    </span>
-                    <span><i class="bi bi-map"></i> Scheduled walking route</span>
-                    <span><i class="bi bi-globe2"></i> English / German / French</span>
-                    <span><i class="bi bi-clock"></i> 100 min</span>
-                    <span><i class="bi bi-signpost"></i> 2.4 km</span>
-                </div>
-
-                <p class="route-card-text">
-                    A movie-themed walk through Hollywood stories, famous names, theater fronts, and the visual identity of LA cinema.
-                </p>
-
-                <div class="meeting-point">
-                    <i class="bi bi-geo-alt-fill"></i>
-                    Meeting point: Hollywood Boulevard
-                </div>
-
-                <div class="walking-route walking-route-horizontal">
-                    <span><strong>Start:</strong> Walk of Fame</span>
-                    <span>Historic theaters</span>
-                    <span>Hollywood Sign viewpoint</span>
-                    <span><strong>Finish:</strong> Cinema photo stop</span>
-                </div>
-
-                <a href="{{ url_for('tour_detail', tour_id=2) }}" class="btn-main route-detail-button">
-                    <i class="bi bi-eye"></i>
-                    View full details
-                </a>
-            </div>
-        </article>
-
-        <article class="route-card route-card-horizontal">
-            <div class="route-image-side">
-                <img
-                    src="{{ url_for('static', filename='images/places/grand-central-market.jpg') }}"
-                    alt="Grand Central Market in Downtown Los Angeles"
-                    class="route-card-image"
-                >
-            </div>
-
-            <div class="route-card-body">
-                <span class="route-number">03</span>
-
-                <h3 class="route-card-title">Downtown Food & Market Walk</h3>
-
-                <div class="tour-summary">
-                    <span class="tour-rating" aria-label="Rated 4 out of 5 stars">
-                        <span class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star"></i>
-                        </span>
-                        <span class="rating-score">4.7</span>
-                    </span>
-                    <span><i class="bi bi-map"></i> Scheduled walking route</span>
-                    <span><i class="bi bi-globe2"></i> English / Spanish / Portuguese</span>
-                    <span><i class="bi bi-clock"></i> 90 min</span>
-                    <span><i class="bi bi-signpost"></i> 1.9 km</span>
-                </div>
-
-                <p class="route-card-text">
-                    A local food route around Downtown LA, market culture, street corners, and everyday city life.
-                </p>
-
-                <div class="meeting-point">
-                    <i class="bi bi-geo-alt-fill"></i>
-                    Meeting point: Grand Central Market entrance
-                </div>
-
-                <div class="walking-route walking-route-horizontal">
-                    <span><strong>Start:</strong> Market entrance</span>
-                    <span>Food hall</span>
-                    <span>Downtown streets</span>
-                    <span><strong>Finish:</strong> Local café stop</span>
-                </div>
-
-                <a href="{{ url_for('tour_detail', tour_id=3) }}" class="btn-main route-detail-button">
-                    <i class="bi bi-eye"></i>
-                    View full details
-                </a>
-            </div>
-        </article>
-
-        <article class="route-card route-card-horizontal">
-            <div class="route-image-side">
-                <img
-                    src="{{ url_for('static', filename='images/places/santa-monica-pier.jpg') }}"
-                    alt="Santa Monica Pier"
-                    class="route-card-image"
-                >
-            </div>
-
-            <div class="route-card-body">
-                <span class="route-number">04</span>
-
-                <h3 class="route-card-title">Santa Monica Coastal Walk</h3>
-
-                <div class="tour-summary">
-                    <span class="tour-rating" aria-label="Rated 4 out of 5 stars">
-                        <span class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star"></i>
-                        </span>
-                        <span class="rating-score">4.8</span>
-                    </span>
-                    <span><i class="bi bi-map"></i> Scheduled walking route</span>
-                    <span><i class="bi bi-globe2"></i> English / Italian / Spanish</span>
-                    <span><i class="bi bi-clock"></i> 95 min</span>
-                    <span><i class="bi bi-signpost"></i> 2.2 km</span>
-                </div>
-
-                <p class="route-card-text">
-                    A relaxed ocean-side walk with beach views, pier stories, entertainment spots, and coastal atmosphere.
-                </p>
-
-                <div class="meeting-point">
-                    <i class="bi bi-geo-alt-fill"></i>
-                    Meeting point: Santa Monica Pier sign
-                </div>
-
-                <div class="walking-route walking-route-horizontal">
-                    <span><strong>Start:</strong> Pier sign</span>
-                    <span>Ocean viewpoint</span>
-                    <span>Boardwalk area</span>
-                    <span><strong>Finish:</strong> Beach photo stop</span>
-                </div>
-
-                <a href="{{ url_for('tour_detail', tour_id=4) }}" class="btn-main route-detail-button">
-                    <i class="bi bi-eye"></i>
-                    View full details
-                </a>
-            </div>
-        </article>
-
-        <article class="route-card route-card-horizontal">
-            <div class="route-image-side">
-                <img
-                    src="{{ url_for('static', filename='images/places/venice-boardwalk.jpg') }}"
-                    alt="Venice Beach Boardwalk"
-                    class="route-card-image"
-                >
-            </div>
-
-            <div class="route-card-body">
-                <span class="route-number">05</span>
-
-                <h3 class="route-card-title">Venice Street Culture Walk</h3>
-
-                <div class="tour-summary">
-                    <span class="tour-rating" aria-label="Rated 4 out of 5 stars">
-                        <span class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star"></i>
-                        </span>
-                        <span class="rating-score">4.7</span>
-                    </span>
-                    <span><i class="bi bi-map"></i> Scheduled walking route</span>
-                    <span><i class="bi bi-globe2"></i> English / Dutch / German</span>
-                    <span><i class="bi bi-clock"></i> 105 min</span>
-                    <span><i class="bi bi-signpost"></i> 2.6 km</span>
-                </div>
-
-                <p class="route-card-text">
-                    A colorful coastal route through murals, performers, skate culture, and the creative personality of Venice.
-                </p>
-
-                <div class="meeting-point">
-                    <i class="bi bi-geo-alt-fill"></i>
-                    Meeting point: Venice Boardwalk
-                </div>
-
-                <div class="walking-route walking-route-horizontal">
-                    <span><strong>Start:</strong> Boardwalk</span>
-                    <span>Street murals</span>
-                    <span>Skate area</span>
-                    <span><strong>Finish:</strong> Beach corner</span>
-                </div>
-
-                <a href="{{ url_for('tour_detail', tour_id=5) }}" class="btn-main route-detail-button">
-                    <i class="bi bi-eye"></i>
-                    View full details
-                </a>
-            </div>
-        </article>
-
-        <article class="route-card route-card-horizontal">
-            <div class="route-image-side">
-                <img
-                    src="{{ url_for('static', filename='images/places/the-broad.jpg') }}"
-                    alt="The Broad museum in Los Angeles"
-                    class="route-card-image"
-                >
-            </div>
-
-            <div class="route-card-body">
-                <span class="route-number">06</span>
-
-                <h3 class="route-card-title">Downtown Art Walk</h3>
-
-                <div class="tour-summary">
-                    <span class="tour-rating" aria-label="Rated 4 out of 5 stars">
-                        <span class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star"></i>
-                        </span>
-                        <span class="rating-score">4.6</span>
-                    </span>
-                    <span><i class="bi bi-map"></i> Scheduled walking route</span>
-                    <span><i class="bi bi-globe2"></i> English / Spanish / French</span>
-                    <span><i class="bi bi-clock"></i> 75 min</span>
-                    <span><i class="bi bi-signpost"></i> 1.6 km</span>
-                </div>
-
-                <p class="route-card-text">
-                    A modern Downtown route focused on public art, museums, architecture, and creative LA spaces.
-                </p>
-
-                <div class="meeting-point">
-                    <i class="bi bi-geo-alt-fill"></i>
-                    Meeting point: The Broad entrance
-                </div>
-
-                <div class="walking-route walking-route-horizontal">
-                    <span><strong>Start:</strong> The Broad</span>
-                    <span>Art district corner</span>
-                    <span>Concert Hall view</span>
-                    <span><strong>Finish:</strong> Downtown photo stop</span>
-                </div>
-
-                <a href="{{ url_for('tour_detail', tour_id=6) }}" class="btn-main route-detail-button">
-                    <i class="bi bi-eye"></i>
-                    View full details
-                </a>
-            </div>
-        </article>
-
-        <article class="route-card route-card-horizontal">
-            <div class="route-image-side">
-                <img
-                    src="{{ url_for('static', filename='images/places/olvera-street.jpg') }}"
-                    alt="Olvera Street in Los Angeles"
-                    class="route-card-image"
-                >
-            </div>
-
-            <div class="route-card-body">
-                <span class="route-number">07</span>
-
-                <h3 class="route-card-title">Historic Olvera Street Tour</h3>
-
-                <div class="tour-summary">
-                    <span class="tour-rating" aria-label="Rated 5 out of 5 stars">
-                        <span class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                        </span>
-                        <span class="rating-score">4.9</span>
-                    </span>
-                    <span><i class="bi bi-map"></i> Scheduled walking route</span>
-                    <span><i class="bi bi-globe2"></i> English / Portuguese / Spanish</span>
-                    <span><i class="bi bi-clock"></i> 90 min</span>
-                    <span><i class="bi bi-signpost"></i> 1.8 km</span>
-                </div>
-
-                <p class="route-card-text">
-                    A historical route about early Los Angeles, markets, local heritage, cultural streets, and old city identity.
-                </p>
-
-                <div class="meeting-point">
-                    <i class="bi bi-geo-alt-fill"></i>
-                    Meeting point: Olvera Street entrance
-                </div>
-
-                <div class="walking-route walking-route-horizontal">
-                    <span><strong>Start:</strong> Olvera entrance</span>
-                    <span>Market street</span>
-                    <span>Historic buildings</span>
-                    <span><strong>Finish:</strong> Cultural photo stop</span>
-                </div>
-
-                <a href="{{ url_for('tour_detail', tour_id=7) }}" class="btn-main route-detail-button">
-                    <i class="bi bi-eye"></i>
-                    View full details
-                </a>
-            </div>
-        </article>
-
-        <article class="route-card route-card-horizontal">
-            <div class="route-image-side">
-                <img
-                    src="{{ url_for('static', filename='images/places/getty center.jpg') }}"
-                    alt="Getty Center in Los Angeles"
-                    class="route-card-image"
-                >
-            </div>
-
-            <div class="route-card-body">
-                <span class="route-number">08</span>
-
-                <h3 class="route-card-title">Getty Art & Views Walk</h3>
-
-                <div class="tour-summary">
-                    <span class="tour-rating" aria-label="Rated 4 out of 5 stars">
-                        <span class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star"></i>
-                        </span>
-                        <span class="rating-score">4.8</span>
-                    </span>
-                    <span><i class="bi bi-map"></i> Scheduled walking route</span>
-                    <span><i class="bi bi-globe2"></i> English / Italian / German</span>
-                    <span><i class="bi bi-clock"></i> 120 min</span>
-                    <span><i class="bi bi-signpost"></i> 2.5 km</span>
-                </div>
-
-                <p class="route-card-text">
-                    A cultural route about art collections, architecture, gardens, viewpoints, and the quiet museum side of LA.
-                </p>
-
-                <div class="meeting-point">
-                    <i class="bi bi-geo-alt-fill"></i>
-                    Meeting point: Getty Center arrival plaza
-                </div>
-
-                <div class="walking-route walking-route-horizontal">
-                    <span><strong>Start:</strong> Arrival plaza</span>
-                    <span>Garden path</span>
-                    <span>Architecture point</span>
-                    <span><strong>Finish:</strong> City view terrace</span>
-                </div>
-
-                <a href="{{ url_for('tour_detail', tour_id=8) }}" class="btn-main route-detail-button">
-                    <i class="bi bi-eye"></i>
-                    View full details
-                </a>
-            </div>
-        </article>
-
-        <article class="route-card route-card-horizontal route-card-disney-special">
-            <div class="route-image-side route-image-side-contain">
-                <img
-                    src="/static/images/places/walt-disney-route.jpg"
-                    alt="Walt Disney themed Los Angeles place"
-                    class="route-card-image route-card-image-contain"
-                >
-            </div>
-
-            <div class="route-card-body">
-                <span class="route-number">09</span>
-
-                <h3 class="route-card-title">Walt Disney Family Route</h3>
-
-                <div class="tour-summary">
-                    <span class="tour-rating" aria-label="Rated 4 out of 5 stars">
-                        <span class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star"></i>
-                        </span>
-                        <span class="rating-score">4.8</span>
-                    </span>
-                    <span><i class="bi bi-map"></i> Scheduled walking route</span>
-                    <span><i class="bi bi-globe2"></i> English / Spanish / French</span>
-                    <span><i class="bi bi-clock"></i> 120 min</span>
-                    <span><i class="bi bi-signpost"></i> 3.1 km</span>
-                </div>
-
-                <p class="route-card-text">
-                    A family-friendly route connected with entertainment, imagination,
-                    creativity, and Disney-style storytelling.
-                </p>
-
-                <div class="meeting-point">
-                    <i class="bi bi-geo-alt-fill"></i>
-                    Meeting point: Main entrance area
-                </div>
-
-                <div class="walking-route walking-route-vertical">
-                    <span><strong>Start:</strong> Main entrance</span>
-                    <span>Castle view</span>
-                    <span>Parade street</span>
-                    <span><strong>Finish:</strong> Family photo point</span>
-                </div>
-
-                <a href="{{ url_for('tour_detail', tour_id=9) }}" class="btn-main route-detail-button">
-                    <i class="bi bi-eye"></i>
-                    View full details
-                </a>
-            </div>
-        </article>
-    </div>
-</section>
-
-{% endif %}
-
-<section id="walking-map" class="walking-map-section">
-    <div class="section-heading">
-        <span class="section-label">Map preview</span>
-
-        <h2 class="section-title">A Homepage That Feels Like a Walk</h2>
-
-        <p class="section-subtitle">
-            This visual map preview is static for now, but it shows the idea of moving
-            from one stop to another during a walking tour.
-        </p>
-    </div>
-
-    <div class="map-preview-card">
-        <div class="map-route-line">
-            <div class="map-stop">
-                <span class="map-dot">
-                    <i class="bi bi-geo-alt-fill"></i>
-                </span>
-                <strong>Start</strong>
-                <small>Meeting point</small>
-            </div>
-
-            <div class="map-stop">
-                <span class="map-dot">
-                    <i class="bi bi-chat-square-text-fill"></i>
-                </span>
-                <strong>Stop 1</strong>
-                <small>Local story</small>
-            </div>
-
-            <div class="map-stop">
-                <span class="map-dot">
-                    <i class="bi bi-camera-fill"></i>
-                </span>
-                <strong>Stop 2</strong>
-                <small>Photo place</small>
-            </div>
-
-            <div class="map-stop">
-                <span class="map-dot">
-                    <i class="bi bi-flag-fill"></i>
-                </span>
-                <strong>Finish</strong>
-                <small>Final view</small>
-            </div>
-        </div>
-
-        <div class="map-note">
-            <i class="bi bi-signpost-2"></i>
-            Routes are built around meeting points, walking stops, duration, distance, and guide stories.
-        </div>
-    </div>
-</section>
-
-<section class="how-it-works-section">
-    <div class="section-heading">
-        <span class="section-label">How each walk works</span>
-
-        <h2 class="section-title">From Route Choice to Final Stop</h2>
-
-        <p class="section-subtitle">
-            The process is designed around walking: choose a route, meet at a starting point,
-            follow the stops, and enjoy the walking experience.
-        </p>
-    </div>
-
     <div class="row g-4">
-        <article class="col-md-3">
-            <div class="info-card">
-                <span class="info-icon">
-                    <i class="bi bi-compass"></i>
-                </span>
+        {% for x in tours %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card tour-card h-100">
+                    <div class="tour-image-wrap">
+                        <img
+                            src="{{ url_for('static', filename=x.image) }}"
+                            class="card-img-top tour-image"
+                            alt="{{ x.title }}"
+                            loading="lazy"
+                            onerror="this.onerror=null; this.src='{{ default_tour_image }}';">
+                        <span class="tour-card-label"><i class="bi bi-pin-map-fill" aria-hidden="true"></i> LA experience</span>
+                        <span class="tour-card-badge"><i class="bi bi-ticket-perforated" aria-hidden="true"></i> Free</span>
+                    </div>
 
-                <h3 class="info-card-title">Pick a Route</h3>
+                    <div class="card-body d-flex flex-column">
+                        <h3 class="card-title h5">{{ x.title }}</h3>
+                        <p class="card-text">{{ x.description }}</p>
 
-                <p class="info-card-text">
-                    Choose a walking route by language, date, duration, and theme.
-                </p>
+                        <ul class="list-unstyled small tour-meta">
+                            <li><i class="bi bi-translate" aria-hidden="true"></i><strong>Language:</strong> {{ x.languages }}</li>
+                            <li><i class="bi bi-clock" aria-hidden="true"></i><strong>Duration:</strong> {{ x.duration }}</li>
+                            {% if x.distance %}
+                                <li><i class="bi bi-signpost-split" aria-hidden="true"></i><strong>Distance:</strong> {{ x.distance }}</li>
+                            {% endif %}
+                            <li><i class="bi bi-geo-alt" aria-hidden="true"></i><strong>Meeting point:</strong> {{ x.meeting_point }}</li>
+                        </ul>
+
+                        <a href="{{ url_for('tour_detail', tour_id=x.id) }}" class="btn btn-primary mt-auto tour-card-action">
+                            View experience <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
-        </article>
-
-        <article class="col-md-3">
-            <div class="info-card">
-                <span class="info-icon">
-                    <i class="bi bi-geo-alt"></i>
-                </span>
-
-                <h3 class="info-card-title">Meet at Start</h3>
-
-                <p class="info-card-text">
-                    Every tour has a clear meeting point and start time.
-                </p>
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <h3 class="h5">No tours match your filters</h3>
+                    <p class="mb-3">Try a different date, language, or duration.</p>
+                    <a href="{{ url_for('home') }}" class="btn btn-outline-primary">Clear filters</a>
+                </div>
             </div>
-        </article>
-
-        <article class="col-md-3">
-            <div class="info-card">
-                <span class="info-icon">
-                    <i class="bi bi-signpost-split"></i>
-                </span>
-
-                <h3 class="info-card-title">Follow Stops</h3>
-
-                <p class="info-card-text">
-                    Walk through selected places with stories from a local guide.
-                </p>
-            </div>
-        </article>
-
-        <article class="col-md-3">
-            <div class="info-card">
-                <span class="info-icon">
-                    <i class="bi bi-map"></i>
-                </span>
-
-                <h3 class="info-card-title">Follow the Route</h3>
-
-                <p class="info-card-text">
-                    The tour is reserved through the website. The website stores the reservation only.
-                </p>
-            </div>
-        </article>
+        {% endfor %}
     </div>
 </section>
 {% endblock %}

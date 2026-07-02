@@ -1,77 +1,184 @@
 {% extends "base.html" %}
+
 {% block title %}Create Tour | LA Walks{% endblock %}
+
 {% block content %}
-<section class="guide-form-page">
-    <header class="dashboard-header">
-        <div>
-            <span class="section-label">Create tour</span>
-            <h1 class="dashboard-title">Create a new walking route</h1>
-            <p class="dashboard-subtitle">Guides can use this form to create a new LA walking tour.</p>
-        </div>
-        <a href="{{ url_for('guide_dashboard') }}" class="btn-light-back"><i class="bi bi-arrow-left"></i> Back to guide dashboard</a>
-    </header>
+<div class="mb-4 page-heading">
+    <span class="eyebrow">Guide studio</span>
+    <h1>Create a new walking tour</h1>
+    <p>Enter the tour details, route, weekly schedule, and photos.</p>
+</div>
 
-    <form class="guide-form-card" method="POST" enctype="multipart/form-data">
-        <div class="form-section-title"><span class="section-label">Basic information</span><h2>Tour details</h2></div>
-        <div class="row g-3">
-            <div class="col-md-8"><label for="title" class="form-label">Tour title</label><input type="text" id="title" name="title" class="form-control" placeholder="Example: Echo Park Sunset Walk" required></div>
-            <div class="col-md-4"><label for="mainLanguage" class="form-label">Main language</label><select id="mainLanguage" name="main_language" class="form-select" required><option value="" selected>Select language</option><option>English</option><option>Spanish</option><option>Italian</option><option>German</option><option>French</option><option>Portuguese</option></select></div>
-            <div class="col-md-12"><label for="languages" class="form-label">All available languages</label><input type="text" id="languages" name="languages" class="form-control" placeholder="English / Spanish / Italian"><small class="form-help">Each tour should include English and at least two other languages.</small></div>
-            <div class="col-md-4"><label for="duration" class="form-label">Duration</label><input type="text" id="duration" name="duration" class="form-control" placeholder="100 min"></div>
-            <div class="col-md-4"><label for="distance" class="form-label">Distance</label><input type="text" id="distance" name="distance" class="form-control" placeholder="2.4 km"></div>
-            <div class="col-md-4"><label for="maxParticipants" class="form-label">Maximum participants</label><input type="number" id="maxParticipants" name="max_participants" class="form-control" min="1" max="30" placeholder="18"></div>
-            <div class="col-md-12"><label for="meetingPoint" class="form-label">Meeting point</label><input type="text" id="meetingPoint" name="meeting_point" class="form-control" placeholder="Echo Park Lake entrance"></div>
-            <div class="col-md-12"><label for="description" class="form-label">Tour description</label><textarea id="description" name="description" class="form-control" rows="5" placeholder="Explain what participants will see and learn."></textarea></div>
-        </div>
+<form method="POST" action="{{ url_for('create_tour') }}" enctype="multipart/form-data" class="tour-editor-form">
+    <section class="card form-section editor-section">
+        <div class="card-body">
+            <span class="editor-section-icon" aria-hidden="true"><i class="bi bi-card-text"></i></span>
+            <h2 class="h4">Tour details</h2>
+            <p class="form-text">Fields marked with * are required.</p>
 
-        <hr class="form-divider">
+            <div class="row g-3">
+                <div class="col-12 col-md-8">
+                    <label for="title" class="form-label">Tour title *</label>
+                    <input type="text" id="title" name="title" class="form-control" required>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="mainLanguage" class="form-label">Main language *</label>
+                    <select id="mainLanguage" name="main_language" class="form-select" required>
+                        <option value="" selected>Select language</option>
+                        <option>English</option>
+                        <option>Spanish</option>
+                        <option>Italian</option>
+                        <option>German</option>
+                        <option>Portuguese</option>
+                    </select>
+                </div>
 
-        <div class="form-section-title"><span class="section-label">Route stops</span><h2>Start, stops, and finish</h2></div>
-        <div class="row g-3">
-            <div class="col-md-6"><label class="form-label" for="startPoint">Start point</label><input id="startPoint" name="start_point" class="form-control" placeholder="Start: ..." required></div>
-            <div class="col-md-6"><label class="form-label" for="stopOne">Stop 1</label><input id="stopOne" name="stop_one" class="form-control" placeholder="First important stop" required></div>
-            <div class="col-md-6"><label class="form-label" for="stopTwo">Stop 2</label><input id="stopTwo" name="stop_two" class="form-control" placeholder="Second important stop" required></div>
-            <div class="col-md-6"><label class="form-label" for="finishPoint">Finish point</label><input id="finishPoint" name="finish_point" class="form-control" placeholder="Finish: ..." required></div>
-            <div class="col-md-12"><label class="form-label" for="restStops">Rest and photo stops</label><textarea id="restStops" name="rest_stops" class="form-control" rows="3" placeholder="Rest near viewpoint, photo break, final stop"></textarea></div>
-        </div>
+                <div class="col-12">
+                    <label class="form-label">Other available languages</label>
+                    <div>
+                        {% for x in ["Italian", "English", "Spanish", "Portuguese", "German"] %}
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="languages" id="createLanguage{{ x }}" value="{{ x }}">
+                                <label class="form-check-label" for="createLanguage{{ x }}">{{ x }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
 
-        <hr class="form-divider">
-
-        <div class="form-section-title"><span class="section-label">Weekly schedule</span><h2>Repeated tour meeting</h2></div>
-        <div class="row g-3">
-            <div class="col-md-6">
-                <label for="scheduleWeekday" class="form-label">Weekly day</label>
-                <select id="scheduleWeekday" name="schedule_weekday" class="form-select" required>
-                    <option>Monday</option>
-                    <option>Tuesday</option>
-                    <option>Wednesday</option>
-                    <option>Thursday</option>
-                    <option>Friday</option>
-                    <option>Saturday</option>
-                    <option>Sunday</option>
-                </select>
+                <div class="col-12 col-md-4">
+                    <label for="duration" class="form-label">Duration in minutes *</label>
+                    <input type="number" id="duration" name="duration" class="form-control" min="1" step="1" required>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="distance" class="form-label">Distance in km</label>
+                    <input type="number" id="distance" name="distance" class="form-control" min="0" step="0.1">
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="maxParticipants" class="form-label">Maximum participants *</label>
+                    <input type="number" id="maxParticipants" name="max_participants" class="form-control" min="1" max="30" required>
+                </div>
+                <div class="col-12">
+                    <label for="meetingPoint" class="form-label">Meeting point *</label>
+                    <input type="text" id="meetingPoint" name="meeting_point" class="form-control" required>
+                </div>
+                <div class="col-12">
+                    <label for="description" class="form-label">Description *</label>
+                    <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
+                </div>
             </div>
-            <div class="col-md-6">
-                <label for="scheduleStartTime" class="form-label">Start time</label>
-                <input type="time" id="scheduleStartTime" name="schedule_start_time" class="form-control" value="10:00" required>
-                <small class="form-help">This weekly schedule is generated for future weeks automatically.</small>
+        </div>
+    </section>
+
+    <section class="card form-section editor-section">
+        <div class="card-body">
+            <span class="editor-section-icon" aria-hidden="true"><i class="bi bi-signpost-split"></i></span>
+            <h2 class="h4">Route</h2>
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <label for="startPoint" class="form-label">Start point *</label>
+                    <input id="startPoint" name="start_point" class="form-control" required>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label for="stopOne" class="form-label">Stop 1 *</label>
+                    <input id="stopOne" name="stop_one" class="form-control" required>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label for="stopTwo" class="form-label">Stop 2 *</label>
+                    <input id="stopTwo" name="stop_two" class="form-control" required>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label for="finishPoint" class="form-label">Finish point *</label>
+                    <input id="finishPoint" name="finish_point" class="form-control" required>
+                </div>
+                <div class="col-12">
+                    <label for="restStops" class="form-label">Rest and photo stops</label>
+                    <textarea id="restStops" name="rest_stops" class="form-control" rows="2"></textarea>
+                </div>
             </div>
         </div>
+    </section>
 
-        <hr class="form-divider">
+    <section class="card form-section editor-section">
+        <div class="card-body">
+            <span class="editor-section-icon" aria-hidden="true"><i class="bi bi-calendar-week"></i></span>
+            <h2 class="h4">Weekly schedule</h2>
+            <p class="form-text">Add up to three weekly tour times.</p>
 
-        <div class="form-section-title"><span class="section-label">Rules and accessibility</span><h2>Participant information</h2></div>
-        <div class="row g-3">
-            <div class="col-md-4"><label for="fitnessLevel" class="form-label">Fitness level</label><select id="fitnessLevel" name="fitness_level" class="form-select"><option>Easy</option><option>Easy to moderate</option><option>Moderate</option><option>Challenging</option></select></div>
-            <div class="col-md-4"><label for="pathType" class="form-label">Path type</label><input id="pathType" name="path_type" class="form-control" placeholder="Flat urban sidewalks"></div>
-            <div class="col-md-4"><label for="mountainPath" class="form-label">Mountain path?</label><select id="mountainPath" name="mountain_path" class="form-select"><option>No</option><option>Partly</option><option>Yes</option></select></div>
-            <div class="col-md-4"><label for="childrenAllowed" class="form-label">Children allowed?</label><select id="childrenAllowed" name="children_allowed" class="form-select"><option>Yes</option><option>No</option><option>Only with adult</option></select></div>
-            <div class="col-md-4"><label for="petsAllowed" class="form-label">Pets allowed?</label><select id="petsAllowed" name="pets_allowed" class="form-select"><option>Yes, on leash</option><option>No</option><option>Outdoor areas only</option></select></div>
-            <div class="col-md-4"><label for="tourImage" class="form-label">Tour image</label><input type="file" id="tourImage" name="tour_image" class="form-control"></div>
-            <div class="col-md-12"><label for="whatToBring" class="form-label">What should participants bring?</label><textarea id="whatToBring" name="what_to_bring" class="form-control" rows="3" placeholder="Comfortable shoes, water, sun protection, camera"></textarea></div>
+            {% for x in range(1, 4) %}
+                <div class="row g-3 schedule-row">
+                    <div class="col-12 col-md-6">
+                        <label for="scheduleWeekday{{ x }}" class="form-label">Day {{ x }}{% if x == 1 %} *{% endif %}</label>
+                        <select id="scheduleWeekday{{ x }}" name="schedule_weekday" class="form-select" {% if x == 1 %}required{% endif %}>
+                            {% if x != 1 %}<option value="">No extra day</option>{% endif %}
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                            <option>Sunday</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="scheduleStartTime{{ x }}" class="form-label">Start time {{ x }}{% if x == 1 %} *{% endif %}</label>
+                        <input type="time" id="scheduleStartTime{{ x }}" name="schedule_start_time" class="form-control" {% if x == 1 %}value="10:00" required{% endif %}>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
+    </section>
 
-        <button type="submit" class="btn-main guide-form-submit"><i class="bi bi-plus-circle"></i> Create tour</button>
-    </form>
-</section>
+    <section class="card form-section editor-section">
+        <div class="card-body">
+            <span class="editor-section-icon" aria-hidden="true"><i class="bi bi-images"></i></span>
+            <h2 class="h4">Tour photos</h2>
+            <p class="form-text">Photo 1 is the cover image. Please upload exactly 5 photos.</p>
+
+            <div class="row g-3">
+                <div class="col-12 col-md-6"><label for="tourImage" class="form-label">Photo 1 - Cover</label><input type="file" id="tourImage" name="tour_image" class="form-control" accept=".jpg,.jpeg,.png,.webp" required></div>
+                <div class="col-12 col-md-6"><label for="photo2" class="form-label">Photo 2</label><input type="file" id="photo2" name="photo_2" class="form-control" accept=".jpg,.jpeg,.png,.webp" required></div>
+                <div class="col-12 col-md-6"><label for="photo3" class="form-label">Photo 3</label><input type="file" id="photo3" name="photo_3" class="form-control" accept=".jpg,.jpeg,.png,.webp" required></div>
+                <div class="col-12 col-md-6"><label for="photo4" class="form-label">Photo 4</label><input type="file" id="photo4" name="photo_4" class="form-control" accept=".jpg,.jpeg,.png,.webp" required></div>
+                <div class="col-12 col-md-6"><label for="photo5" class="form-label">Photo 5</label><input type="file" id="photo5" name="photo_5" class="form-control" accept=".jpg,.jpeg,.png,.webp" required></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card form-section editor-section">
+        <div class="card-body">
+            <span class="editor-section-icon" aria-hidden="true"><i class="bi bi-person-check"></i></span>
+            <h2 class="h4">Participant information</h2>
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <label for="fitnessLevel" class="form-label">Fitness level</label>
+                    <select id="fitnessLevel" name="fitness_level" class="form-select">
+                        <option>Easy</option><option>Easy to moderate</option><option>Moderate</option><option>Challenging</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="pathType" class="form-label">Path type</label>
+                    <input id="pathType" name="path_type" class="form-control">
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="mountainPath" class="form-label">Mountain path?</label>
+                    <select id="mountainPath" name="mountain_path" class="form-select"><option>No</option><option>Partly</option><option>Yes</option></select>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="childrenAllowed" class="form-label">Children allowed?</label>
+                    <select id="childrenAllowed" name="children_allowed" class="form-select"><option>Yes</option><option>No</option><option>Only with adult</option></select>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="petsAllowed" class="form-label">Pets allowed?</label>
+                    <select id="petsAllowed" name="pets_allowed" class="form-select"><option>Yes, on leash</option><option>No</option><option>Outdoor areas only</option></select>
+                </div>
+                <div class="col-12">
+                    <label for="whatToBring" class="form-label">What should participants bring?</label>
+                    <textarea id="whatToBring" name="what_to_bring" class="form-control" rows="2"></textarea>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="editor-submit-bar"><span><i class="bi bi-info-circle" aria-hidden="true"></i> Review all required fields before publishing.</span><button type="submit" class="btn btn-primary">Create tour <i class="bi bi-arrow-right" aria-hidden="true"></i></button></div>
+</form>
 {% endblock %}

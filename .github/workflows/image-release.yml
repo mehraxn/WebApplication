@@ -1,0 +1,61 @@
+name: Image Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+# The KubeNotes project lives in a subdirectory of this repository.
+defaults:
+  run:
+    working-directory: "Polito Course/final project/kubenotes"
+
+jobs:
+  build-push-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Lowercase image owner
+        id: owner
+        run: echo "owner=${OWNER,,}" >> "$GITHUB_OUTPUT"
+        env:
+          OWNER: ${{ github.repository_owner }}
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and tag image (latest + commit SHA)
+        env:
+          IMAGE: ghcr.io/${{ steps.owner.outputs.owner }}/kubeops
+        run: |
+          docker build \
+            -t "$IMAGE:latest" \
+            -t "$IMAGE:${{ github.sha }}" \
+            .
+
+      - name: Push both tags
+        env:
+          IMAGE: ghcr.io/${{ steps.owner.outputs.owner }}/kubeops
+        run: |
+          docker push "$IMAGE:latest"
+          docker push "$IMAGE:${{ github.sha }}"
+
+      - name: Trivy image scan (fail on HIGH/CRITICAL)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ghcr.io/${{ steps.owner.outputs.owner }}/kubeops:${{ github.sha }}
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: os,library

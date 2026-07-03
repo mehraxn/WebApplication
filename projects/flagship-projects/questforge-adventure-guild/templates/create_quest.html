@@ -3,8 +3,62 @@
 {% block title %}Create Quest | QuestForge{% endblock %}
 
 {% block content %}
-<div class="placeholder-panel">
+<nav class="mb-3" aria-label="Breadcrumb">
+    <a class="link-secondary" href="{{ url_for('guild_master_dashboard') }}">Guild Master dashboard</a>
+    <span class="text-muted mx-2" aria-hidden="true">/</span>
+    <span>Create quest</span>
+</nav>
+
+<section class="management-form-panel">
+    <span class="section-eyebrow">New adventure</span>
     <h1 class="h2">Create a quest</h1>
-    <p class="text-muted mb-0">The quest creation form will be added later.</p>
-</div>
+    <p class="text-muted">Define the permanent quest information before scheduling sessions.</p>
+
+    <form method="post">
+        <div class="mb-3">
+            <label class="form-label" for="title">Quest title</label>
+            <input class="form-control" id="title" name="title" type="text" value="{{ form_values.title }}" required autofocus>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-4">
+                <label class="form-label" for="quest_type">Quest type</label>
+                <select class="form-select" id="quest_type" name="quest_type" required>
+                    {% for quest_type in quest_types %}
+                        <option value="{{ quest_type }}" {% if form_values.quest_type == quest_type %}selected{% endif %}>{{ quest_type }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label" for="difficulty">Difficulty</label>
+                <select class="form-select" id="difficulty" name="difficulty" required>
+                    {% for difficulty in difficulties %}
+                        <option value="{{ difficulty }}" {% if form_values.difficulty == difficulty %}selected{% endif %}>{{ difficulty }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label" for="duration_minutes">Duration in minutes</label>
+                <input class="form-control" id="duration_minutes" name="duration_minutes" type="number" min="1" value="{{ form_values.duration_minutes }}" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="5" required>{{ form_values.description }}</textarea>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label" for="image_filename">Image filename <span class="text-muted">(optional)</span></label>
+            <input class="form-control" id="image_filename" name="image_filename" type="text" value="{{ form_values.image_filename }}" placeholder="example-quest.jpg">
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+            <button class="btn quest-button" type="submit">Create quest</button>
+            <a class="btn btn-outline-secondary" href="{{ url_for('guild_master_dashboard') }}">Cancel</a>
+        </div>
+    </form>
+</section>
 {% endblock %}

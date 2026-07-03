@@ -72,7 +72,7 @@ def login():
 
         if email == "" or password == "":
             flash("Please enter your email and password.", "danger")
-            return render_template("login.html", email=email)
+            return redirect(url_for("login"))
 
         user_row = get_user_by_email(email)
 
@@ -81,7 +81,7 @@ def login():
             password,
         ):
             flash("Invalid email or password.", "danger")
-            return render_template("login.html", email=email)
+            return redirect(url_for("login"))
 
         user = User(user_row)
         login_user(user)
@@ -121,23 +121,23 @@ def register():
             or form_values["role"] == ""
         ):
             flash("Please fill in all required fields.", "danger")
-            return render_template("register.html", form_values=form_values)
+            return redirect(url_for("register"))
 
         if re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", form_values["email"]) is None:
             flash("Please enter a valid email address.", "danger")
-            return render_template("register.html", form_values=form_values)
+            return redirect(url_for("register"))
 
         if password != confirm_password:
             flash("Password and confirmation password must match.", "danger")
-            return render_template("register.html", form_values=form_values)
+            return redirect(url_for("register"))
 
         if form_values["role"] not in ("Adventurer", "GuildMaster"):
             flash("Please choose Adventurer or Guild Master.", "danger")
-            return render_template("register.html", form_values=form_values)
+            return redirect(url_for("register"))
 
         if get_user_by_email(form_values["email"]) is not None:
             flash("An account with that email already exists.", "danger")
-            return render_template("register.html", form_values=form_values)
+            return redirect(url_for("register"))
 
         connection = get_db_connection()
 
@@ -159,9 +159,10 @@ def register():
             )
             connection.commit()
         except sqlite3.IntegrityError:
+            connection.rollback()
             connection.close()
             flash("An account with that email already exists.", "danger")
-            return render_template("register.html", form_values=form_values)
+            return redirect(url_for("register"))
 
         connection.close()
         flash("Your account was created. You can now log in.", "success")

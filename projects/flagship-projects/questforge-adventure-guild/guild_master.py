@@ -1,4 +1,6 @@
-from flask import abort, flash, redirect, render_template, request, url_for
+import sqlite3
+
+from flask import flash, redirect, render_template, request, url_for
 
 from database import get_db_connection
 from helpers import (
@@ -156,30 +158,15 @@ def create_quest():
 
         if form_values["title"] == "":
             flash("Quest title is required.", "danger")
-            return render_template(
-                "create_quest.html",
-                form_values=form_values,
-                quest_types=QUEST_TYPES,
-                difficulties=DIFFICULTIES,
-            )
+            return redirect(url_for("create_quest"))
 
         if form_values["quest_type"] not in QUEST_TYPES:
             flash("Please select a valid quest type.", "danger")
-            return render_template(
-                "create_quest.html",
-                form_values=form_values,
-                quest_types=QUEST_TYPES,
-                difficulties=DIFFICULTIES,
-            )
+            return redirect(url_for("create_quest"))
 
         if form_values["difficulty"] not in DIFFICULTIES:
             flash("Please select a valid difficulty.", "danger")
-            return render_template(
-                "create_quest.html",
-                form_values=form_values,
-                quest_types=QUEST_TYPES,
-                difficulties=DIFFICULTIES,
-            )
+            return redirect(url_for("create_quest"))
 
         try:
             duration_minutes = int(form_values["duration_minutes"])
@@ -188,21 +175,11 @@ def create_quest():
 
         if duration_minutes <= 0:
             flash("Duration must be a positive number of minutes.", "danger")
-            return render_template(
-                "create_quest.html",
-                form_values=form_values,
-                quest_types=QUEST_TYPES,
-                difficulties=DIFFICULTIES,
-            )
+            return redirect(url_for("create_quest"))
 
         if form_values["description"] == "":
             flash("Quest description is required.", "danger")
-            return render_template(
-                "create_quest.html",
-                form_values=form_values,
-                quest_types=QUEST_TYPES,
-                difficulties=DIFFICULTIES,
-            )
+            return redirect(url_for("create_quest"))
 
         connection = get_db_connection()
         connection.execute(
@@ -262,13 +239,7 @@ def schedule_session():
 
         if validation_error is not None:
             flash(validation_error, "danger")
-            return render_template(
-                "schedule_session.html",
-                form_values=form_values,
-                quests=quests,
-                days=list(DAY_ORDER.keys()),
-                locations=LOCATIONS,
-            )
+            return redirect(url_for("schedule_session"))
 
         connection = get_db_connection()
         connection.execute(
@@ -304,7 +275,8 @@ def edit_session(session_id):
     session = get_session(session_id)
 
     if session is None:
-        abort(404)
+        flash("Quest session not found.", "danger")
+        return redirect(url_for("guild_master_dashboard"))
 
     if int(session["participation_count"]) > 0:
         flash("Sessions with participations cannot be edited.", "danger")
@@ -330,12 +302,8 @@ def edit_session(session_id):
 
         if validation_error is not None:
             flash(validation_error, "danger")
-            return render_template(
-                "edit_session.html",
-                session=session,
-                form_values=form_values,
-                days=list(DAY_ORDER.keys()),
-                locations=LOCATIONS,
+            return redirect(
+                url_for("edit_session", session_id=session_id)
             )
 
         connection = get_db_connection()
@@ -371,15 +339,24 @@ def cancel_session(session_id):
     session = get_session(session_id)
 
     if session is None:
-        abort(404)
+        flash("Quest session not found.", "danger")
+        return redirect(url_for("guild_master_dashboard"))
 
     if int(session["participation_count"]) > 0:
         flash("Sessions with participations cannot be cancelled.", "danger")
         return redirect(url_for("guild_master_dashboard"))
 
     connection = get_db_connection()
-    connection.execute("DELETE FROM quest_sessions WHERE id = ?", (session_id,))
-    connection.commit()
+
+    try:
+        connection.execute("DELETE FROM quest_sessions WHERE id = ?", (session_id,))
+        connection.commit()
+    except sqlite3.IntegrityError:
+        connection.rollback()
+        connection.close()
+        flash("Sessions with participations cannot be cancelled.", "danger")
+        return redirect(url_for("guild_master_dashboard"))
+
     connection.close()
 
     flash("The quest session was cancelled.", "success")

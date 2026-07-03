@@ -125,7 +125,7 @@ def cancel_session(session_id):
     return cancel_session_page(session_id)
 
 
-@app.route("/admin-dashboard")
+@app.route("/admin")
 @require_role("Admin")
 def admin_dashboard():
     return admin_dashboard_page()

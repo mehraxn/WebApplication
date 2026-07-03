@@ -30,7 +30,10 @@
                             {% endif %}
                         </div>
 
-                        <h2 class="h4">{{ participation.title }}</h2>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="participation-crest role-{{ participation.role_category|lower }}" aria-hidden="true">{{ participation.role_category[0] }}</span>
+                            <h2 class="h4 mb-0">{{ participation.title }}</h2>
+                        </div>
 
                         <dl class="detail-facts my-4">
                             <div><dt>Location</dt><dd>{{ participation.location }}</dd></div>
@@ -60,6 +63,7 @@
     </div>
 {% else %}
     <div class="empty-state text-center">
+        <span class="empty-state-mark" aria-hidden="true">&#10022;</span>
         <h2 class="h4">No quest participations yet</h2>
         <p class="text-muted">Browse the weekly board and join a party that needs your skills.</p>
         <a class="btn quest-button" href="{{ url_for('home') }}">Explore quest sessions</a>

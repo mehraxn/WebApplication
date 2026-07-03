@@ -1,4 +1,4 @@
-from flask import abort, render_template, request
+from flask import flash, redirect, render_template, request, url_for
 
 from database import get_db_connection
 from helpers import (
@@ -179,7 +179,8 @@ def quest_detail(session_id):
     connection.close()
 
     if session_row is None:
-        abort(404)
+        flash("Quest session not found.", "danger")
+        return redirect(url_for("home"))
 
     session = dict(session_row)
     session["role_availability"] = []

@@ -3,53 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0d12">
     <meta name="description" content="QuestForge fantasy adventure guild platform">
     <title>{% block title %}QuestForge{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark quest-navbar">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <div class="ambient-backdrop" aria-hidden="true"></div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark quest-navbar sticky-top" aria-label="Primary navigation">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">QuestForge</a>
+            <a class="navbar-brand quest-brand" href="{{ url_for('home') }}" aria-label="QuestForge home">
+                <span class="brand-crest" aria-hidden="true">QF</span>
+                <span class="brand-copy">
+                    <strong>QuestForge</strong>
+                    <small>Adventure Guild</small>
+                </span>
+            </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link {% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}">Quest Board</a></li>
                     {% if current_user.is_authenticated and current_user.role == 'Adventurer' %}
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('adventurer_profile') }}">My Profile</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.endpoint in ['adventurer_profile', 'edit_participation'] %}active{% endif %}" href="{{ url_for('adventurer_profile') }}">My Participations</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
                     {% elif current_user.is_authenticated and current_user.role == 'GuildMaster' %}
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('guild_master_dashboard') }}">Guild Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.endpoint in ['guild_master_dashboard', 'create_quest', 'schedule_session', 'edit_session'] %}active{% endif %}" href="{{ url_for('guild_master_dashboard') }}">Guild Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
                     {% elif current_user.is_authenticated and current_user.role == 'Admin' %}
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}" href="{{ url_for('admin_dashboard') }}">Council Overview</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}">Register</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'login' %}active{% endif %}" href="{{ url_for('login') }}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'register' %}active{% endif %}" href="{{ url_for('register') }}">Register</a></li>
                     {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
 
-    <main class="container py-4">
+    <main class="container site-main" id="main-content">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category if category else 'info' }}" role="alert">{{ message }}</div>
-                {% endfor %}
+                <div class="flash-stack" aria-live="polite">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category if category else 'info' }}" role="alert">
+                            <span class="flash-mark" aria-hidden="true">&#10022;</span>
+                            <span>{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
             {% endif %}
         {% endwith %}
 
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="container py-4 text-center text-muted">
-        <small>QuestForge — Fantasy Adventure Guild Platform</small>
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                <span class="brand-crest brand-crest-small" aria-hidden="true">QF</span>
+                <div>
+                    <strong>QuestForge</strong>
+                    <small>Fantasy Adventure Guild Platform</small>
+                </div>
+            </div>
+            <p class="mb-0">Gather your party. Answer the call.</p>
+        </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

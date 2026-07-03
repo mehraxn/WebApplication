@@ -73,7 +73,7 @@
             <h3 class="h6 text-uppercase text-muted">Role capacity</h3>
             <div class="role-grid">
                 {% for role in role_availability %}
-                    <div class="role-availability {% if role.remaining == 0 %}role-full{% endif %}">
+                    <div class="role-availability role-{{ role.name|lower }} {% if role.remaining == 0 %}role-full{% endif %}">
                         <span>{{ role.name }}</span>
                         <strong>{{ role.remaining }}/{{ role.capacity }}</strong>
                     </div>

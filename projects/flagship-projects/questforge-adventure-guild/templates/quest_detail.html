@@ -10,6 +10,7 @@
 </nav>
 
 <section class="detail-hero mb-4">
+    <span class="hero-sigil" aria-hidden="true">&#10022;</span>
     <div class="row g-4 align-items-center">
         <div class="col-lg-8">
             <div class="d-flex flex-wrap gap-2 mb-3">
@@ -50,7 +51,7 @@
             <div class="row g-3">
                 {% for role in session.role_availability %}
                     <div class="col-sm-4">
-                        <div class="role-detail-card {% if role.remaining == 0 %}role-full{% endif %}">
+                        <div class="role-detail-card role-{{ role.name|lower }} {% if role.remaining == 0 %}role-full{% endif %}">
                             <h3 class="h5">{{ role.name }}</h3>
                             <strong>{{ role.remaining }}</strong>
                             <span>of {{ role.capacity }} places remaining</span>

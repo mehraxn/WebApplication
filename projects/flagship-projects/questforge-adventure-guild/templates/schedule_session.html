@@ -3,8 +3,64 @@
 {% block title %}Schedule Session | QuestForge{% endblock %}
 
 {% block content %}
-<div class="placeholder-panel">
+<nav class="mb-3" aria-label="Breadcrumb">
+    <a class="link-secondary" href="{{ url_for('guild_master_dashboard') }}">Guild Master dashboard</a>
+    <span class="text-muted mx-2" aria-hidden="true">/</span>
+    <span>Schedule session</span>
+</nav>
+
+<section class="management-form-panel">
+    <span class="section-eyebrow">Weekly programme</span>
     <h1 class="h2">Schedule a quest session</h1>
-    <p class="text-muted mb-0">Day, time, quest, and location fields will be added later.</p>
-</div>
+    <p class="text-muted">A location cannot host overlapping sessions on the same day.</p>
+
+    {% if quests %}
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label" for="quest_id">Quest</label>
+                <select class="form-select" id="quest_id" name="quest_id" required>
+                    <option value="">Choose a quest</option>
+                    {% for quest in quests %}
+                        <option value="{{ quest.id }}" {% if form_values.quest_id|string == quest.id|string %}selected{% endif %}>{{ quest.title }} — {{ quest.duration_minutes }} minutes</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label class="form-label" for="day_of_week">Day</label>
+                    <select class="form-select" id="day_of_week" name="day_of_week" required>
+                        {% for day in days %}
+                            <option value="{{ day }}" {% if form_values.day_of_week == day %}selected{% endif %}>{{ day }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label" for="start_time">Start time</label>
+                    <input class="form-control" id="start_time" name="start_time" type="time" value="{{ form_values.start_time }}" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label" for="location">Location</label>
+                    <select class="form-select" id="location" name="location" required>
+                        {% for location in locations %}
+                            <option value="{{ location }}" {% if form_values.location == location %}selected{% endif %}>{{ location }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn quest-button" type="submit">Schedule session</button>
+                <a class="btn btn-outline-secondary" href="{{ url_for('guild_master_dashboard') }}">Cancel</a>
+            </div>
+        </form>
+    {% else %}
+        <div class="alert alert-warning mb-0">
+            Create a quest before scheduling a session.
+            <a class="alert-link" href="{{ url_for('create_quest') }}">Create quest</a>
+        </div>
+    {% endif %}
+</section>
 {% endblock %}

@@ -1,6 +1,6 @@
 import sqlite3
 
-from flask import abort, flash, redirect, render_template, request, url_for
+from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user
 
 from database import get_db_connection
@@ -184,7 +184,8 @@ def join_session(session_id):
     session = get_session(session_id)
 
     if session is None:
-        abort(404)
+        flash("Quest session not found.", "danger")
+        return redirect(url_for("home"))
 
     form_values = {
         "role_category": "Warrior",
@@ -196,7 +197,7 @@ def join_session(session_id):
 
         if validation_error is not None:
             flash(validation_error, "danger")
-            return render_participation_form(session, form_values)
+            return redirect(url_for("join_session", session_id=session_id))
 
         connection = get_db_connection()
         duplicate = connection.execute(
@@ -215,15 +216,15 @@ def join_session(session_id):
 
         if duplicate is not None:
             flash("You have already joined this quest session.", "danger")
-            return render_participation_form(session, form_values)
+            return redirect(url_for("join_session", session_id=session_id))
 
         if participation_count >= 3:
             flash("You can join at most three quest sessions per week.", "danger")
-            return render_participation_form(session, form_values)
+            return redirect(url_for("join_session", session_id=session_id))
 
         if adventurer_has_overlapping_session(current_user.id, session):
             flash("This quest session overlaps one of your existing sessions.", "danger")
-            return render_participation_form(session, form_values)
+            return redirect(url_for("join_session", session_id=session_id))
 
         remaining_places = get_remaining_places_for_role(
             session_id,
@@ -232,7 +233,7 @@ def join_session(session_id):
 
         if places_reserved > remaining_places:
             flash("That role does not have enough remaining places.", "danger")
-            return render_participation_form(session, form_values)
+            return redirect(url_for("join_session", session_id=session_id))
 
         connection = get_db_connection()
 
@@ -255,9 +256,10 @@ def join_session(session_id):
             )
             connection.commit()
         except sqlite3.IntegrityError:
+            connection.rollback()
             connection.close()
             flash("The participation could not be saved. Please check availability.", "danger")
-            return render_participation_form(session, form_values)
+            return redirect(url_for("join_session", session_id=session_id))
 
         connection.close()
         flash("You joined the quest session.", "success")
@@ -318,7 +320,8 @@ def cancel_participation(participation_id):
     participation = get_owned_participation(participation_id, current_user.id)
 
     if participation is None:
-        abort(404)
+        flash("Participation not found or it does not belong to you.", "danger")
+        return redirect(url_for("adventurer_profile"))
 
     if not can_modify_participation(
         participation["day_of_week"],
@@ -346,7 +349,8 @@ def edit_participation(participation_id):
     participation = get_owned_participation(participation_id, current_user.id)
 
     if participation is None:
-        abort(404)
+        flash("Participation not found or it does not belong to you.", "danger")
+        return redirect(url_for("adventurer_profile"))
 
     if not can_modify_participation(
         participation["day_of_week"],
@@ -369,7 +373,9 @@ def edit_participation(participation_id):
 
         if validation_error is not None:
             flash(validation_error, "danger")
-            return render_participation_form(session, form_values, participation)
+            return redirect(
+                url_for("edit_participation", participation_id=participation_id)
+            )
 
         remaining_places = get_remaining_places_for_role(
             participation["session_id"],
@@ -379,7 +385,9 @@ def edit_participation(participation_id):
 
         if places_reserved > remaining_places:
             flash("That role does not have enough remaining places.", "danger")
-            return render_participation_form(session, form_values, participation)
+            return redirect(
+                url_for("edit_participation", participation_id=participation_id)
+            )
 
         connection = get_db_connection()
 
@@ -399,9 +407,12 @@ def edit_participation(participation_id):
             )
             connection.commit()
         except sqlite3.IntegrityError:
+            connection.rollback()
             connection.close()
             flash("The participation could not be updated. Please check availability.", "danger")
-            return render_participation_form(session, form_values, participation)
+            return redirect(
+                url_for("edit_participation", participation_id=participation_id)
+            )
 
         connection.close()
         flash("Your participation was updated.", "success")

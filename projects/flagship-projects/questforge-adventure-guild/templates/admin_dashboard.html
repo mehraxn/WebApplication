@@ -3,8 +3,155 @@
 {% block title %}Guild Council Admin | QuestForge{% endblock %}
 
 {% block content %}
-<div class="placeholder-panel">
-    <h1 class="h2">Guild Council Admin dashboard</h1>
-    <p class="text-muted mb-0">Users, quests, sessions, participations, and statistics will appear here.</p>
+<section class="admin-hero mb-4">
+    <div>
+        <span class="section-eyebrow">Guild Council oversight</span>
+        <h1 class="display-6 fw-bold">Administrator dashboard</h1>
+        <p class="text-muted mb-0">A read-only view of guild members, quests, sessions, and party activity.</p>
+    </div>
+    <span class="badge admin-readonly-badge">Read-only access</span>
+</section>
+
+<section class="mb-4" aria-labelledby="summary-heading">
+    <span class="section-eyebrow">Platform totals</span>
+    <h2 class="h3 mb-3" id="summary-heading">Summary</h2>
+    <div class="row g-3 admin-summary-grid">
+        <div class="col-6 col-lg-4 col-xl-2">
+            <div class="admin-summary-card"><strong>{{ summary.adventurers }}</strong><span>Adventurers</span></div>
+        </div>
+        <div class="col-6 col-lg-4 col-xl-2">
+            <div class="admin-summary-card"><strong>{{ summary.guild_masters }}</strong><span>Guild Masters</span></div>
+        </div>
+        <div class="col-6 col-lg-4 col-xl-2">
+            <div class="admin-summary-card"><strong>{{ summary.quests }}</strong><span>Quests</span></div>
+        </div>
+        <div class="col-6 col-lg-4 col-xl-2">
+            <div class="admin-summary-card"><strong>{{ summary.sessions }}</strong><span>Sessions</span></div>
+        </div>
+        <div class="col-6 col-lg-4 col-xl-2">
+            <div class="admin-summary-card"><strong>{{ summary.participations }}</strong><span>Participations</span></div>
+        </div>
+        <div class="col-6 col-lg-4 col-xl-2">
+            <div class="admin-summary-card"><strong>{{ summary.reserved_places }}</strong><span>Reserved places</span></div>
+        </div>
+    </div>
+</section>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <section class="content-panel h-100">
+            <span class="section-eyebrow">Party composition</span>
+            <h2 class="h3 mb-3">Role statistics</h2>
+            <div class="admin-role-grid">
+                {% for role, places in role_statistics.items() %}
+                    <div class="admin-role-card role-{{ role|lower }}">
+                        <span>{{ role }}</span>
+                        <strong>{{ places }}</strong>
+                        <small>places reserved</small>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-6">
+        <section class="content-panel h-100">
+            <span class="section-eyebrow">Guild trends</span>
+            <h2 class="h3 mb-3">Popularity</h2>
+            <div class="popularity-grid">
+                <div class="popularity-card">
+                    <span>Most popular quest type</span>
+                    {% if popularity.quest_type %}
+                        <strong>{{ popularity.quest_type.quest_type }}</strong>
+                        <small>{{ popularity.quest_type.reserved_places }} reserved places</small>
+                    {% else %}
+                        <strong>No data</strong>
+                    {% endif %}
+                </div>
+
+                <div class="popularity-card">
+                    <span>Most reserved session</span>
+                    {% if popularity.session %}
+                        <strong>{{ popularity.session.title }}</strong>
+                        <small>{{ popularity.session.day_of_week }}, {{ popularity.session.start_time }} · {{ popularity.session.reserved_places }} places</small>
+                    {% else %}
+                        <strong>No data</strong>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </div>
 </div>
+
+<section class="content-panel mb-4">
+    <div class="d-flex justify-content-between align-items-end gap-3 mb-3">
+        <div>
+            <span class="section-eyebrow">Account directory</span>
+            <h2 class="h3 mb-0">Users</h2>
+        </div>
+        <span class="text-muted">{{ users|length }} accounts</span>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle admin-table mb-0">
+            <thead>
+                <tr>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.first_name }}</td>
+                        <td>{{ user.last_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td><span class="badge user-role-badge role-{{ user.role|lower }}">{{ user.role }}</span></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="content-panel">
+    <div class="d-flex justify-content-between align-items-end gap-3 mb-3">
+        <div>
+            <span class="section-eyebrow">Weekly activity</span>
+            <h2 class="h3 mb-0">Quest sessions</h2>
+        </div>
+        <span class="text-muted">{{ sessions|length }} sessions</span>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle admin-table mb-0">
+            <thead>
+                <tr>
+                    <th>Quest</th>
+                    <th>Day</th>
+                    <th>Start</th>
+                    <th>Location</th>
+                    <th>Type</th>
+                    <th>Difficulty</th>
+                    <th>Reserved places</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for session in sessions %}
+                    <tr>
+                        <td><a href="{{ url_for('quest_detail', session_id=session.id) }}">{{ session.title }}</a></td>
+                        <td>{{ session.day_of_week }}</td>
+                        <td>{{ session.start_time }}</td>
+                        <td>{{ session.location }}</td>
+                        <td><span class="badge quest-type-badge">{{ session.quest_type }}</span></td>
+                        <td>{{ session.difficulty }}</td>
+                        <td><strong>{{ session.total_reserved_places }}</strong></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
 {% endblock %}

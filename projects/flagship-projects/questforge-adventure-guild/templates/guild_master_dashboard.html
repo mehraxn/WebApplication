@@ -3,8 +3,121 @@
 {% block title %}Guild Master Dashboard | QuestForge{% endblock %}
 
 {% block content %}
-<div class="placeholder-panel">
-    <h1 class="h2">Guild Master dashboard</h1>
-    <p class="text-muted mb-0">Quest management and session statistics will appear here.</p>
-</div>
+<section class="management-hero mb-4">
+    <div>
+        <span class="section-eyebrow">Guild operations</span>
+        <h1 class="display-6 fw-bold">Guild Master dashboard</h1>
+        <p class="text-muted mb-0">Create adventures, schedule the weekly board, and monitor every party roster.</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn quest-button" href="{{ url_for('create_quest') }}">Create quest</a>
+        <a class="btn btn-outline-dark" href="{{ url_for('schedule_session') }}">Schedule session</a>
+    </div>
+</section>
+
+<section class="content-panel mb-4">
+    <div class="d-flex justify-content-between align-items-end gap-3 mb-3">
+        <div>
+            <span class="section-eyebrow">Adventure catalogue</span>
+            <h2 class="h3 mb-0">All quests</h2>
+        </div>
+        <span class="text-muted">{{ quests|length }} quests</span>
+    </div>
+
+    {% if quests %}
+        <div class="table-responsive">
+            <table class="table align-middle guild-table mb-0">
+                <thead>
+                    <tr>
+                        <th>Quest</th>
+                        <th>Type</th>
+                        <th>Difficulty</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for quest in quests %}
+                        <tr>
+                            <td><strong>{{ quest.title }}</strong></td>
+                            <td><span class="badge quest-type-badge">{{ quest.quest_type }}</span></td>
+                            <td>{{ quest.difficulty }}</td>
+                            <td>{{ quest.duration_minutes }} minutes</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted mb-0">No quests have been created.</p>
+    {% endif %}
+</section>
+
+<section>
+    <div class="d-flex justify-content-between align-items-end gap-3 mb-3">
+        <div>
+            <span class="section-eyebrow">Weekly programme</span>
+            <h2 class="h3 mb-0">Scheduled sessions</h2>
+        </div>
+        <span class="text-muted">{{ sessions|length }} sessions</span>
+    </div>
+
+    {% if sessions %}
+        <div class="row g-4">
+            {% for session in sessions %}
+                <div class="col-xl-6">
+                    <article class="card management-session-card h-100">
+                        <div class="card-body p-4">
+                            <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
+                                <span class="session-schedule">{{ session.day_of_week }} · {{ session.start_time }}</span>
+                                {% if session.can_manage %}
+                                    <span class="badge status-open">Editable</span>
+                                {% else %}
+                                    <span class="badge status-locked">Party assigned</span>
+                                {% endif %}
+                            </div>
+
+                            <h3 class="h4">{{ session.title }}</h3>
+                            <p class="text-muted">{{ session.location }} · {{ session.duration_minutes }} minutes</p>
+
+                            <div class="dashboard-reservation-total mb-3">
+                                <strong>{{ session.total_reserved_places }}</strong>
+                                <span>total reserved places</span>
+                            </div>
+
+                            <div class="role-grid mb-4">
+                                {% for role in session.role_availability %}
+                                    <div class="role-availability role-{{ role.name|lower }} {% if role.remaining == 0 %}role-full{% endif %}">
+                                        <span>{{ role.name }}</span>
+                                        <strong>{{ role.remaining }}/{{ role.capacity }}</strong>
+                                        <small>remaining</small>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2">
+                                <a class="btn btn-outline-dark" href="{{ url_for('quest_detail', session_id=session.id) }}">View details</a>
+
+                                {% if session.can_manage %}
+                                    <a class="btn btn-outline-secondary" href="{{ url_for('edit_session', session_id=session.id) }}">Edit</a>
+                                    <form method="post" action="{{ url_for('cancel_session', session_id=session.id) }}">
+                                        <button class="btn btn-outline-danger" type="submit">Cancel</button>
+                                    </form>
+                                {% else %}
+                                    <span class="small text-muted align-self-center">Edit and cancel are locked.</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state text-center">
+            <span class="empty-state-mark" aria-hidden="true">&#10022;</span>
+            <h3 class="h5">No sessions scheduled</h3>
+            <p class="text-muted">Choose a quest and add it to the weekly programme.</p>
+            <a class="btn quest-button" href="{{ url_for('schedule_session') }}">Schedule the first session</a>
+        </div>
+    {% endif %}
+</section>
 {% endblock %}

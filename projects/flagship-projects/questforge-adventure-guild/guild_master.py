@@ -14,6 +14,7 @@ from helpers import (
     get_total_reserved_places,
     is_valid_time,
     location_has_session_overlap,
+    time_to_minutes,
 )
 
 
@@ -67,6 +68,11 @@ def validate_session_form(form_values, quest_id, ignored_session_id=None):
 
     if not is_valid_time(form_values["start_time"]):
         return None, "Please enter a valid time in HH:MM format."
+
+    start_minutes = time_to_minutes(form_values["start_time"])
+
+    if start_minutes + int(quest["duration_minutes"]) > 24 * 60:
+        return None, "A session must end before midnight."
 
     if form_values["location"] not in LOCATIONS:
         return None, "Please select a valid guild location."

@@ -199,6 +199,12 @@ def join_session(session_id):
             flash(validation_error, "danger")
             return redirect(url_for("join_session", session_id=session_id))
 
+        hours = hours_until_session(session["day_of_week"], session["start_time"])
+
+        if hours is None or hours <= 0:
+            flash("This quest session has already started.", "danger")
+            return redirect(url_for("quest_detail", session_id=session_id))
+
         connection = get_db_connection()
         duplicate = connection.execute(
             """

@@ -149,10 +149,8 @@ questforge-adventure-guild/
 ├── guild_master.py
 ├── admin.py
 ├── helpers.py
-├── database.db
 ├── requirements.txt
 ├── README.md
-├── README_QuestForge.md
 ├── static/
 │   ├── css/
 │   │   └── style.css
@@ -171,6 +169,8 @@ questforge-adventure-guild/
     ├── edit_session.html
     └── admin_dashboard.html
 ```
+
+The SQLite database file (`database.db`) is generated locally on first run and is intentionally not committed. Sample data and demo accounts are created automatically by the application.
 
 ## Core Modules
 
@@ -236,7 +236,7 @@ SQLite constraints validate allowed account roles, quest types, difficulty level
 ### 1. Open the project directory
 
 ```powershell
-cd "projects/flagship-projects/questforge-adventure-guild"
+cd questforge-adventure-guild
 ```
 
 ### 2. Create a virtual environment
@@ -473,8 +473,12 @@ It also provided practice keeping role permissions explicit, centralizing repeat
 | Seeded SQLite demo data | Complete |
 | Automated test suite | Not included |
 | Deployment configuration | Not configured |
-| Screenshots | Pending |
+| Screenshots | Complete |
 
 ## Author
 
 Developed by **Mehran Bayat** as a standalone full-stack portfolio project.
+
+## License
+
+This project is intended for educational and portfolio purposes.

@@ -1,0 +1,10 @@
+database.db
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.DS_Store
+Thumbs.db
+*.zip
+__image_pack_extract_temp/
+__screenshots_extract_temp/

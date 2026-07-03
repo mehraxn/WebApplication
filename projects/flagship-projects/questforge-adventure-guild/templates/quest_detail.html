@@ -24,7 +24,8 @@
             {% set image_name = session.image_filename or 'quest-default.svg' %}
             <img src="{{ url_for('static', filename='images/' ~ image_name) }}"
                  alt="Artwork for the {{ session.title }} quest"
-                 class="img-fluid rounded mb-3 quest-detail-image">
+                 class="img-fluid rounded mb-3 quest-detail-image"
+                 onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/quest-default.svg') }}'">
             <div class="detail-schedule-card">
                 <span>Quest session</span>
                 <strong>{{ session.day_of_week }}</strong>

@@ -93,3 +93,7 @@ These are the most complete, portfolio-ready projects to highlight to a recruite
 
 Together these show the full stack a junior web / Flask developer is expected to know:
 semantic HTML, modern CSS, responsive Bootstrap UIs, and database-backed Flask applications.
+
+---
+
+> Last reviewed: 2026-07-03.

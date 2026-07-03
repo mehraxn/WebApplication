@@ -183,6 +183,10 @@ This repository demonstrates the ability to:
 - Add **automated tests** for the Flask projects
 - Add **Docker** to the strongest Flask projects for easy setup
 
+## Repository Notes
+
+Old GitHub Actions workflows were archived because they belonged to a previous CI/CD setup and were not needed for this web application portfolio.
+
 ---
 
 > Note: No live demos are deployed yet. Screenshots and deployment links will be added as

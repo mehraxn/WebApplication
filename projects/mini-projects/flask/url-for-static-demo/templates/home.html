@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page</title>
+
+    <!-- This line connects the CSS file using Flask/Jinja url_for() -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="box">
+        <h1>Hello IWA!</h1>
+
+        <p>This is my Flask home page.</p>
+
+        <!-- This line creates a link to the Flask route function called about -->
+        <a href="{{ url_for('about') }}">Go to About Page</a>
+    </div>
+
+</body>
+</html>

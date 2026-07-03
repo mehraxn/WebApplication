@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}{{ service['name'] }} — BookIt{% endblock %}
+
+{% block content %}
+  <p><a href="{{ url_for('index') }}">&larr; Back to events</a></p>
+
+  <article class="detail">
+    <h1>{{ service["name"] }}</h1>
+    <p class="meta">📅 {{ service["date"] }} · 🕒 {{ service["time"] }}</p>
+
+    <p class="desc">{{ service["description"] }}</p>
+
+    <ul class="facts">
+      <li><strong>Capacity:</strong> {{ service["capacity"] }} seats</li>
+      <li>
+        <strong>Availability:</strong>
+        {% if past %}
+          <span class="badge badge-muted">Past event</span>
+        {% elif available > 0 %}
+          <span class="badge badge-open">{{ available }} seats left</span>
+        {% else %}
+          <span class="badge badge-full">Fully booked</span>
+        {% endif %}
+      </li>
+    </ul>
+
+    <div class="form-actions">
+      {% if not past and available > 0 %}
+        <a class="btn btn-primary" href="{{ url_for('reserve', service_id=service['id']) }}">Reserve seats</a>
+      {% endif %}
+      <a class="btn btn-outline" href="{{ url_for('index') }}">Back</a>
+    </div>
+  </article>
+{% endblock %}

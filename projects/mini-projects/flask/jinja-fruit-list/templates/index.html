@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Jinja Example</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Flask + Jinja Example</h1>
+
+        {% if logged_in %}
+            <p class="welcome">Welcome, {{ user_name }}!</p>
+        {% else %}
+            <p class="warning">Please log in first.</p>
+        {% endif %}
+
+        <h2>Fruit List</h2>
+
+        {% if fruits %}
+            <div class="fruit-list">
+                {% for fruit in fruits %}
+                    <div class="fruit-card">
+                        <h3>{{ loop.index }}. {{ fruit.name }}</h3>
+                        <p><strong>Color:</strong> {{ fruit.color }}</p>
+
+                        {% if fruit.available %}
+                            <p class="available">Available</p>
+                        {% else %}
+                            <p class="not-available">Out of stock</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No fruits found.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Concept - About</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Concept of Route 2</h1>
+
+    <p>This page exists to explain the route <code>/about</code>.</p>
+
+    <h2>What happens when you open <code>/about</code> ?</h2>
+    <ol>
+        <li>The browser requests the URL <code>/about</code>.</li>
+        <li>Flask looks for a matching route.</li>
+        <li>Flask finds <code>@app.route("/about")</code>.</li>
+        <li>Flask runs the function <code>about()</code>.</li>
+        <li>The function returns <code>about.html</code>.</li>
+        <li>The browser displays this page.</li>
+    </ol>
+
+    <h2>Meaning of this route</h2>
+    <p><code>/about</code> is usually used for information about the site, app, or company.</p>
+
+    <div class="box">
+        <strong>Mapping:</strong><br>
+        <code>/about</code> → <code>about()</code> → <code>about.html</code>
+    </div>
+
+    <h2>How is it different from the first route?</h2>
+    <p>This route is not the homepage. Because the path is different, Flask does not run <code>home()</code>. It runs <code>about()</code> instead.</p>
+
+    <p><a href="/">Go to the / route</a></p>
+</body>
+</html>

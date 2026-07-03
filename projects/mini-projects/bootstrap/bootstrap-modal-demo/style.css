@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+}
+
+.page-container {
+    width: 80%;
+    max-width: 700px;
+    margin: 100px auto;
+    padding: 40px;
+    text-align: center;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.page-container h1 {
+    margin-bottom: 20px;
+    color: #222;
+}
+
+.page-container p {
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.modal-body p {
+    color: #444;
+}

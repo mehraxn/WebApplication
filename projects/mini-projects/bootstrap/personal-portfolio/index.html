@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alex Morgan — Portfolio</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Minimal custom CSS: hero spacing and smooth scroll only -->
+    <style>
+      html { scroll-behavior: smooth; }
+      .hero { padding: 6rem 0; }
+      section { scroll-margin-top: 70px; }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#home">Alex Morgan</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#nav"
+          aria-controls="nav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+            <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <header id="home" class="hero bg-primary text-white text-center">
+      <div class="container">
+        <h1 class="display-4 fw-bold">Hi, I'm Alex Morgan</h1>
+        <p class="lead">Junior Web &amp; Flask Developer</p>
+        <a href="#projects" class="btn btn-light btn-lg mt-3">View my work</a>
+        <a href="#contact" class="btn btn-outline-light btn-lg mt-3">Get in touch</a>
+      </div>
+    </header>
+
+    <!-- About -->
+    <section id="about" class="py-5">
+      <div class="container">
+        <div class="row align-items-center g-4">
+          <div class="col-md-4 text-center">
+            <div
+              class="rounded-circle bg-secondary text-white d-inline-flex align-items-center justify-content-center"
+              style="width: 160px; height: 160px; font-size: 3rem;"
+            >
+              AM
+            </div>
+          </div>
+          <div class="col-md-8">
+            <h2>About Me</h2>
+            <p>
+              I'm a motivated junior developer who enjoys building clean, accessible,
+              responsive websites. I work with HTML, CSS, Bootstrap, and Flask, and I'm
+              always learning something new. I care about writing tidy code and creating
+              interfaces that are easy to use.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills" class="py-5 bg-light">
+      <div class="container">
+        <h2 class="text-center mb-4">Skills</h2>
+        <div class="row g-3 text-center">
+          <div class="col-6 col-md-3">
+            <div class="p-3 bg-white rounded shadow-sm">HTML5</div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-3 bg-white rounded shadow-sm">CSS3</div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-3 bg-white rounded shadow-sm">Bootstrap</div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-3 bg-white rounded shadow-sm">Flask</div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-3 bg-white rounded shadow-sm">Python</div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-3 bg-white rounded shadow-sm">SQLite</div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-3 bg-white rounded shadow-sm">Git</div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-3 bg-white rounded shadow-sm">Responsive Design</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="py-5">
+      <div class="container">
+        <h2 class="text-center mb-4">Projects</h2>
+        <div class="row g-4">
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Task Manager</h5>
+                <p class="card-text">A Flask + SQLite CRUD app to create, edit, and delete tasks.</p>
+                <span class="badge bg-secondary">Flask</span>
+                <span class="badge bg-secondary">SQLite</span>
+              </div>
+              <div class="card-footer bg-transparent border-0">
+                <a href="#" class="btn btn-sm btn-primary">Live</a>
+                <a href="#" class="btn btn-sm btn-outline-primary">Code</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Startup Landing Page</h5>
+                <p class="card-text">A responsive marketing page built with Bootstrap components.</p>
+                <span class="badge bg-secondary">Bootstrap</span>
+                <span class="badge bg-secondary">HTML</span>
+              </div>
+              <div class="card-footer bg-transparent border-0">
+                <a href="#" class="btn btn-sm btn-primary">Live</a>
+                <a href="#" class="btn btn-sm btn-outline-primary">Code</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Restaurant Menu</h5>
+                <p class="card-text">A semantic, accessible menu page with categories and prices.</p>
+                <span class="badge bg-secondary">HTML</span>
+                <span class="badge bg-secondary">CSS</span>
+              </div>
+              <div class="card-footer bg-transparent border-0">
+                <a href="#" class="btn btn-sm btn-primary">Live</a>
+                <a href="#" class="btn btn-sm btn-outline-primary">Code</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-5 bg-light">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-8 col-lg-6 text-center">
+            <h2 class="mb-3">Get in Touch</h2>
+            <p>Interested in working together? Send me a message.</p>
+            <form>
+              <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Your name" />
+              </div>
+              <div class="mb-3">
+                <input type="email" class="form-control" placeholder="Your email" />
+              </div>
+              <div class="mb-3">
+                <textarea class="form-control" rows="4" placeholder="Your message"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Send message</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4">
+      <div class="container">
+        <p class="mb-1">&copy; 2026 Alex Morgan</p>
+        <small class="text-muted">Built with HTML &amp; Bootstrap</small>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

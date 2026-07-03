@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tour.title }} | LA Walks{% endblock %}
+
+{% block content %}
+{% set default_tour_image = url_for('static', filename='images/places/default-tour-cover.jpg') %}
+<div class="row g-2 mb-4 detail-heading">
+
+    <div class=" col-12 ">
+        <a href="{{ url_for('home') }}#walking-routes" class="detail-back-link"><i class="bi bi-arrow-left" aria-hidden="true"></i> All walking tours</a>
+        <span class="eyebrow"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i> Los Angeles walking experience</span>
+        <h1>{{ tour.title }}</h1>
+        <p class="lead">{{ tour.description }}</p>
+    </div>
+
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-12 col-lg-7">
+        <div class="detail-media">
+            <img
+                src="{{ url_for('static', filename=tour.image) }}"
+                class="detail-main-image"
+                alt="{{ tour.title }}"
+                onerror="this.onerror=null; this.src='{{ default_tour_image }}';">
+            <span class="detail-media-badge"><i class="bi bi-stars" aria-hidden="true"></i> Curated LA experience</span>
+            <span class="detail-media-caption"><i class="bi bi-camera" aria-hidden="true"></i> Local perspective</span>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+
+        <section class="card h-100 detail-booking-card">
+            <div class="card-body">
+                <span class="eyebrow">At a glance</span>
+                <h2 class="h4">Tour information</h2>
+                <dl class="row mb-3 detail-spec-list">
+                    <dt class="col-12 col-sm-5"><i class="bi bi-translate" aria-hidden="true"></i> Languages</dt>
+                    <dd class="col-12 col-sm-7">{{ tour.languages }}</dd>
+
+                    <dt class="col-12 col-sm-5"><i class="bi bi-clock" aria-hidden="true"></i> Duration</dt>
+                    <dd class="col-12 col-sm-7">{{ tour.duration }}</dd>
+
+                    <dt class="col-12 col-sm-5"><i class="bi bi-signpost-split" aria-hidden="true"></i> Distance</dt>
+                    <dd class="col-12 col-sm-7">{{ tour.distance }}</dd>
+
+                    <dt class="col-12 col-sm-5"><i class="bi bi-geo-alt" aria-hidden="true"></i> Meeting point</dt>
+                    <dd class="col-12 col-sm-7">{{ tour.meeting_point }}</dd>
+
+                    <dt class="col-12 col-sm-5"><i class="bi bi-people" aria-hidden="true"></i> Group size</dt>
+                    <dd class="col-12 col-sm-7">{{ tour.max_participants }}</dd>
+
+                    <dt class="col-12 col-sm-5"><i class="bi bi-person-badge" aria-hidden="true"></i> Local guide</dt>
+                    <dd class="col-12 col-sm-7"><a href="{{ url_for('guide_profile', guide_id=tour.guide_user_id) }}" class="guide-profile-link">{{ tour.guide }} <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a></dd>
+
+                    <dt class="col-12 col-sm-5"><i class="bi bi-calendar3" aria-hidden="true"></i> Schedule</dt>
+                    <dd class="col-12 col-sm-7">
+                        {% if tour.schedule %}
+                            <ul class="list-unstyled mb-0">
+                                {% for x in tour.schedule %}
+                                    <li>{{ x }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            No weekly schedule available.
+                        {% endif %}
+                    </dd>
+
+                </dl>
+
+                <a href="{{ url_for('reserve_tour', tour_id=tour.id) }}" class="btn btn-primary detail-cta">
+                    Reserve this tour <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                </a>
+                <p class="detail-cta-note"><i class="bi bi-shield-check" aria-hidden="true"></i> Free reservation &middot; Instant confirmation</p>
+
+                {% if tour.existing_reservations %}
+                    <div class="alert alert-info mt-3 mb-0">
+                        You already reserved:
+                        {% for x in tour.existing_reservations %}
+                            <strong>{{ x.selected_date }} at {{ x.selected_time }}</strong>{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+    </div>
+</div>
+
+{% if tour.photos %}
+    <section class="card mb-4 detail-gallery-card">
+        <div class="card-body">
+            <span class="eyebrow">Visual diary</span>
+            <h2 class="h4">Tour photos</h2>
+            <div class="row g-3">
+                {% for x in tour.photos %}
+                    <div class="col-12 col-md-4 gallery-frame">
+                        <img
+                            src="{{ url_for('static', filename=x) }}"
+                            class="gallery-image"
+                            alt="{{ tour.title }} photo {{ loop.index }}"
+                            loading="lazy"
+                            onerror="this.onerror=null; this.src='{{ default_tour_image }}';">
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endif %}
+
+<div class="row g-4 mb-4">
+    <div class="col-12 col-lg-6">
+        <section class="card h-100 detail-section-card route-card">
+            <div class="card-body">
+                <span class="section-icon" aria-hidden="true"><i class="bi bi-map"></i></span>
+                <h2 class="h4">Meeting point and route</h2>
+                <p class="meeting-point"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i><span><strong>Meeting point</strong>{{ tour.meeting_point }}</span></p>
+                <ol class="mb-0 route-timeline">
+                    {% for x in tour.route_stops %}
+                        <li>{{ x }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-12 col-lg-6">
+        <section class="card h-100 detail-section-card">
+            <div class="card-body">
+                <span class="section-icon" aria-hidden="true"><i class="bi bi-info-circle"></i></span>
+                <h2 class="h4">Participant information</h2>
+                <ul class="mb-0 participant-facts">
+                    <li><strong>Audience:</strong> {{ tour.audience }}</li>
+                    <li><strong>Fitness level:</strong> {{ tour.fitness_level }}</li>
+                    <li><strong>Path type:</strong> {{ tour.terrain }}</li>
+                    <li><strong>Mountain path:</strong> {{ tour.mountain_path }}</li>
+                    <li><strong>Pets:</strong> {{ tour.pets_allowed }}</li>
+                    <li><strong>Children:</strong> {{ tour.children_allowed }}</li>
+                    <li><strong>Accessibility:</strong> {{ tour.accessibility }}</li>
+                    <li><strong>Note:</strong> {{ tour.notes }}</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-12 col-lg-6">
+        <section class="card h-100 detail-section-card compact-detail-card">
+            <div class="card-body">
+                <span class="section-icon" aria-hidden="true"><i class="bi bi-cup-hot"></i></span>
+                <h2 class="h5">Rest stops</h2>
+                <ul class="mb-0 detail-check-list">
+                    {% for x in tour.rest_stops %}<li>{{ x }}</li>{% endfor %}
+                </ul>
+            </div>
+        </section>
+    </div>
+    <div class="col-12 col-lg-6">
+        <section class="card h-100 detail-section-card compact-detail-card">
+            <div class="card-body">
+                <span class="section-icon" aria-hidden="true"><i class="bi bi-backpack"></i></span>
+                <h2 class="h5">What to bring</h2>
+                <ul class="mb-0 detail-check-list">
+                    {% for x in tour.what_to_bring %}<li>{{ x }}</li>{% endfor %}
+                </ul>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+<section class="card mb-4 availability-section">
+    <div class="card-body">
+        <div class="availability-heading">
+            <div>
+                <span class="eyebrow">Plan your visit</span>
+                <h2 class="h4">Available dates</h2>
+            </div>
+            <span class="availability-legend"><i aria-hidden="true"></i> Tour available</span>
+        </div>
+        {% if not calendars %}
+            <div class="alert alert-info mb-0">
+                <h3 class="h5">No upcoming dates</h3>
+                <p class="mb-3">There are no upcoming dates available for this tour.</p>
+                <a href="{{ url_for('home') }}" class="btn btn-outline-primary">Back to tours</a>
+            </div>
+        {% endif %}
+        <div class="row g-3">
+            {% for x in calendars %}
+                <div class="col-12 col-md-6 col-lg-6">
+                    <div class="simple-calendar">
+                        <h3 class="h6 text-center">{{ x.month_name }} {{ x.year }}</h3>
+
+                        <div class="calendar-weekdays">
+                            {% for y in ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] %}
+                                <span>{{ y }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="calendar-days">
+                            {% for y in x.weeks %}
+                                {% for z in y %}
+                                    {% if z %}
+                                        {% if z.available %}
+                                            <span class="calendar-day available-day" aria-label="{{ x.month_name }} {{ z.day }}, {{ x.year }}: tour available">{{ z.day }}</span>
+                                        {% else %}
+                                            <span class="calendar-day">{{ z.day }}</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="calendar-day"></span>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

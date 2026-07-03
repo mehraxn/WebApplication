@@ -1,0 +1,32 @@
+body {
+  display: flex;
+  justify-content: center;
+}
+
+.quiz-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.answers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+button .number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button .text {
+  flex: 1;
+}

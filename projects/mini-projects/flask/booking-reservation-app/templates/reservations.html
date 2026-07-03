@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}My Reservations — BookIt{% endblock %}
+
+{% block content %}
+  <h1>My Reservations</h1>
+
+  {% if reservations %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Seats</th>
+            <th>Booked</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in reservations %}
+            <tr>
+              <td>{{ r["service_name"] }}</td>
+              <td>{{ r["service_date"] }} {{ r["service_time"] }}</td>
+              <td>{{ r["customer_name"] }}</td>
+              <td>{{ r["customer_email"] }}</td>
+              <td>{{ r["seats"] }}</td>
+              <td>{{ r["created_at"] }}</td>
+              <td>
+                <!-- Cancel uses a POST form, not a link -->
+                <form
+                  action="{{ url_for('cancel_reservation', reservation_id=r['id']) }}"
+                  method="POST"
+                  onsubmit="return confirm('Cancel this reservation?');"
+                >
+                  <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="empty">You have no reservations yet. <a href="{{ url_for('index') }}">Browse events</a>.</p>
+  {% endif %}
+{% endblock %}

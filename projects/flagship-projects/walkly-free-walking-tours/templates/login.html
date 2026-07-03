@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Login | LA Walks{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center auth-shell">
+    <div class="col-12 col-md-8 col-lg-5">
+        <section class="card auth-card">
+            <div class="card-body">
+            <span class="auth-icon" aria-hidden="true"><i class="bi bi-compass"></i></span>
+            <span class="eyebrow">Welcome back</span>
+            <h1 class="h3">Login</h1>
+            <p>Enter your account details.</p>
+
+            <form method="POST" action="{{ url_for('login') }}">
+                <div class="mb-3">
+                    <label for="loginEmail" class="form-label">Email address</label>
+                    <input type="email" id="loginEmail" name="email" class="form-control" autocomplete="email" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="loginPassword" class="form-label">Password</label>
+                    <input type="password" id="loginPassword" name="password" class="form-control" autocomplete="current-password" required>
+                </div>
+
+                <input type="hidden" name="next" value="{{ next_url }}">
+
+                <button type="submit" class="btn btn-primary w-100">Login <i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+            </form>
+
+            <p class="mt-3 mb-0">
+                Do not have an account? <a href="{{ url_for('register') }}">Register here</a>.
+            </p>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+{% if role_choices %}
+    <div class="modal fade" id="roleChoiceModal" tabindex="-1" aria-labelledby="roleChoiceModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title h5" id="roleChoiceModalLabel">Choose account type</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p>This email is connected to more than one role.</p>
+                    <div class="d-grid gap-2">
+                        {% for x in role_choices %}
+                            <form method="POST" action="{{ url_for('select_login_role') }}">
+                                <input type="hidden" name="user_id" value="{{ x.id }}">
+                                <button type="submit" class="btn btn-outline-primary w-100 text-start">
+                                    Continue as {{ x.role }} - {{ x.full_name }}
+                                </button>
+                            </form>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+    {% if role_choices %}
+        <script src="{{ url_for('static', filename='js/login.js') }}" defer></script>
+    {% endif %}
+{% endblock %}

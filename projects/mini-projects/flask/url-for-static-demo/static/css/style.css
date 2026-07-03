@@ -1,0 +1,33 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: lightgray;
+    margin: 0;
+    padding: 0;
+}
+
+.box {
+    background-color: white;
+    width: 400px;
+    margin: 80px auto;
+    padding: 30px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+h1 {
+    color: darkblue;
+}
+
+p {
+    color: #333333;
+}
+
+a {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: darkblue;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}

@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}My Reservations | LA Walks{% endblock %}
+
+{% block content %}
+{% set default_tour_image = url_for('static', filename='images/places/default-tour-cover.jpg') %}
+<div class="row g-2 mb-4 page-heading dashboard-hero">
+    <div class="col-12 col-md-9">
+        <span class="eyebrow"><i class="bi bi-calendar2-check" aria-hidden="true"></i> Booking center</span>
+        <h1>My reservations</h1>
+        <p>View your bookings and cancellation options.</p>
+    </div>
+    <div class="col-12 col-md-3">
+        <a href="{{ url_for('participant_dashboard') }}" class="btn btn-outline-secondary">Back to dashboard</a>
+    </div>
+</div>
+
+<div class="row g-3">
+    {% for x in reservations %}
+        <div class="col-12">
+            <div class="card reservation-management-card">
+                <div class="row g-0">
+                    <div class="col-12 col-md-3">
+                        <img
+                            src="{{ url_for('static', filename=x.tour.image) }}"
+                            class="reservation-list-image"
+                            alt="{{ x.tour.title }}"
+                            loading="lazy"
+                            onerror="this.onerror=null; this.src='{{ default_tour_image }}';">
+                    </div>
+
+                    <div class="col-12 col-md-9">
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <div class="col-12 col-md-9">
+                                    <h2 class="card-title h5">{{ x.tour.title }}</h2>
+                                </div>
+                                <div class="col-12 col-md-3 text-md-end">
+                                    {% if x.status == "Confirmed" %}
+                                        <span class="badge text-bg-success">Confirmed</span>
+                                    {% elif x.status == "Cancelled" %}
+                                        <span class="badge text-bg-secondary">Cancelled</span>
+                                    {% else %}
+                                        <span class="badge text-bg-info">{{ x.status }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row mt-2 reservation-data-grid">
+                                <div class="col-12 col-md-6">
+                                    <p class="mb-1"><strong>Date:</strong> {{ x.date }}</p>
+                                    <p class="mb-1"><strong>Time:</strong> {{ x.time }}</p>
+                                    <p class="mb-1">
+                                        <strong>Tour:</strong>
+                                        {% if x.is_past %}Past{% else %}Upcoming{% endif %}
+                                    </p>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <p class="mb-1"><strong>Total people:</strong> {{ x.extra_people_count + 1 }}</p>
+                                    <p class="mb-1"><strong>Meeting point:</strong> {{ x.tour.meeting_point }}</p>
+                                    {% if x.extra_names %}
+                                        <p class="mb-1"><strong>Extra participants:</strong> {{ x.extra_names|join(", ") }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row g-2 mt-3 reservation-actions">
+                                <div class="col-12 col-md-3">
+                                    <a href="{{ url_for('tour_detail', tour_id=x.tour.id) }}" class="btn btn-primary btn-sm">View tour</a>
+                                </div>
+
+                                {% if x.can_cancel %}
+                                    <div class="col-12 col-md-3">
+                                        <form method="POST" action="{{ url_for('cancel_reservation', reservation_id=x.id) }}" onsubmit="return confirm('Cancel this reservation?');">
+                                            <button type="submit" class="btn btn-danger btn-sm">Cancel reservation</button>
+                                        </form>
+                                    </div>
+                                {% else %}
+                                    <div class="col-12 col-md-6">
+                                        <span class="text-muted small">This reservation cannot be cancelled online.</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="col-12">
+            <div class="empty-state">
+                <i class="bi bi-ticket-perforated" aria-hidden="true"></i>
+                <h2 class="h5">No reservations yet</h2>
+                <p class="mb-3">You have not reserved any tours yet.</p>
+                <a href="{{ url_for('home') }}" class="btn btn-primary">Browse tours</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="dashboard-notice mt-4">
+    <i class="bi bi-info-circle" aria-hidden="true"></i>
+    <span><strong>Cancellation policy</strong>Reservations can be cancelled at least 24 hours before the tour start time.</span>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+@font-face {
+    font-family: Vazir;
+    src: url("./assets/Vazir.ttf");
+}
+
+* {
+    font-family: Vazir;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+}
+
+.explore-categories {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header h2 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.header a {
+    font-size: 16px;
+    text-decoration: none;
+    color: #503E9D;
+}
+
+.categories {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.category {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 12%;
+    padding: 20px;
+    text-align: center;
+    background-color: #F7F7F7;
+}
+
+.category .icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon img {
+    width: 50%;
+    height: 50%;
+}
+
+.category .text h3 {
+    font-size: 18px;
+    color: #333;
+    margin: 0 0 5px;
+}
+
+.category .text p {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+.categories .category:nth-child(1) .icon { background-color: #fb6d3a; }
+.categories .category:nth-child(2) .icon { background-color: #503e9d; }
+.categories .category:nth-child(3) .icon { background-color: #facd5d; }
+.categories .category:nth-child(4) .icon { background-color: #3a64fb; }
+.categories .category:nth-child(5) .icon { background-color: #4a9777; }

@@ -1,0 +1,47 @@
+body {
+  background-color: #0E1019;
+}
+
+.modal {
+  background-color: #22242F;
+  border-radius: 10px;
+  padding: 20px;
+  width: 400px;
+  text-align: center;
+  margin: auto;
+}
+
+.modal h2 {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.modal p {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.input-group {
+  background-color: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.input-group input {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 1em;
+  padding: 15px 10px;
+}
+
+.input-group button {
+  background-color: #3d518f;
+  color: #ffffff;
+  border: none;
+  padding: 15px 25px;
+  cursor: pointer;
+}

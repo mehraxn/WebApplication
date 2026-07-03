@@ -1,0 +1,32 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+}
+
+.hero-section {
+  background: linear-gradient(135deg, #e9f3ff, #ffffff);
+}
+
+.example-box {
+  border-left: 5px solid #0d6efd;
+}
+
+.comparison-box {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.code-box {
+  background-color: #212529;
+  color: #f8f9fa;
+  padding: 16px;
+  border-radius: 10px;
+  overflow-x: auto;
+  margin-top: 12px;
+}
+
+footer {
+  background-color: #ffffff;
+}

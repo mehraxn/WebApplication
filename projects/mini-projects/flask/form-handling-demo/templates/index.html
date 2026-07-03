@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Form Example</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Flask Form Example</h1>
+        <p>Fill the form and click submit. The data will be shown below.</p>
+
+        <form method="POST" action="/">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    placeholder="Enter your name" 
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder="Enter your email" 
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea 
+                    id="message" 
+                    name="message" 
+                    placeholder="Write your message" 
+                    required
+                ></textarea>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <h2>Submitted Data</h2>
+
+        {% if submissions %}
+            {% for item in submissions %}
+                <div class="card">
+                    <p><strong>Name:</strong> {{ item.name }}</p>
+                    <p><strong>Email:</strong> {{ item.email }}</p>
+                    <p><strong>Message:</strong> {{ item.message }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="empty">No form data submitted yet.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

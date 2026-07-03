@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <title>برنامه زمانی کلاس</title>
+  <style>
+    body {
+      font-family: 'Vazir', sans-serif;
+      direction: rtl;
+      background: #ffffff; /* white background */
+      color: #111;
+    }
+    table {
+      border-collapse: collapse;
+      margin: 40px auto;
+      width: 90%;
+      max-width: 900px;
+      background: #fff;
+    }
+    caption { font-size: 28px; font-weight: 800; margin-bottom: 16px; }
+    th, td { border: 2px solid #333; padding: 14px 10px; text-align: center; font-size: 18px; }
+    thead th { background: #f0f0f0; }
+    th { font-weight: 800; }
+  </style>
+</head>
+<body>
+
+  <table class="برنامه_زمانی">
+    <caption>برنامه زمانی</caption>
+    <thead>
+      <tr>
+        <th id="time" rowspan="2">ساعت</th>
+        <th id="day" colspan="5">روز</th>
+      </tr>
+      <tr>
+        <th scope="col">شنبه</th>
+        <th scope="col">یکشنبه</th>
+        <th scope="col">دوشنبه</th>
+        <th scope="col">سه‌شنبه</th>
+        <th scope="col">چهارشنبه</th>
+      </tr>
+    </thead>
+
+    <!-- 4 class rows; time entries use <th>, classes use <td> -->
+    <tr>
+      <th scope="row">۸:۰۰ - ۹:۰۰</th>
+      <td>ریاضی</td>
+      <td>علوم</td>
+      <td>تاریخ</td>
+      <td>ریاضی</td>
+      <td>زبان</td>
+    </tr>
+    <tr>
+      <th scope="row">۹:۰۰ - ۱۰:۰۰</th>
+      <td>زبان</td>
+      <td>ریاضی</td>
+      <td>علوم</td>
+      <td>تاریخ</td>
+      <td>ریاضی</td>
+    </tr>
+    <tr>
+      <th scope="row">۱۰:۰۰ - ۱۱:۰۰</th>
+      <td>تاریخ</td>
+      <td>زبان</td>
+      <td>ریاضی</td>
+      <td>علوم</td>
+      <td>تاریخ</td>
+    </tr>
+    <tr>
+      <th scope="row">۱۱:۰۰ - ۱۲:۰۰</th>
+      <td>علوم</td>
+      <td>تاریخ</td>
+      <td>زبان</td>
+      <td>ریاضی</td>
+      <td>علوم</td>
+    </tr>
+  </table>
+
+</body>
+</html>

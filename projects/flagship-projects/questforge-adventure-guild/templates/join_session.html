@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% if is_editing %}
+    {% set page_heading = "Edit participation" %}
+{% else %}
+    {% set page_heading = "Join quest session" %}
+{% endif %}
+
+{% block title %}{{ page_heading }} | QuestForge{% endblock %}
+
+{% block content %}
+<nav class="mb-3" aria-label="Breadcrumb">
+    <a class="link-secondary" href="{{ url_for('home') }}">Quest board</a>
+    <span class="text-muted mx-2" aria-hidden="true">/</span>
+    <a class="link-secondary" href="{{ url_for('quest_detail', session_id=session.session_id) }}">{{ session.title }}</a>
+    <span class="text-muted mx-2" aria-hidden="true">/</span>
+    <span>{{ page_heading }}</span>
+</nav>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <section class="content-panel">
+            <span class="section-eyebrow">Party assignment</span>
+            <h1 class="h2">{{ page_heading }}</h1>
+            <p class="text-muted">Choose one role and reserve one or two places. Both places use the same role.</p>
+
+            <form method="post">
+                <div class="mb-3">
+                    <label class="form-label" for="role_category">Party role</label>
+                    <select class="form-select" id="role_category" name="role_category" required>
+                        {% for role in role_availability %}
+                            <option
+                                value="{{ role.name }}"
+                                {% if form_values.role_category == role.name %}selected{% endif %}
+                                {% if role.remaining == 0 and form_values.role_category != role.name %}disabled{% endif %}
+                            >
+                                {{ role.name }} — {{ role.remaining }} place{% if role.remaining != 1 %}s{% endif %} available
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" for="places_reserved">Places to reserve</label>
+                    <select class="form-select" id="places_reserved" name="places_reserved" required>
+                        <option value="1" {% if form_values.places_reserved|string == '1' %}selected{% endif %}>1 place</option>
+                        <option value="2" {% if form_values.places_reserved|string == '2' %}selected{% endif %}>2 places</option>
+                    </select>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn quest-button" type="submit">
+                        {% if is_editing %}Save changes{% else %}Confirm participation{% endif %}
+                    </button>
+                    <a class="btn btn-outline-secondary" href="{{ url_for('adventurer_profile') }}">Back to my participations</a>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <div class="col-lg-5">
+        <aside class="session-summary-panel">
+            <span class="section-eyebrow">Selected quest</span>
+            <h2 class="h4">{{ session.title }}</h2>
+            <dl class="detail-facts mb-4">
+                <div><dt>Day</dt><dd>{{ session.day_of_week }}</dd></div>
+                <div><dt>Time</dt><dd>{{ session.start_time }}</dd></div>
+                <div><dt>Location</dt><dd>{{ session.location }}</dd></div>
+                <div><dt>Duration</dt><dd>{{ session.duration_minutes }} minutes</dd></div>
+                <div><dt>Difficulty</dt><dd>{{ session.difficulty }}</dd></div>
+            </dl>
+
+            <h3 class="h6 text-uppercase text-muted">Role capacity</h3>
+            <div class="role-grid">
+                {% for role in role_availability %}
+                    <div class="role-availability {% if role.remaining == 0 %}role-full{% endif %}">
+                        <span>{{ role.name }}</span>
+                        <strong>{{ role.remaining }}/{{ role.capacity }}</strong>
+                    </div>
+                {% endfor %}
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}

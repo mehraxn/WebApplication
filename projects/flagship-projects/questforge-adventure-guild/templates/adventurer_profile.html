@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}My Participations | QuestForge{% endblock %}
+
+{% block content %}
+<section class="profile-heading mb-4">
+    <div>
+        <span class="section-eyebrow">Adventurer record</span>
+        <h1 class="display-6 fw-bold">My participations</h1>
+        <p class="text-muted mb-0">Welcome, {{ current_user.full_name }}. Review your place on this week's quest parties.</p>
+    </div>
+    <div class="participation-count">
+        <strong>{{ participations|length }}/3</strong>
+        <span>weekly sessions</span>
+    </div>
+</section>
+
+{% if participations %}
+    <div class="row g-4">
+        {% for participation in participations %}
+            <div class="col-lg-6">
+                <article class="card participation-card h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
+                            <span class="session-schedule">{{ participation.day_of_week }} · {{ participation.start_time }}</span>
+                            {% if participation.can_modify %}
+                                <span class="badge status-open">Changes available</span>
+                            {% else %}
+                                <span class="badge status-locked">Participation locked</span>
+                            {% endif %}
+                        </div>
+
+                        <h2 class="h4">{{ participation.title }}</h2>
+
+                        <dl class="detail-facts my-4">
+                            <div><dt>Location</dt><dd>{{ participation.location }}</dd></div>
+                            <div><dt>Role</dt><dd>{{ participation.role_category }}</dd></div>
+                            <div><dt>Reserved places</dt><dd>{{ participation.places_reserved }}</dd></div>
+                            <div><dt>Duration</dt><dd>{{ participation.duration_minutes }} minutes</dd></div>
+                        </dl>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <a class="btn btn-outline-dark" href="{{ url_for('quest_detail', session_id=participation.session_id) }}">View quest</a>
+
+                            {% if participation.can_modify %}
+                                <a class="btn btn-outline-secondary" href="{{ url_for('edit_participation', participation_id=participation.id) }}">Edit</a>
+                                <form method="post" action="{{ url_for('cancel_participation', participation_id=participation.id) }}">
+                                    <button class="btn btn-outline-danger" type="submit">Cancel</button>
+                                </form>
+                            {% endif %}
+                        </div>
+
+                        {% if not participation.can_modify %}
+                            <p class="small text-muted mt-3 mb-0">Changes close when the session is eight hours or less away.</p>
+                        {% endif %}
+                    </div>
+                </article>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state text-center">
+        <h2 class="h4">No quest participations yet</h2>
+        <p class="text-muted">Browse the weekly board and join a party that needs your skills.</p>
+        <a class="btn quest-button" href="{{ url_for('home') }}">Explore quest sessions</a>
+    </div>
+{% endif %}
+{% endblock %}

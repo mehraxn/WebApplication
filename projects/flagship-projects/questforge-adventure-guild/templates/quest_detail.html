@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}{{ session.title }} | QuestForge{% endblock %}
+
+{% block content %}
+<nav class="mb-3" aria-label="Breadcrumb">
+    <a class="link-secondary" href="{{ url_for('home') }}">Quest board</a>
+    <span class="text-muted mx-2" aria-hidden="true">/</span>
+    <span>{{ session.title }}</span>
+</nav>
+
+<section class="detail-hero mb-4">
+    <div class="row g-4 align-items-center">
+        <div class="col-lg-8">
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <span class="badge quest-type-badge">{{ session.quest_type }}</span>
+                <span class="badge difficulty-badge difficulty-{{ session.difficulty|lower }}">{{ session.difficulty }}</span>
+            </div>
+            <h1 class="display-5 fw-bold">{{ session.title }}</h1>
+            <p class="lead mb-0">{{ session.description }}</p>
+        </div>
+        <div class="col-lg-4">
+            <div class="detail-schedule-card">
+                <span>Quest session</span>
+                <strong>{{ session.day_of_week }}</strong>
+                <strong>{{ session.start_time }}</strong>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <section class="content-panel mb-4">
+            <span class="section-eyebrow">Mission details</span>
+            <h2 class="h4">Session information</h2>
+            <dl class="detail-facts mb-0">
+                <div><dt>Type</dt><dd>{{ session.quest_type }}</dd></div>
+                <div><dt>Difficulty</dt><dd>{{ session.difficulty }}</dd></div>
+                <div><dt>Day and time</dt><dd>{{ session.day_of_week }}, {{ session.start_time }}</dd></div>
+                <div><dt>Location</dt><dd>{{ session.location }}</dd></div>
+                <div><dt>Duration</dt><dd>{{ session.duration_minutes }} minutes</dd></div>
+                <div><dt>Total reserved</dt><dd>{{ session.total_reserved_places }} places</dd></div>
+            </dl>
+        </section>
+
+        <section class="content-panel">
+            <span class="section-eyebrow">Party roster</span>
+            <h2 class="h4 mb-3">Capacity by role</h2>
+            <div class="row g-3">
+                {% for role in session.role_availability %}
+                    <div class="col-sm-4">
+                        <div class="role-detail-card {% if role.remaining == 0 %}role-full{% endif %}">
+                            <h3 class="h5">{{ role.name }}</h3>
+                            <strong>{{ role.remaining }}</strong>
+                            <span>of {{ role.capacity }} places remaining</span>
+                            <small>{{ role.reserved }} currently reserved</small>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-4">
+        <aside class="join-panel">
+            <span class="section-eyebrow">Answer the call</span>
+            <h2 class="h4">Join this session</h2>
+
+            {% if current_user.is_authenticated and current_user.role == 'Adventurer' and session.has_available_role %}
+                <p>Choose your party role and reserve one or two places.</p>
+                <a class="btn quest-button w-100" href="{{ url_for('join_session', session_id=session.session_id) }}">Join quest session</a>
+            {% elif current_user.is_authenticated and current_user.role == 'Adventurer' %}
+                <p class="mb-0 text-muted">Every party role is currently full for this session.</p>
+            {% elif not current_user.is_authenticated %}
+                <p>Log in as an Adventurer to join this quest session.</p>
+                <a class="btn quest-button w-100" href="{{ url_for('login') }}">Login to join</a>
+            {% else %}
+                <p class="mb-0 text-muted">Guild Master and Admin accounts can review sessions but cannot join them.</p>
+            {% endif %}
+        </aside>
+    </div>
+</div>
+{% endblock %}

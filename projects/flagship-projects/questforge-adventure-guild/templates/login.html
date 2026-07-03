@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Login | QuestForge{% endblock %}
+
+{% block content %}
+<div class="auth-panel">
+    <div class="mb-4">
+        <span class="auth-eyebrow">Guild access</span>
+        <h1 class="h2 mt-2">Login to QuestForge</h1>
+        <p class="text-muted mb-0">Use your Adventurer, Guild Master, or Admin account.</p>
+    </div>
+
+    <form method="post" action="{{ url_for('login') }}">
+        <div class="mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input
+                class="form-control"
+                id="email"
+                name="email"
+                type="email"
+                value="{{ email }}"
+                autocomplete="email"
+                required
+                autofocus
+            >
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label" for="password">Password</label>
+            <input
+                class="form-control"
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                required
+            >
+        </div>
+
+        <button class="btn quest-button w-100" type="submit">Enter the guild</button>
+    </form>
+
+    <p class="text-center text-muted mt-4 mb-0">
+        Need an account? <a href="{{ url_for('register') }}">Register here</a>.
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,369 @@
+:root {
+    --quest-ink: #17211b;
+    --quest-forest: #263f32;
+    --quest-gold: #c89b3c;
+}
+
+body {
+    min-height: 100vh;
+    color: var(--quest-ink);
+    background: #f8f6ef;
+}
+
+.quest-navbar {
+    background: var(--quest-forest);
+    border-bottom: 3px solid var(--quest-gold);
+}
+
+.hero-panel {
+    color: #fff;
+    background: linear-gradient(135deg, var(--quest-forest), #4b654e);
+    border: 1px solid var(--quest-gold);
+    border-radius: 1rem;
+    box-shadow: 0 0.75rem 2rem rgb(23 33 27 / 12%);
+}
+
+.quest-card,
+.placeholder-panel {
+    background: #fff;
+    border: 1px solid #ded6c4;
+    border-radius: 0.75rem;
+}
+
+.placeholder-panel {
+    padding: 2rem;
+}
+
+.auth-panel {
+    max-width: 32rem;
+    margin: 1.5rem auto;
+    padding: 2rem;
+    background: #fff;
+    border: 1px solid #ded6c4;
+    border-radius: 1rem;
+    box-shadow: 0 0.75rem 2rem rgb(23 33 27 / 8%);
+}
+
+.auth-panel-wide {
+    max-width: 42rem;
+}
+
+.auth-eyebrow {
+    color: #7e5f20;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.quest-button {
+    color: #fff;
+    background: var(--quest-forest);
+    border-color: var(--quest-forest);
+}
+
+.quest-button:hover,
+.quest-button:focus {
+    color: #fff;
+    background: #365443;
+    border-color: #365443;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--quest-gold);
+    box-shadow: 0 0 0 0.25rem rgb(200 155 60 / 20%);
+}
+
+.simulated-clock {
+    min-width: 13rem;
+    padding: 0.85rem 1rem;
+    background: rgb(255 255 255 / 12%);
+    border: 1px solid rgb(255 255 255 / 30%);
+    border-radius: 0.75rem;
+}
+
+.simulated-clock span,
+.simulated-clock strong {
+    display: block;
+}
+
+.simulated-clock span {
+    margin-bottom: 0.2rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.filter-panel,
+.content-panel,
+.join-panel,
+.empty-state {
+    padding: 1.5rem;
+    background: #fff;
+    border: 1px solid #ded6c4;
+    border-radius: 0.9rem;
+}
+
+.section-eyebrow {
+    color: #7e5f20;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.session-card {
+    overflow: hidden;
+    border: 1px solid #ded6c4;
+    border-radius: 0.9rem;
+    box-shadow: 0 0.5rem 1.5rem rgb(23 33 27 / 6%);
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.session-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.85rem 1.8rem rgb(23 33 27 / 12%);
+}
+
+.session-card-banner {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-height: 5.5rem;
+    padding: 1rem;
+    background:
+        radial-gradient(circle at top right, rgb(200 155 60 / 35%), transparent 50%),
+        linear-gradient(135deg, #263f32, #455f4c);
+}
+
+.quest-type-badge {
+    align-self: flex-start;
+    color: #2e240e;
+    background: #e2bd6a;
+}
+
+.difficulty-badge {
+    align-self: flex-start;
+    color: #fff;
+    background: #5c665f;
+}
+
+.difficulty-easy {
+    background: #39764e;
+}
+
+.difficulty-medium {
+    background: #506aa0;
+}
+
+.difficulty-hard {
+    background: #9a542f;
+}
+
+.difficulty-legendary {
+    background: #713e86;
+}
+
+.session-schedule {
+    color: #7e5f20;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.session-facts,
+.detail-facts {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.session-facts div,
+.detail-facts div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee8da;
+}
+
+.session-facts dt,
+.detail-facts dt {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.session-facts dd,
+.detail-facts dd {
+    margin: 0;
+    font-weight: 600;
+    text-align: right;
+}
+
+.role-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+}
+
+.role-availability {
+    padding: 0.55rem;
+    text-align: center;
+    background: #eef5ef;
+    border: 1px solid #cadbcd;
+    border-radius: 0.55rem;
+}
+
+.role-availability span,
+.role-availability strong {
+    display: block;
+}
+
+.role-availability span {
+    font-size: 0.72rem;
+}
+
+.role-full {
+    color: #7b3b32;
+    background: #f8e9e7;
+    border-color: #e4bdb7;
+}
+
+.detail-hero {
+    padding: 2rem;
+    color: #fff;
+    background:
+        radial-gradient(circle at top right, rgb(200 155 60 / 32%), transparent 45%),
+        linear-gradient(135deg, #263f32, #405e4a);
+    border: 1px solid var(--quest-gold);
+    border-radius: 1rem;
+}
+
+.detail-schedule-card {
+    padding: 1.25rem;
+    text-align: center;
+    background: rgb(255 255 255 / 12%);
+    border: 1px solid rgb(255 255 255 / 30%);
+    border-radius: 0.75rem;
+}
+
+.detail-schedule-card span,
+.detail-schedule-card strong {
+    display: block;
+}
+
+.detail-schedule-card span {
+    margin-bottom: 0.4rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.detail-schedule-card strong {
+    font-size: 1.25rem;
+}
+
+.role-detail-card {
+    height: 100%;
+    padding: 1rem;
+    background: #eef5ef;
+    border: 1px solid #cadbcd;
+    border-radius: 0.7rem;
+}
+
+.role-detail-card strong,
+.role-detail-card span,
+.role-detail-card small {
+    display: block;
+}
+
+.role-detail-card strong {
+    font-size: 2rem;
+}
+
+.role-detail-card small {
+    margin-top: 0.5rem;
+    color: #6c757d;
+}
+
+.join-panel {
+    position: sticky;
+    top: 1rem;
+}
+
+.session-summary-panel {
+    position: sticky;
+    top: 1rem;
+    padding: 1.5rem;
+    background: #fff;
+    border: 1px solid #ded6c4;
+    border-radius: 0.9rem;
+}
+
+.profile-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.75rem;
+    background: #fff;
+    border: 1px solid #ded6c4;
+    border-radius: 1rem;
+}
+
+.participation-count {
+    flex: 0 0 auto;
+    min-width: 8rem;
+    padding: 0.85rem 1rem;
+    text-align: center;
+    background: #eef5ef;
+    border: 1px solid #cadbcd;
+    border-radius: 0.75rem;
+}
+
+.participation-count strong,
+.participation-count span {
+    display: block;
+}
+
+.participation-count strong {
+    color: var(--quest-forest);
+    font-size: 1.6rem;
+}
+
+.participation-count span {
+    color: #6c757d;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.participation-card {
+    border: 1px solid #ded6c4;
+    border-radius: 0.9rem;
+    box-shadow: 0 0.5rem 1.5rem rgb(23 33 27 / 6%);
+}
+
+.status-open {
+    color: #245338;
+    background: #dceee1;
+}
+
+.status-locked {
+    color: #713a33;
+    background: #f4dfdc;
+}
+
+@media (max-width: 575.98px) {
+    .role-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-hero {
+        padding: 1.5rem;
+    }
+
+    .profile-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

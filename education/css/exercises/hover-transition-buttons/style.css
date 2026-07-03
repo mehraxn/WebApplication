@@ -1,0 +1,69 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f9fafb;
+  text-align: center;
+}
+
+main {
+  padding: 40px;
+}
+
+.buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+/* Base button: the transition lives here so it works in AND out of hover */
+.btn {
+  padding: 12px 22px;
+  border: 2px solid #2563eb;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* 1. Smooth background color change */
+.btn-color {
+  transition: background 0.3s ease;
+}
+.btn-color:hover {
+  background: #1e3a8a;
+}
+
+/* 2. Grow slightly using transform (doesn't shift other elements) */
+.btn-grow {
+  transition: transform 0.2s ease;
+}
+.btn-grow:hover {
+  transform: scale(1.1);
+}
+
+/* 3. Lift up and add a shadow */
+.btn-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* 4. Outline button that fills in on hover */
+.btn-outline {
+  background: transparent;
+  color: #2563eb;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.btn-outline:hover {
+  background: #2563eb;
+  color: white;
+}

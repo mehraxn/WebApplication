@@ -1,0 +1,29 @@
+/* Apply border-box to everything so width includes padding + border */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+  padding: 40px;
+}
+
+.card {
+  width: 320px;          /* fixed content-box width (incl. padding + border) */
+  padding: 20px;         /* space INSIDE the card */
+  border: 3px solid #2563eb;  /* line around the padding */
+  margin: 24px auto;     /* space OUTSIDE the card; auto = centered */
+  background: white;
+  border-radius: 8px;
+}
+
+.card h2 {
+  margin-top: 0;
+  color: #2563eb;
+}
+
+.card p {
+  color: #374151;
+  line-height: 1.5;
+}

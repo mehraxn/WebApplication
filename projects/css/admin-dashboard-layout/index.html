@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Overall page is a grid: sidebar + main area -->
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="logo">Admin<span>Panel</span></div>
+        <nav>
+          <a href="#" class="active">Dashboard</a>
+          <a href="#">Analytics</a>
+          <a href="#">Orders</a>
+          <a href="#">Customers</a>
+          <a href="#">Settings</a>
+        </nav>
+      </aside>
+
+      <!-- Main area: top nav + content -->
+      <div class="main">
+        <header class="topnav">
+          <h1>Dashboard</h1>
+          <div class="topnav-right">
+            <input type="search" placeholder="Search..." />
+            <div class="avatar">AM</div>
+          </div>
+        </header>
+
+        <main class="content">
+          <!-- Statistics cards -->
+          <section class="stats">
+            <article class="stat-card">
+              <p class="stat-label">Revenue</p>
+              <p class="stat-value">€24,300</p>
+              <p class="stat-change up">▲ 12%</p>
+            </article>
+            <article class="stat-card">
+              <p class="stat-label">Orders</p>
+              <p class="stat-value">1,204</p>
+              <p class="stat-change up">▲ 8%</p>
+            </article>
+            <article class="stat-card">
+              <p class="stat-label">Customers</p>
+              <p class="stat-value">842</p>
+              <p class="stat-change down">▼ 3%</p>
+            </article>
+            <article class="stat-card">
+              <p class="stat-label">Refunds</p>
+              <p class="stat-value">32</p>
+              <p class="stat-change down">▼ 5%</p>
+            </article>
+          </section>
+
+          <!-- Two-column area: main panel + recent activity -->
+          <section class="panels">
+            <article class="panel">
+              <h2>Overview</h2>
+              <div class="chart-placeholder">Chart area</div>
+            </article>
+
+            <article class="panel">
+              <h2>Recent Activity</h2>
+              <ul class="activity">
+                <li><span>New order</span> #1042 · 2m ago</li>
+                <li><span>New customer</span> Jane D. · 15m ago</li>
+                <li><span>Refund</span> #1039 · 1h ago</li>
+                <li><span>New order</span> #1041 · 2h ago</li>
+                <li><span>Review</span> 5★ product A · 3h ago</li>
+              </ul>
+            </article>
+          </section>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

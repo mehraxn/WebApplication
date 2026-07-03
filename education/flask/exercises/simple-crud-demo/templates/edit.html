@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Note{% endblock %}
+
+{% block content %}
+  <h1>Edit Note</h1>
+
+  <!-- UPDATE: pre-fill the input with the current content -->
+  <form action="{{ url_for('edit', note_id=note['id']) }}" method="POST" class="add-form">
+    <input type="text" name="content" value="{{ note['content'] }}" />
+    <button type="submit">Save</button>
+  </form>
+
+  <a href="{{ url_for('index') }}">Cancel</a>
+{% endblock %}

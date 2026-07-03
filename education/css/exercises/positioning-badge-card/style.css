@@ -1,0 +1,69 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+}
+
+main {
+  padding: 40px;
+  text-align: center;
+}
+
+/* position: relative makes this the anchor for the absolute badge */
+.card {
+  position: relative;
+  width: 280px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+/* Absolutely positioned inside the card's top-right corner */
+.badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #dc2626;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  z-index: 2;   /* sit above the image */
+}
+
+.image {
+  height: 160px;
+  background: #93c5fd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1e3a8a;
+}
+
+.info {
+  padding: 16px;
+}
+
+.price {
+  color: #2563eb;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.info button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}

@@ -1,0 +1,45 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Flex container: brand and links on one row, spaced apart */
+.navbar {
+  display: flex;
+  justify-content: space-between;  /* brand left, links right */
+  align-items: center;             /* vertically centered */
+  flex-wrap: wrap;                 /* wrap on small screens */
+  gap: 12px;
+  background: #111827;
+  padding: 16px 24px;
+}
+
+.brand {
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+/* The links are themselves a flex row */
+.nav-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  color: #d1d5db;
+  text-decoration: none;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+}
+
+main {
+  padding: 24px;
+}

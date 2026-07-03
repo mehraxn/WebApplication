@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Reserve — {{ service['name'] }}{% endblock %}
+
+{% block content %}
+  <p><a href="{{ url_for('service_detail', service_id=service['id']) }}">&larr; Back to event</a></p>
+
+  <h1>Reserve: {{ service["name"] }}</h1>
+  <p class="meta">📅 {{ service["date"] }} · 🕒 {{ service["time"] }} · {{ available }} seat(s) available</p>
+
+  <form action="{{ url_for('reserve', service_id=service['id']) }}" method="POST" class="reserve-form">
+    <label for="customer_name">Your name <span class="req">*</span></label>
+    <input type="text" id="customer_name" name="customer_name" value="{{ name or '' }}" required />
+
+    <label for="customer_email">Email <span class="req">*</span></label>
+    <input type="email" id="customer_email" name="customer_email" value="{{ email or '' }}" required />
+
+    <label for="seats">Number of seats <span class="req">*</span></label>
+    <input
+      type="number"
+      id="seats"
+      name="seats"
+      min="1"
+      max="{{ available }}"
+      value="{{ seats or 1 }}"
+      required
+    />
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Confirm reservation</button>
+      <a href="{{ url_for('service_detail', service_id=service['id']) }}" class="btn btn-outline">Cancel</a>
+    </div>
+  </form>
+{% endblock %}

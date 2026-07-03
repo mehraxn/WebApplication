@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- The card is centered on the page and fades in on load -->
+    <main class="login-card">
+      <h1>Welcome back</h1>
+      <p class="subtitle">Sign in to your account</p>
+
+      <form>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required />
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="••••••••" required />
+        </div>
+
+        <div class="options">
+          <label class="remember">
+            <input type="checkbox" name="remember" /> Remember me
+          </label>
+          <a href="#" class="link">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn">Sign in</button>
+      </form>
+
+      <p class="signup">Don't have an account? <a href="#" class="link">Sign up</a></p>
+    </main>
+  </body>
+</html>

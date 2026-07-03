@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Form</title>
+  </head>
+  <body>
+    <h1>Enter your name</h1>
+
+    <!-- Show a validation error if one was passed -->
+    {% if error %}
+      <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <!-- POST because we are sending data -->
+    <form method="POST">
+      <input type="text" name="name" placeholder="Your name" />
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Semantic Page Layout</title>
+  </head>
+  <body>
+    <!-- Top of the page: site title and (below) navigation -->
+    <header>
+      <h1>The Daily Coder</h1>
+      <p>Notes and tutorials for new web developers</p>
+    </header>
+
+    <!-- Main site navigation -->
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#articles">Articles</a>
+      <a href="#about">About</a>
+    </nav>
+
+    <!-- The unique, main content of the page -->
+    <main>
+      <!-- A grouped section of related content with its own heading -->
+      <section id="articles">
+        <h2>Latest Articles</h2>
+
+        <!-- A self-contained post that would make sense on its own -->
+        <article>
+          <h3>Why Semantic HTML Matters</h3>
+          <p>
+            Using tags like header, nav, and main makes your page easier to
+            read for developers, screen readers, and search engines.
+          </p>
+        </article>
+
+        <article>
+          <h3>Getting Started with Forms</h3>
+          <p>
+            Forms let users send data to a server. They are the first step
+            toward building real, interactive applications.
+          </p>
+        </article>
+      </section>
+
+      <!-- Content related to, but separate from, the main content -->
+      <aside>
+        <h2>About the Author</h2>
+        <p>Written by a junior developer learning HTML one topic at a time.</p>
+      </aside>
+    </main>
+
+    <!-- Bottom of the page: secondary info -->
+    <footer>
+      <p>&copy; 2026 The Daily Coder. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

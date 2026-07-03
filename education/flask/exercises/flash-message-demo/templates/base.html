@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Flash Demo{% endblock %}</title>
+    <style>
+      body { font-family: Arial, sans-serif; max-width: 500px; margin: 40px auto; }
+      .flash { padding: 10px; border-radius: 6px; margin-bottom: 8px; }
+      .flash.success { background: #d1fae5; color: #065f46; }
+      .flash.error { background: #fee2e2; color: #991b1b; }
+    </style>
+  </head>
+  <body>
+    <!-- Show any flashed messages, styled by their category -->
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+      <div class="flash {{ category }}">{{ message }}</div>
+    {% endfor %}
+
+    {% block content %}{% endblock %}
+  </body>
+</html>

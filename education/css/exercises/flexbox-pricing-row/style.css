@@ -1,0 +1,75 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+}
+
+main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+/* Flex row that wraps on small screens */
+.pricing {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Each card grows/shrinks around an ideal 240px width */
+.plan {
+  flex: 1 1 240px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 24px;
+  text-align: center;
+}
+
+.plan .price {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2563eb;
+}
+
+.plan .price span {
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+.plan ul {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+}
+
+.plan li {
+  padding: 6px 0;
+  color: #374151;
+}
+
+.plan button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+/* Highlight the middle plan */
+.plan.featured {
+  border: 2px solid #2563eb;
+  transform: scale(1.03);
+}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Add Expense — Expense Tracker{% endblock %}
+
+{% block content %}
+  <h1>Add Expense</h1>
+
+  <form action="{{ url_for('add_expense') }}" method="POST" class="expense-form">
+    <label for="title">Title <span class="req">*</span></label>
+    <input type="text" id="title" name="title" value="{{ title or '' }}" required />
+
+    <label for="amount">Amount (€) <span class="req">*</span></label>
+    <input type="number" id="amount" name="amount" step="0.01" min="0.01"
+           value="{{ amount or '' }}" required />
+
+    <label for="category">Category <span class="req">*</span></label>
+    <select id="category" name="category" required>
+      <option value="" disabled {{ 'selected' if not category }}>Choose a category</option>
+      {% for cat in categories %}
+        <option value="{{ cat }}" {{ 'selected' if category == cat }}>{{ cat }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="date">Date <span class="req">*</span></label>
+    <input type="date" id="date" name="date" value="{{ date or '' }}" required />
+
+    <label for="note">Note</label>
+    <textarea id="note" name="note" rows="3">{{ note or '' }}</textarea>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Add expense</button>
+      <a href="{{ url_for('index') }}" class="btn btn-outline">Cancel</a>
+    </div>
+  </form>
+{% endblock %}

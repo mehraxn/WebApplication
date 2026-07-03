@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Home — Flask Blog{% endblock %}
+
+{% block content %}
+  <h1>Blog Posts</h1>
+
+  <!-- Search by title (GET so the query stays in the URL) -->
+  <form action="{{ url_for('index') }}" method="GET" class="search-form">
+    <input type="text" name="q" value="{{ search }}" placeholder="Search by title..." />
+    <button type="submit" class="btn btn-primary">Search</button>
+    {% if search %}
+      <a href="{{ url_for('index') }}" class="btn btn-outline">Clear</a>
+    {% endif %}
+  </form>
+
+  {% if search %}
+    <p class="muted">Showing results for “{{ search }}”.</p>
+  {% endif %}
+
+  {% if posts %}
+    <div class="post-list">
+      {% for post in posts %}
+        <article class="post-card">
+          <h2 class="post-title">
+            <a href="{{ url_for('post_detail', post_id=post['id']) }}">{{ post["title"] }}</a>
+          </h2>
+          <p class="post-meta">By {{ post["author"] }} · {{ post["created_at"] }}</p>
+          <!-- truncate gives a short preview of the content -->
+          <p class="post-excerpt">{{ post["content"]|truncate(160) }}</p>
+          <a class="read-more" href="{{ url_for('post_detail', post_id=post['id']) }}">Read more →</a>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty">
+      {% if search %}
+        No posts match your search. <a href="{{ url_for('index') }}">Show all</a>.
+      {% else %}
+        No posts yet. <a href="{{ url_for('create_post') }}">Write the first one</a>.
+      {% endif %}
+    </p>
+  {% endif %}
+{% endblock %}

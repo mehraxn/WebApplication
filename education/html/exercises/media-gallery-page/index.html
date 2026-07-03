@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Media Gallery</title>
+  </head>
+  <body>
+    <header>
+      <h1>Nature Media Gallery</h1>
+      <p>A mix of images, audio, and video using only HTML.</p>
+    </header>
+
+    <main>
+      <section>
+        <h2>Photos</h2>
+
+        <!-- figure ties an image to its caption -->
+        <figure>
+          <!-- src points to a placeholder file that would live in an images folder -->
+          <img src="images/forest.jpg" alt="Sunlight breaking through tall forest trees" width="400" />
+          <figcaption>Morning light in the forest.</figcaption>
+        </figure>
+
+        <figure>
+          <img src="images/lake.jpg" alt="Calm mountain lake reflecting the sky" width="400" />
+          <figcaption>A quiet mountain lake at dawn.</figcaption>
+        </figure>
+      </section>
+
+      <section>
+        <h2>Audio</h2>
+        <!-- controls gives the user a play/pause bar -->
+        <audio controls>
+          <source src="media/birdsong.mp3" type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
+        <p>Recording: birdsong in the forest.</p>
+      </section>
+
+      <section>
+        <h2>Video</h2>
+        <video controls width="480" poster="images/video-thumb.jpg">
+          <source src="media/waterfall.mp4" type="video/mp4" />
+          Your browser does not support the video element.
+        </video>
+        <p>Clip: a small waterfall.</p>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Media Gallery Exercise</p>
+    </footer>
+  </body>
+</html>

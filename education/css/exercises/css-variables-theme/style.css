@@ -1,0 +1,73 @@
+/* All theme values defined once, globally, in :root */
+:root {
+  /* colors */
+  --primary: #2563eb;
+  --accent: #db2777;
+  --bg: #f3f4f6;
+  --card-bg: #ffffff;
+  --text: #374151;
+
+  /* spacing scale */
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 32px;
+
+  /* font sizes */
+  --font-base: 1rem;
+  --font-lg: 1.4rem;
+
+  /* misc */
+  --radius: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: var(--font-base);
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+}
+
+.cards {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1 1 250px;
+  background: var(--card-bg);
+  padding: var(--space-lg);
+  border-radius: var(--radius);
+}
+
+.card h2 {
+  font-size: var(--font-lg);
+  color: var(--primary);
+  margin-top: 0;
+}
+
+.btn {
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border: none;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+}
+
+/* Reuses the accent color variable */
+.btn-accent {
+  background: var(--accent);
+}

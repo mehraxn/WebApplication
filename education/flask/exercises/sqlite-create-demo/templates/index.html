@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Messages</title>
+  </head>
+  <body>
+    <h1>Message Board</h1>
+
+    <!-- Form to create a new message -->
+    <form action="{{ url_for('add') }}" method="POST">
+      <input type="text" name="text" placeholder="Type a message" />
+      <button type="submit">Add</button>
+    </form>
+
+    <!-- List existing messages -->
+    <ul>
+      {% for message in messages %}
+        <li>{{ message["text"] }}</li>
+      {% else %}
+        <li>No messages yet.</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Flash Message Demo{% endblock %}
+
+{% block content %}
+  <h1>Flash Message Demo</h1>
+  <form action="{{ url_for('submit') }}" method="POST">
+    <input type="text" name="name" placeholder="Your name" />
+    <button type="submit">Submit</button>
+  </form>
+  <p>Submit with a name for a success message, or empty for an error message.</p>
+{% endblock %}

@@ -8,6 +8,16 @@ The projects are divided into two groups:
 
 Complete, larger projects that demonstrate full application structure, backend logic, database usage, authentication, and realistic user flows.
 
+### QuestForge — Fantasy Adventure Guild Platform
+
+**Path:** [`flagship-projects/questforge-adventure-guild/`](flagship-projects/questforge-adventure-guild/)
+
+**Description:**
+A full-stack Flask web application for a fantasy adventure guild. It includes authentication, role-based access control with Adventurer, Guild Master, and Admin roles, a public quest board with filtering, session joining, Warrior/Mage/Healer capacity limits, weekly participation limits, overlap prevention, simulated-time scheduling logic, Guild Master management pages, an Admin statistics dashboard, SQLite storage, a Bootstrap UI, image assets, and screenshots.
+
+**Technologies:**
+Flask, SQLite, Flask-Login, Jinja, HTML5, CSS3, Bootstrap.
+
 ### Walkly — Free Walking Tours Platform
 
 **Path:** [`flagship-projects/walkly-free-walking-tours/`](flagship-projects/walkly-free-walking-tours/)
@@ -52,13 +62,14 @@ Routes, templates, Jinja, forms, static files, GET/POST handling, flash messages
 
 ## Recommended Review Order
 
-1. [`flagship-projects/walkly-free-walking-tours/`](flagship-projects/walkly-free-walking-tours/)
-2. [`mini-projects/flask/`](mini-projects/flask/)
-3. [`mini-projects/bootstrap/`](mini-projects/bootstrap/)
-4. [`mini-projects/css/`](mini-projects/css/)
-5. [`mini-projects/html/`](mini-projects/html/)
+1. [`flagship-projects/questforge-adventure-guild/`](flagship-projects/questforge-adventure-guild/)
+2. [`flagship-projects/walkly-free-walking-tours/`](flagship-projects/walkly-free-walking-tours/)
+3. [`mini-projects/flask/`](mini-projects/flask/)
+4. [`mini-projects/bootstrap/`](mini-projects/bootstrap/)
+5. [`mini-projects/css/`](mini-projects/css/)
+6. [`mini-projects/html/`](mini-projects/html/)
 
 ## Notes
 
-The flagship project is the strongest resume project.
-The mini projects show the learning path and fundamentals behind the larger application.
+The flagship projects are the strongest resume projects, with QuestForge as the most complete.
+The mini projects show the learning path and fundamentals behind the larger applications.

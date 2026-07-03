@@ -291,25 +291,65 @@ These credentials are demonstration data and must not be reused in a production 
 
 ## Screenshots
 
-Screenshots have not been added yet. Recommended portfolio captures:
+### Homepage
 
-- Weekly quest board and filters
-- Quest session detail and role availability
-- Adventurer participation dashboard
-- Guild Master scheduling dashboard
-- Guild Council Admin statistics
-- Responsive mobile navigation
+![Homepage](screenshots/homepage.png)
 
-Suggested future layout:
+### Weekly Quest Board
 
-```text
-screenshots/
-├── quest-board.png
-├── quest-detail.png
-├── adventurer-participations.png
-├── guild-master-dashboard.png
-└── admin-dashboard.png
-```
+![Weekly Quest Board](screenshots/weekly-quest-board.png)
+
+### Available Sessions
+
+![Available Sessions](screenshots/available-sessions.png)
+
+### Filtered Available Sessions
+
+![Filtered Available Sessions](screenshots/available-sessions-filter.png)
+
+### Quest Detail Page
+
+![Quest Detail Page](screenshots/quest-detail.png)
+
+### Join Session
+
+![Join Session](screenshots/join-session.png)
+
+### Adventurer Profile
+
+![Adventurer Profile](screenshots/adventurer-profile.png)
+
+### Guild Master Dashboard
+
+![Guild Master Dashboard](screenshots/guild-master-dashboard.png)
+
+### Guild Dashboard Overview
+
+![Guild Dashboard Overview](screenshots/guild-dashboard-overview.png)
+
+### Guild Scheduled Sessions
+
+![Guild Scheduled Sessions](screenshots/guild-scheduled-sessions.png)
+
+### Create Quest
+
+![Create Quest](screenshots/create-quest.png)
+
+### Register Page
+
+![Register Page](screenshots/register.png)
+
+### Admin Dashboard
+
+![Admin Dashboard](screenshots/admin-dashboard.png)
+
+### Admin Dashboard Overview
+
+![Admin Dashboard Overview](screenshots/admin-dashboard-overview.png)
+
+### Admin Users and Sessions
+
+![Admin Users and Sessions](screenshots/admin-users-sessions.png)
 
 ## User Flows
 
@@ -377,6 +417,10 @@ For a production-oriented version, CSRF protection, rate limiting, stronger acco
 QuestForge uses a dark fantasy visual language without sacrificing legibility. Deep charcoal surfaces create the guild atmosphere, while antique gold, copper, emerald, and violet accents identify actions and party roles.
 
 The interface favors Bootstrap's responsive grid, semantic HTML, reusable Jinja inheritance, clear form labels, readable tables, keyboard focus states, and reduced-motion support. Backend modules remain deliberately direct and beginner-readable rather than introducing an ORM or a large framework architecture.
+
+## Image Assets
+
+QuestForge uses local fantasy-themed SVG images stored in `static/images/`. Several icon shapes are adapted from Game-icons.net under CC BY, with attribution kept in `static/images/ATTRIBUTION.md`. Optional PNG versions of the same artwork are available in `static/images/png/`, but the app primarily uses the SVG files.
 
 ## What This Project Demonstrates
 

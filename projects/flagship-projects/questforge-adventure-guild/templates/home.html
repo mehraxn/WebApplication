@@ -12,6 +12,9 @@
             <p class="lead mb-0">Find an adventure, inspect the party roster, and choose your calling.</p>
         </div>
         <div class="col-lg-4 text-lg-end">
+            <img src="{{ url_for('static', filename='images/ui-hero-guild-banner.svg') }}"
+                 alt="QuestForge guild banner"
+                 class="img-fluid mb-3 hero-banner-image" style="max-height: 140px;">
             <div class="simulated-clock d-inline-block text-start">
                 <span>Simulated guild time</span>
                 <strong>{{ simulated_time.day }}, {{ simulated_time.time }}</strong>
@@ -93,6 +96,10 @@
         {% for session in sessions %}
             <div class="col-md-6 col-xl-4">
                 <article class="card session-card h-100">
+                    {% set image_name = session.image_filename or 'quest-default.svg' %}
+                    <img src="{{ url_for('static', filename='images/' ~ image_name) }}"
+                         alt="Artwork for the {{ session.title }} quest"
+                         class="card-img-top img-fluid session-card-image">
                     <div class="session-card-banner">
                         <div class="d-flex justify-content-between align-items-start gap-2 w-100">
                             <span class="badge quest-type-badge">{{ session.quest_type }}</span>
@@ -130,7 +137,9 @@
     </div>
 {% else %}
     <div class="empty-state text-center">
-        <span class="empty-state-mark" aria-hidden="true">&#10022;</span>
+        <img src="{{ url_for('static', filename='images/ui-empty-scroll.svg') }}"
+             alt="Empty scroll indicating no quest sessions found"
+             class="img-fluid mb-3" style="max-width: 160px;">
         <h3 class="h5">No matching quest sessions</h3>
         <p class="text-muted mb-3">Try changing or clearing one of the selected filters.</p>
         <a class="btn quest-button" href="{{ url_for('home') }}">Show all sessions</a>

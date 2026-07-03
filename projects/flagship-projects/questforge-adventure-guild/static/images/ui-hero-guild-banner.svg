@@ -1,0 +1,32 @@
+<!--
+QuestForge original project asset: ui-hero-guild-banner.svg
+Created for this project pack. No external copyrighted photo used.
+-->
+<svg width="1200" height="720" viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">QuestForge Guild</title>
+  <desc id="desc">ADVENTURES BEGIN AT THE BOARD</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#09070d"/>
+      <stop offset="55%" stop-color="#20132b"/>
+      <stop offset="100%" stop-color="#050306"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="65%" cy="25%" r="60%">
+      <stop offset="0%" stop-color="#f5c16c" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#f5c16c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="720" rx="42" fill="url(#bg)"/>
+  <rect x="42" y="42" width="1116" height="636" rx="28" fill="none" stroke="#f5c16c" stroke-opacity="0.28" stroke-width="4"/>
+  <circle cx="860" cy="180" r="300" fill="url(#shine)"/>
+  <path d="M0 570 C210 490 370 615 580 535 C790 455 930 525 1200 470 L1200 720 L0 720 Z" fill="#000" opacity="0.25"/>
+  
+  <g transform="translate(310 105)" fill="none" stroke="#f5c16c" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M290 35 L365 185 L530 210 L410 325 L438 490 L290 412 L142 490 L170 325 L50 210 L215 185 Z"/>
+    <path d="M215 265 H365"/>
+    <path d="M245 325 H335"/>
+    <path d="M290 35 V165"/>
+  </g>
+  <text x="600" y="585" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="56" fill="#f8e8c5" font-weight="700">QuestForge Guild</text>
+  <text x="600" y="632" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="24" fill="#d7c7aa" letter-spacing="2">ADVENTURES BEGIN AT THE BOARD</text>
+</svg>

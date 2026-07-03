@@ -1,0 +1,35 @@
+<!--
+QuestForge original project asset: location-wizard-tower.svg
+Created for this project pack. No external copyrighted photo used.
+-->
+<svg width="1200" height="720" viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Wizard Tower</title>
+  <desc id="desc">STARS • SPELLS • HEIGHTS</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c1020"/>
+      <stop offset="55%" stop-color="#222d4e"/>
+      <stop offset="100%" stop-color="#050306"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="65%" cy="25%" r="60%">
+      <stop offset="0%" stop-color="#b8c7ff" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#b8c7ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="720" rx="42" fill="url(#bg)"/>
+  <rect x="42" y="42" width="1116" height="636" rx="28" fill="none" stroke="#b8c7ff" stroke-opacity="0.28" stroke-width="4"/>
+  <circle cx="860" cy="180" r="300" fill="url(#shine)"/>
+  <path d="M0 570 C210 490 370 615 580 535 C790 455 930 525 1200 470 L1200 720 L0 720 Z" fill="#000" opacity="0.25"/>
+  
+  <g transform="translate(330 95)" fill="none" stroke="#b8c7ff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M90 425 V165 L245 55 L400 165 V425"/>
+    <path d="M135 425 V215 H355 V425"/>
+    <path d="M195 425 V315 C195 285 218 262 245 262 C272 262 295 285 295 315 V425"/>
+    <path d="M175 210 V155 H315 V210"/>
+    <path d="M90 165 L245 55 L400 165"/>
+    <path d="M245 55 V20"/>
+    <path d="M245 20 L295 45 L245 70"/>
+  </g>
+  <text x="600" y="585" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="56" fill="#f8e8c5" font-weight="700">Wizard Tower</text>
+  <text x="600" y="632" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="24" fill="#d7c7aa" letter-spacing="2">STARS • SPELLS • HEIGHTS</text>
+</svg>

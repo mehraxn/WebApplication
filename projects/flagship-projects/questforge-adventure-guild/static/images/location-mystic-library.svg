@@ -1,0 +1,37 @@
+<!--
+QuestForge original project asset: location-mystic-library.svg
+Created for this project pack. No external copyrighted photo used.
+-->
+<svg width="1200" height="720" viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Mystic Library</title>
+  <desc id="desc">BOOKS • RUNES • KNOWLEDGE</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#140d17"/>
+      <stop offset="55%" stop-color="#382345"/>
+      <stop offset="100%" stop-color="#050306"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="65%" cy="25%" r="60%">
+      <stop offset="0%" stop-color="#d8a85a" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#d8a85a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="720" rx="42" fill="url(#bg)"/>
+  <rect x="42" y="42" width="1116" height="636" rx="28" fill="none" stroke="#d8a85a" stroke-opacity="0.28" stroke-width="4"/>
+  <circle cx="860" cy="180" r="300" fill="url(#shine)"/>
+  <path d="M0 570 C210 490 370 615 580 535 C790 455 930 525 1200 470 L1200 720 L0 720 Z" fill="#000" opacity="0.25"/>
+  
+  <g transform="translate(260 130)" fill="none" stroke="#d8a85a" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M90 375 V95 H170 V375"/>
+    <path d="M205 375 V65 H285 V375"/>
+    <path d="M320 375 V120 H400 V375"/>
+    <path d="M435 375 V85 H515 V375"/>
+    <path d="M60 390 H545"/>
+    <path d="M105 150 H155"/>
+    <path d="M220 135 H270"/>
+    <path d="M335 185 H385"/>
+    <path d="M450 150 H500"/>
+  </g>
+  <text x="600" y="585" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="56" fill="#f8e8c5" font-weight="700">Mystic Library</text>
+  <text x="600" y="632" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="24" fill="#d7c7aa" letter-spacing="2">BOOKS • RUNES • KNOWLEDGE</text>
+</svg>

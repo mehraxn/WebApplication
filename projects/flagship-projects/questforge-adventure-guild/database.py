@@ -13,6 +13,18 @@ ROLE_CAPACITIES = {
     "Healer": 2,
 }
 
+# Maps sample quest titles to their local SVG artwork in static/images/.
+# Used both when seeding fresh data and when correcting an existing database
+# that still holds outdated image_filename values.
+SAMPLE_QUEST_IMAGE_FILENAMES = {
+    "Crypt of the Silver Flame": "quest-combat.svg",
+    "Whispers of the Emerald Path": "quest-exploration.svg",
+    "Runes of the Forgotten Gate": "quest-puzzle.svg",
+    "Shadow over Raven Keep": "quest-stealth.svg",
+    "Trial of the Arcane Star": "quest-magic.svg",
+    "Frozen Peak Expedition": "quest-survival.svg",
+}
+
 
 def get_db_connection():
     """Open a SQLite connection and return rows that support name access."""
@@ -136,8 +148,31 @@ def initialize_database():
     connection.commit()
     connection.close()
 
+    update_existing_quest_image_filenames()
+
     if not has_existing_users:
         seed_sample_data()
+
+
+def update_existing_quest_image_filenames():
+    """Correct outdated image_filename values on already-seeded quest rows.
+
+    When database.db already exists, seed_sample_data() does not run again, so
+    sample quests can keep stale filenames (for example the original .jpg names).
+    This aligns existing rows with the local SVG artwork by matching quest title.
+    """
+    connection = get_db_connection()
+    for title, image_filename in SAMPLE_QUEST_IMAGE_FILENAMES.items():
+        connection.execute(
+            """
+            UPDATE quests
+            SET image_filename = ?
+            WHERE title = ? AND image_filename IS NOT ?
+            """,
+            (image_filename, title, image_filename),
+        )
+    connection.commit()
+    connection.close()
 
 
 def seed_sample_data():
@@ -182,7 +217,7 @@ def seed_sample_data():
             "Hard",
             120,
             "Defend the ancient crypt and recover the silver flame.",
-            "crypt-silver-flame.jpg",
+            "quest-combat.svg",
         ),
         (
             "Whispers of the Emerald Path",
@@ -190,7 +225,7 @@ def seed_sample_data():
             "Easy",
             90,
             "Map a forgotten path through the enchanted woodland.",
-            "emerald-path.jpg",
+            "quest-exploration.svg",
         ),
         (
             "Runes of the Forgotten Gate",
@@ -198,7 +233,7 @@ def seed_sample_data():
             "Medium",
             75,
             "Decode the runes that seal an abandoned gateway.",
-            "forgotten-gate.jpg",
+            "quest-puzzle.svg",
         ),
         (
             "Shadow over Raven Keep",
@@ -206,7 +241,7 @@ def seed_sample_data():
             "Hard",
             105,
             "Enter Raven Keep unseen and recover the stolen guild ledger.",
-            "raven-keep.jpg",
+            "quest-stealth.svg",
         ),
         (
             "Trial of the Arcane Star",
@@ -214,7 +249,7 @@ def seed_sample_data():
             "Legendary",
             150,
             "Survive a sequence of magical trials beneath the Wizard Tower.",
-            "arcane-star.jpg",
+            "quest-magic.svg",
         ),
         (
             "Frozen Peak Expedition",
@@ -222,7 +257,7 @@ def seed_sample_data():
             "Medium",
             180,
             "Cross the frozen ridge and establish a safe mountain camp.",
-            "frozen-peak.jpg",
+            "quest-survival.svg",
         ),
     ]
 

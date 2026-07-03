@@ -1,0 +1,37 @@
+<!--
+QuestForge original project asset: location-enchanted-forest.svg
+Created for this project pack. No external copyrighted photo used.
+-->
+<svg width="1200" height="720" viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Enchanted Forest</title>
+  <desc id="desc">MIST • ROOTS • SECRETS</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#07130d"/>
+      <stop offset="55%" stop-color="#173923"/>
+      <stop offset="100%" stop-color="#050306"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="65%" cy="25%" r="60%">
+      <stop offset="0%" stop-color="#74b86a" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#74b86a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="720" rx="42" fill="url(#bg)"/>
+  <rect x="42" y="42" width="1116" height="636" rx="28" fill="none" stroke="#74b86a" stroke-opacity="0.28" stroke-width="4"/>
+  <circle cx="860" cy="180" r="300" fill="url(#shine)"/>
+  <path d="M0 570 C210 490 370 615 580 535 C790 455 930 525 1200 470 L1200 720 L0 720 Z" fill="#000" opacity="0.25"/>
+  
+  <g transform="translate(260 105)" fill="none" stroke="#74b86a" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M160 380 V235"/>
+    <path d="M160 245 L80 330 H240 Z"/>
+    <path d="M160 170 L60 285 H260 Z"/>
+    <path d="M160 100 L45 235 H275 Z"/>
+    <path d="M370 395 V250"/>
+    <path d="M370 255 L290 350 H450 Z"/>
+    <path d="M370 180 L270 295 H470 Z"/>
+    <path d="M370 105 L255 245 H485 Z"/>
+    <path d="M60 410 H500"/>
+  </g>
+  <text x="600" y="585" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="56" fill="#f8e8c5" font-weight="700">Enchanted Forest</text>
+  <text x="600" y="632" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="24" fill="#d7c7aa" letter-spacing="2">MIST • ROOTS • SECRETS</text>
+</svg>

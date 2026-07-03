@@ -1,0 +1,45 @@
+<!--
+QuestForge project asset: role-healer.svg
+Base icon: Healing Shield by game-icons.net
+Source: https://www.svgviewer.dev/s/45019/healing-shield
+License: CC Attribution / CC BY
+Modifications: recolored, placed on gradient background, layout/text added.
+-->
+<svg width="1200" height="720" viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Healer</title>
+  <desc id="desc">SUPPORT ROLE</desc>
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="35%" r="75%">
+      <stop offset="0%" stop-color="#2aa66a" stop-opacity="0.95"/>
+      <stop offset="46%" stop-color="#123822" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#06120c" stop-opacity="1"/>
+    </radialGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#24162f"/>
+      <stop offset="55%" stop-color="#15101d"/>
+      <stop offset="100%" stop-color="#09070d"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="720" rx="42" fill="url(#card)"/>
+  <circle cx="940" cy="116" r="190" fill="url(#glow)" opacity="0.33"/>
+  <circle cx="255" cy="632" r="260" fill="#baffcc" opacity="0.10"/>
+  <path d="M0 555 C210 470 360 610 575 525 C780 445 920 520 1200 455 L1200 720 L0 720 Z" fill="#000000" opacity="0.22"/>
+  <g opacity="0.17" stroke="#baffcc" stroke-width="2" fill="none">
+    <path d="M92 92 H1108 V628 H92 Z"/>
+    <path d="M128 126 H1072 V594 H128 Z"/>
+    <path d="M165 165 L1035 555"/>
+    <path d="M1035 165 L165 555"/>
+  </g>
+  <g filter="url(#shadow)" transform="translate(375 76)">
+    <circle cx="225" cy="225" r="210" fill="#0d0a14" opacity="0.88"/>
+    <circle cx="225" cy="225" r="185" fill="#baffcc" opacity="0.11"/>
+    <g transform="translate(47 47) scale(0.695)">
+      <path fill="#baffcc" d="M256 21.98c-64 48-128 68-224.03 100.02C31.97 234 112 394 256 490c144-96 224-250 224-362-96-32.02-160-58.02-224-106.02zM229 128h54v101h101v54H283v101h-54V283H128v-54h101V128z"/>
+    </g>
+  </g>
+  <text x="600" y="585" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="58" fill="#f6e8c9" font-weight="700">Healer</text>
+  <text x="600" y="632" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="24" fill="#cdbd9e" letter-spacing="2">SUPPORT ROLE</text>
+</svg>
